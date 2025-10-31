@@ -223,6 +223,7 @@
             "vacuum_platform": "Vacuum platform (nauðsynlegt)",
             "map_locked": "Læsa korti (valkvætt)",
             "two_finger_pan": "Val með 2 fingrum (valkvætt)"
+            "map_only": "Map only (optional)",
         }
     }
 }

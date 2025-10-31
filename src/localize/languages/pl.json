@@ -249,6 +249,7 @@
             "vacuum_platform": "Platforma integracji odkurzacza (wymagana)",
             "map_locked": "Blokada mapy (opcjonalna)",
             "two_finger_pan": "Przesuwanie mapy dwoma palcami (opcjonalne)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Dokumentacja wybranej platformy ({0})",
             "selection": "Zaznaczenie:",
             "copy": "Kopiuj",

@@ -237,6 +237,7 @@
             "vacuum_platform": "Πλατφόρμα σκούπας (απαραίτητο)",
             "map_locked": "Κλείδωμα χάρτη (προεραιτικό)",
             "two_finger_pan": "Μετακίνηση με δύο δάχτυλα (προεραιτικό)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Τεκμηρίωση της επιλεγμένης πλατφόρμας ({0})",
             "selection": "Επιλογή:",
             "copy": "Αντιγραφή",

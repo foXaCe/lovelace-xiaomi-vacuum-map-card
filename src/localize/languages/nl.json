@@ -249,6 +249,7 @@
             "vacuum_platform": "Stofzuigerplatform (verplicht)",
             "map_locked": "Kaart vergrendelen (optioneel)",
             "two_finger_pan": "Kaart verplaatsen met twee vingers (optioneel)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Documentatie van gekozen stofzuigerplatform ({0})",
             "selection": "Selectie:",
             "copy": "Kopiëren",

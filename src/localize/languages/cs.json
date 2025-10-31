@@ -249,6 +249,7 @@
             "vacuum_platform": "Platforma vysavače (povinná položka)",
             "map_locked": "Uzamčení mapy",
             "two_finger_pan": "Posuv mapy dvěma prsty",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Dokumentace vybrané platformy ({0})",
             "selection": "Výběr:",
             "copy": "Kopírovat",

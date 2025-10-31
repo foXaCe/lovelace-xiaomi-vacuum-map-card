@@ -225,6 +225,7 @@
             "vacuum_platform": "扫地机平台（必填）",
             "map_locked": "地图锁定（可选）",
             "two_finger_pan": "双指缩放（可选）"
+            "map_only": "Map only (optional)",
         }
     }
 }

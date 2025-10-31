@@ -223,6 +223,7 @@
             "vacuum_platform": "Vakum platformu (gerekli)",
             "map_locked": "Harita kilitli (isteğe bağlı)",
             "two_finger_pan": "İki parmaklı tava (isteğe bağlı)"
+            "map_only": "Map only (optional)",
         }
     }
 }

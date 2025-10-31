@@ -223,6 +223,7 @@
             "vacuum_platform": "vacuum platform（必填）",
             "map_locked": "鎖定地圖（選填）",
             "two_finger_pan": "雙指縮放（選填）"
+            "map_only": "Map only (optional)",
         }
     }
 }

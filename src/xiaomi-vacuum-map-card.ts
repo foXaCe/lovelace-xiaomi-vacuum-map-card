@@ -361,7 +361,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                 </div>
                 ${conditional(!validCalibration, () => this._showInvalidCalibrationWarning())}
                 ${conditional(
-                    modes.length > 1 || mapControls.length > 0 || (icons?.length??0) !== 0 || (tiles?.length ?? 0) !== 0,
+                    !preset.map_only && (modes.length > 1 || mapControls.length > 0 || (icons?.length??0) !== 0 || (tiles?.length ?? 0) !== 0),
                     () => html`
                     <div class="controls-wrapper">
                         ${conditional(

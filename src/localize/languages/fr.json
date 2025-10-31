@@ -254,6 +254,7 @@
             "vacuum_platform": "Plateforme (obligatoire)",
             "map_locked": "Carte verrouillée (optionnel)",
             "two_finger_pan": "Déplacement à deux doigts (optionnel)",
+            "map_only": "Carte uniquement (optionnel)",
             "platforms_documentation": "Documentation de la plateforme choisie ({0})",
             "selection": "Sélection :",
             "copy": "Copier",

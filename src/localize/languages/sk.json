@@ -223,6 +223,7 @@
             "vacuum_platform": "Platforma vysávača (povinná položka)",
             "map_locked": "Uzamknutie mapy",
             "two_finger_pan": "Posuv mapy dvoma prstami"
+            "map_only": "Map only (optional)",
         }
     }
 }

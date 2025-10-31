@@ -61,6 +61,10 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         return this._config?.two_finger_pan || false;
     }
 
+    get _map_only(): boolean {
+        return this._config?.map_only || false;
+    }
+
     private static _copyServiceCall(): void {
         window.dispatchEvent(new Event(EVENT_SERVICE_CALL_GET));
     }
@@ -196,6 +200,14 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._two_finger_pan}"
                             .configValue="${"two_finger_pan"}"
+                            @change="${this._valueChanged}"></ha-switch>
+                    </ha-formfield>
+                </div>
+                <div class="values">
+                    <ha-formfield class="switch-wrapper" .label="${this._localize("editor.label.map_only")}">
+                        <ha-switch
+                            .checked="${this._map_only}"
+                            .configValue="${"map_only"}"
                             @change="${this._valueChanged}"></ha-switch>
                     </ha-formfield>
                 </div>

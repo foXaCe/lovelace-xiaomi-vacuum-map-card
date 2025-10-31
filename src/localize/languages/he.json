@@ -249,6 +249,7 @@
             "vacuum_platform": "פלטפורמת שואב (נדרש)",
             "map_locked": "נעילת מפה (אופציונלי)",
             "two_finger_pan": "צביטת שתי אצבעות (אופציונלי)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "תיעוד הפלטפורמה שנבחרה ({0})",
             "selection": "בחירה:",
             "copy": "העתקה",

@@ -187,6 +187,7 @@
             "vacuum_platform": "Plataforma do aspirador (Obrigatório)",
             "map_locked": "Mapa travado (Opicional)",
             "two_finger_pan": "Movimente com dois dedos (Opicional)"
+            "map_only": "Map only (optional)",
         }
     }
 }

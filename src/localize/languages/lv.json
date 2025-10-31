@@ -249,6 +249,7 @@
           "vacuum_platform": "Vakuuma platforma (obligāti)",
           "map_locked": "Karte bloķēta (pēc izvēles)",
           "two_finger_pan": "Divu pirkstu panoramēšana (pēc izvēles)",
+            "map_only": "Map only (optional)",
           "platforms_documentation": "Izvēlētās platformas dokumentācija ({0})",
           "selection": "Izvēle:",
           "copy": "Kopēt",

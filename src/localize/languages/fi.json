@@ -249,6 +249,7 @@
             "vacuum_platform": "Imurin alusta (vaadittu)",
             "map_locked": "Kartta lukittu (valinnainen)",
             "two_finger_pan": "Liikuta karttaa kahdella sormella (valinnainen)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Valitun alustan dokumentaatio ({0})",
             "selection": "Valinta:",
             "copy": "Kopioi",

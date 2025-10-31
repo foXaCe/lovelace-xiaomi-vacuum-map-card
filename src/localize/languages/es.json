@@ -249,6 +249,7 @@
             "vacuum_platform": "Plataforma de la aspiradora (requerido)",
             "map_locked": "Bloquear mapa (opcional)",
             "two_finger_pan": "Mover con dos dedos (opcional)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Plataforma de documentación elegida ({0})",
             "selection": "Selección:",
             "copy": "Copiar",

@@ -237,6 +237,7 @@
             "vacuum_platform": "Plataforma de la aspiradora (obligatori)",
             "map_locked": "Mapa bloquejat(opcional)",
             "two_finger_pan": "Moure amb dos dits (opcional)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Documentació de la plataforma seleccionadan ({0})",
             "selection": "Selecció:",
             "copy": "Copiar",

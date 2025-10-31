@@ -237,6 +237,7 @@
             "vacuum_platform": "Platformă aspirator (necesar)",
             "map_locked": "Hartă blocată (opțional)",
             "two_finger_pan": "Mișcare hartă cu două degete (opțional)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Documentația platformei alese ({0})",
             "selection": "Selecție:",
             "copy": "Copiază",

@@ -249,6 +249,7 @@
             "vacuum_platform": "Платформа інтеграції пилососу (необхідно)",
             "map_locked": "Блокування мапи (опція)",
             "two_finger_pan": "Переміщення мапи двома пальцями (опція)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Документація обраної платформи ({0})",
             "selection": "Вибір:",
             "copy": "Скопіювати",

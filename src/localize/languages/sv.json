@@ -223,6 +223,7 @@
             "vacuum_platform": "Dammsugarplattform (obligatoriskt)",
             "map_locked": "Låst karta (valfritt)",
             "two_finger_pan": "Panorering med två fingrar (valfritt)"
+            "map_only": "Map only (optional)",
         }
     }
 }

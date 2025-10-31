@@ -249,6 +249,7 @@
             "vacuum_platform": "Vacuum платформа (задължително)",
             "map_locked": "Заключване на карта (по избор)",
             "two_finger_pan": "Навигация с два пръста (по избор)",
+            "map_only": "Map only (optional)",
             "platforms_documentation": "Документация за избраната платформа ({0})",
             "selection": "Селекция:",
             "copy": "Копиране",

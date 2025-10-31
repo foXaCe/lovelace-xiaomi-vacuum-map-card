@@ -8,14 +8,20 @@ import json from "@rollup/plugin-json";
 const plugins = [
     nodeResolve({
         extensions: [".js", ".ts"],
-        exportConditions: ["node", "import", "default"],
+        browser: true,
+        preferBuiltins: false,
+        exportConditions: ["default", "module", "import"],
+        mainFields: ["module", "main"],
     }),
-    commonjs(),
+    commonjs({
+        include: /node_modules/,
+    }),
     typescript(),
     json(),
     babel({
         exclude: "node_modules/**",
         babelHelpers: "bundled",
+        extensions: [".js", ".ts"],
     }),
     terser(),
 ];
@@ -28,5 +34,6 @@ export default [
             format: "es",
         },
         plugins,
+        external: [],
     },
 ];

@@ -15,7 +15,10 @@
         "vacuum_clean_point_predefined": "Points",
         "vacuum_clean_zone": "Nettoyage de zone",
         "vacuum_clean_zone_predefined": "Liste des zones",
-        "vacuum_follow_path": "Chemin"
+        "vacuum_follow_path": "Chemin",
+        "setup_zone": "Coordonnées de zone",
+        "setup_point": "Coordonnées de point",
+        "setup_outline": "Coordonnées de contour"
     },
     "validation": {
         "preset": {
@@ -53,7 +56,7 @@
             "tiles": {
                 "invalid": "Erreur de configuration : tuiles",
                 "entity": {
-                    "missing_outdated_translation": "Chaque élément de la liste de tuiles doit avoir une propriété « entity »"
+                    "missing": "Chaque élément de la liste de tuiles doit avoir une propriété « entity » ou une variable interne"
                 },
                 "label": {
                     "missing": "Chaque élément de la liste de tuiles doit avoir une propriété « label »"
@@ -104,10 +107,10 @@
                     },
                     "icon": {
                         "x": {
-                            "missing": "L'icône doit avoir une propriété x property"
+                            "missing": "L'icône doit avoir une propriété « x »"
                         },
                         "y": {
-                            "missing": "L'icône doit avoir une propriété y property"
+                            "missing": "L'icône doit avoir une propriété « y »"
                         },
                         "name": {
                             "missing": "L'icône doit avoir une propriété « name »"
@@ -115,9 +118,9 @@
                     }
                 },
                 "service_call_schema": {
-                    "missing": "Schema d'appel du service manquant",
+                    "missing": "Schéma d'appel du service manquant",
                     "service": {
-                        "missing": "Le schema doit contenir un service",
+                        "missing": "Le schéma doit contenir un service",
                         "invalid": "Service incorrect : {0}"
                     }
                 }
@@ -142,6 +145,7 @@
                 "paused": "En pause",
                 "spot cleaning": "Nettoyage ciblé",
                 "error": "Erreur",
+                "sleeping": "En veille",
                 "shutting down": "Arrêt en cours...",
                 "updating": "Mise à jour",
                 "docking": "Retour à la station",
@@ -164,7 +168,8 @@
                 "medium": "Moyen",
                 "turbo": "Turbo",
                 "auto": "Auto",
-                "gentle": "Calme"
+                "gentle": "Calme",
+                "strong": "Puissant"
             }
         },
         "sensor_dirty_left": {
@@ -185,11 +190,37 @@
         "cleaned_area": {
             "label": "Surface nettoyée"
         },
+        "total_cleaned_area": {
+            "label": "Surface totale nettoyée"
+        },
         "cleaning_time": {
             "label": "Durée de nettoyage"
         },
+        "total_cleaning_time": {
+            "label": "Durée totale de nettoyage"
+        },
         "mop_left": {
             "label": "Serpillère"
+        },
+        "bin_full": {
+            "label": "Réservoir plein",
+            "value": {
+                "true": "Oui",
+                "false": "Non"
+            }
+        },
+        "bin_present": {
+            "label": "Réservoir présent",
+            "value": {
+                "true": "Oui",
+                "false": "Non"
+            }
+        },
+        "water_volume": {
+            "label": "Volume d'eau"
+        },
+        "mop_pad_humidity": {
+            "label": "Humidité de la serpillère"
         }
     },
     "icon": {
@@ -222,7 +253,19 @@
             "camera": "Entité de la caméra (obligatoire)",
             "vacuum_platform": "Plateforme (obligatoire)",
             "map_locked": "Carte verrouillée (optionnel)",
-            "two_finger_pan": "Déplacement à deux doigts (optionnel)"
+            "two_finger_pan": "Déplacement à deux doigts (optionnel)",
+            "platforms_documentation": "Documentation de la plateforme choisie ({0})",
+            "selection": "Sélection :",
+            "copy": "Copier",
+            "copied": "Copié !",
+            "set_static_config": "Générer la configuration statique",
+            "config_set": "Configuration définie !\nOuvrez l'éditeur de configuration pour l'ajuster.",
+            "config_set_failed": "Échec de la mise à jour de la configuration.",
+            "generate_rooms_config": "Générer la configuration des pièces",
+            "copy_service_call": "Copier l'appel de service"
+        },
+        "alerts": {
+            "set_static_config": "Vous devez utiliser cette fonctionnalité uniquement si vous souhaitez ajuster manuellement la configuration générée automatiquement.\nContinuer ?"
         }
     }
 }

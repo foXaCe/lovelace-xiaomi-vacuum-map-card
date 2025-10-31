@@ -217,8 +217,8 @@
             "camera": "Kamera entitet (påkrævet)",
             "vacuum_platform": "Støvsuger platform (påkrævet)",
             "map_locked": "Kort låst (valgfrit)",
-            "two_finger_pan": "To-finger panorering (valgfrit)"
-            "map_only": "Map only (optional)",
+            "two_finger_pan": "To-finger panorering (valgfrit)",
+            "map_only": "Map only (optional)"
         }
     }
 }

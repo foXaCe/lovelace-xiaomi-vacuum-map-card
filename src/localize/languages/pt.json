@@ -1,4 +1,4 @@
-  {
+{
     "common": {
         "version": "Versão",
         "invalid_configuration": "Configuração inválida {0}",

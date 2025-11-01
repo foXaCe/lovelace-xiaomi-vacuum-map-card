@@ -188,13 +188,7 @@ export class XiaomiVacuumMapCard extends LitElement {
             },
             entity: vacuums[0],
             vacuum_platform: PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM,
-            show_tiles: true,
-            tiles: [
-                { tile_id: "water_volume", entity: vacuums[0], attribute: "water_volume", label: "tile.water_volume.label", icon: "mdi:water" },
-                { tile_id: "cleaned_area", entity: vacuums[0], attribute: "cleaned_area", label: "tile.cleaned_area.label", icon: "mdi:ruler-square", unit: "unit.meter_squared_shortcut" },
-                { tile_id: "cleaning_time", entity: vacuums[0], attribute: "cleaning_time", label: "tile.cleaning_time.label", icon: "mdi:timer-sand", unit: "unit.minute_shortcut" },
-                { tile_id: "cleaning_mode", entity: vacuums[0], attribute: "cleaning_mode", label: "tile.cleaning_mode.label", icon: "mdi:vacuum" }
-            ]
+            show_tiles: true
         };
     }
 
@@ -559,7 +553,13 @@ export class XiaomiVacuumMapCard extends LitElement {
         const iconsPromise = GeneratorWrapper.generate(this.hass, config.icons, config.entity, vacuumPlatform,
             internalVariables, this.config.language, config.append_icons ?? false,
             (t: IconActionConfig) => t.icon_id, sortIcons, IconListGenerator.generate);
-        const tilesPromise = GeneratorWrapper.generate(this.hass, config.tiles, config.entity, vacuumPlatform,
+
+        // If show_tiles is enabled and tiles is empty or undefined, force auto-generation
+        const tilesConfig = (config.show_tiles !== false && (config.tiles?.length ?? 0) === 0)
+            ? undefined
+            : config.tiles;
+
+        const tilesPromise = GeneratorWrapper.generate(this.hass, tilesConfig, config.entity, vacuumPlatform,
             internalVariables, this.config.language, config.append_tiles ?? false, (t: TileConfig) => t.tile_id,
             sortTiles, TilesGenerator.generate);
         return Promise.all([iconsPromise, tilesPromise]);

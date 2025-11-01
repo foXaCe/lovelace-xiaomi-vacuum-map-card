@@ -34,7 +34,14 @@ export class PlatformGenerator {
     }
 
     public static getPlatformName(platform: string | undefined): string {
-        return platform ?? PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM;
+        if (!platform) {
+            return PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM;
+        }
+        // Support legacy platform names
+        if (platform === "Tasshack/dreame-vacuum" || platform === "tasshackDreameVacuum") {
+            return PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM;
+        }
+        return platform;
     }
 
     public static getPlatformsDocumentationUrl(platform: string): string {

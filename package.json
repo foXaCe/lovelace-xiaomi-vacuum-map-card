@@ -10,6 +10,7 @@
         "lovelace",
         "custom-cards"
     ],
+    "type": "module",
     "module": "xiaomi-vacuum-map-card.js",
     "repository": "git@github.com:PiotrMachowski/lovelace-xiaomi-vacuum-map-card.git",
     "author": "Piotr Machowski <piotr.machowski.dev@gmail.com>",
@@ -17,10 +18,10 @@
     "dependencies": {
         "change-perspective": "^1.0.1",
         "custom-card-helpers": "^1.9.0",
-        "home-assistant-js-websocket": "^8.0.1",
-        "lit": "^2.0.0",
+        "home-assistant-js-websocket": "^9.5.0",
+        "lit": "^3.3.1",
         "pointer-tracker": "^2.4.0",
-        "transformation-matrix": "^2.8.0"
+        "transformation-matrix": "^3.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.26.0",
@@ -28,16 +29,15 @@
         "@babel/plugin-proposal-decorators": "^7.25.9",
         "@rollup/plugin-alias": "^6.0.0",
         "@rollup/plugin-babel": "^6.0.4",
-        "@rollup/plugin-commonjs": "^28.0.1",
+        "@rollup/plugin-commonjs": "^29.0.0",
         "@rollup/plugin-json": "^6.1.0",
-        "@rollup/plugin-node-resolve": "^15.3.0",
+        "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^12.1.1",
         "@typescript-eslint/eslint-plugin": "^8.15.0",
         "@typescript-eslint/parser": "^8.15.0",
-        "cross-var": "^1.1.0",
         "eslint": "^9.15.0",
-        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-prettier": "^10.1.8",
         "prettier": "^3.3.3",
         "replace-in-file": "^8.2.0",
         "rollup": "^4.27.4",
@@ -48,7 +48,7 @@
     "scripts": {
         "start": "rollup -c rollup.config.dev.js --watch",
         "build": "npm run lint && npm run rollup && npm run add-version",
-        "add-version": "cross-var replace-in-file \"@VACUUM_MAP_CARD_VERSION_PLACEHOLDER@\" \"$npm_package_version\" \"dist/xiaomi-vacuum-map-card.js\"",
+        "add-version": "node scripts/add-version.mjs",
         "lint": "eslint src/*.ts",
         "rollup": "rollup -c"
     }

@@ -335,27 +335,11 @@ export class XiaomiVacuumMapCard extends LitElement {
                         ${mapZoomerContent}
                     </pinch-zoom>
                     <div id="map-zoomer-overlay">
-                        <div style="right: 0; top: 0; position: absolute;">
-                            <ha-icon
-                                icon="${this.mapLocked ? "mdi:lock" : "mdi:lock-open"}"
-                                class="standalone-icon-on-map clickable ripple"
-                                @click="${this._toggleLock}"></ha-icon>
-                        </div>
-                        <div class="map-zoom-icons" style="visibility: ${this.mapLocked ? "hidden" : "visible"}">
+                        <div class="map-zoom-icons">
                             <ha-icon
                                 icon="mdi:image-filter-center-focus"
                                 class="icon-on-map clickable ripple"
                                 @click="${this._restoreMap}"></ha-icon>
-                            <div class="map-zoom-icons-main">
-                                <ha-icon
-                                    icon="mdi:magnify-minus"
-                                    class="icon-on-map clickable ripple"
-                                    @click="${this._zoomOut}"></ha-icon>
-                                <ha-icon
-                                    icon="mdi:magnify-plus"
-                                    class="icon-on-map clickable ripple"
-                                    @click="${this._zoomIn}"></ha-icon>
-                            </div>
                         </div>
                     </div>
                 </div>

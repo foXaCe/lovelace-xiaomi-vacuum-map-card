@@ -188,6 +188,13 @@ export class XiaomiVacuumMapCard extends LitElement {
             },
             entity: vacuums[0],
             vacuum_platform: PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM,
+            show_tiles: true,
+            tiles: [
+                { tile_id: "water_volume", entity: vacuums[0], attribute: "water_volume", label: "tile.water_volume.label", icon: "mdi:water" },
+                { tile_id: "cleaned_area", entity: vacuums[0], attribute: "cleaned_area", label: "tile.cleaned_area.label", icon: "mdi:ruler-square", unit: "unit.meter_squared_shortcut" },
+                { tile_id: "cleaning_time", entity: vacuums[0], attribute: "cleaning_time", label: "tile.cleaning_time.label", icon: "mdi:timer-sand", unit: "unit.minute_shortcut" },
+                { tile_id: "cleaning_mode", entity: vacuums[0], attribute: "cleaning_mode", label: "tile.cleaning_mode.label", icon: "mdi:vacuum" }
+            ]
         };
     }
 
@@ -351,7 +358,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                 </div>
                 ${conditional(!validCalibration, () => this._showInvalidCalibrationWarning())}
                 ${conditional(
-                    !preset.map_only && (modes.length > 1 || mapControls.length > 0 || (icons?.length??0) !== 0 || (tiles?.length ?? 0) !== 0),
+                    !preset.map_only && (modes.length > 1 || mapControls.length > 0 || (icons?.length??0) !== 0 || (preset.show_tiles !== false && (tiles?.length ?? 0) !== 0)),
                     () => html`
                     <div class="controls-wrapper">
                         ${conditional(
@@ -381,13 +388,18 @@ export class XiaomiVacuumMapCard extends LitElement {
                             .isInEditor=${this.isInEditor}
                             .onAction=${(c: ActionableObjectConfig, action?: string) => createActionWithConfigHandler(this, c, action)}>
                         </xvmc-icons-wrapper>
-                        <xvmc-tiles-wrapper
-                            .hass=${this.hass}
-                            .tiles=${tiles}
-                            .isInEditor=${this.isInEditor}
-                            .onAction=${(c: ActionableObjectConfig, action?: string) => createActionWithConfigHandler(this, c, action)}
-                            .internalVariables=${this.internalVariables}>
-                        </xvmc-tiles-wrapper>
+                        ${conditional(
+                            preset.show_tiles !== false,
+                            () => html`
+                                <xvmc-tiles-wrapper
+                                    .hass=${this.hass}
+                                    .tiles=${tiles}
+                                    .isInEditor=${this.isInEditor}
+                                    .onAction=${(c: ActionableObjectConfig, action?: string) => createActionWithConfigHandler(this, c, action)}
+                                    .internalVariables=${this.internalVariables}>
+                                </xvmc-tiles-wrapper>
+                            `,
+                        )}
                     </div>`
                 )}
                 ${ToastRenderer.render("map-card")}

@@ -221,6 +221,57 @@
         },
         "mop_pad_humidity": {
             "label": "Mop pad"
+        },
+        "cleaning_mode": {
+            "label": "Cleaning mode",
+            "value": {
+                "sweeping": "Sweeping",
+                "mopping": "Mopping",
+                "sweeping and mopping": "Sweeping and mopping",
+                "mopping after sweeping": "Mopping after sweeping"
+            }
+        },
+        "tight_mopping": {
+            "label": "Tight mopping",
+            "value": {
+                "true": "Yes",
+                "false": "No"
+            }
+        },
+        "wetness_level": {
+            "label": "Wetness level"
+        },
+        "mop_wash_level": {
+            "label": "Mop wash level",
+            "value": {
+                "deep": "Deep",
+                "daily": "Daily",
+                "water saving": "Water saving"
+            }
+        },
+        "auto_empty_mode": {
+            "label": "Auto empty mode",
+            "value": {
+                "off": "Off",
+                "standard": "Standard",
+                "high frequency": "High frequency",
+                "low frequency": "Low frequency"
+            }
+        },
+        "cleaning_route": {
+            "label": "Cleaning route",
+            "value": {
+                "quick": "Quick",
+                "standard": "Standard"
+            }
+        },
+        "cleangenius": {
+            "label": "CleanGenius",
+            "value": {
+                "off": "Off",
+                "routine cleaning": "Routine cleaning",
+                "deep cleaning": "Deep cleaning"
+            }
         }
     },
     "icon": {
@@ -255,6 +306,7 @@
             "map_locked": "Map locked (optional)",
             "two_finger_pan": "Two finger pan (optional)",
             "map_only": "Map only (optional)",
+            "show_tiles": "Show information tiles",
             "platforms_documentation": "Chosen platform's documentation ({0})",
             "selection": "Selection:",
             "copy": "Copy",

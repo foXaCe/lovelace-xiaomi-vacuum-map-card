@@ -221,6 +221,57 @@
         },
         "mop_pad_humidity": {
             "label": "Humidité de la serpillère"
+        },
+        "cleaning_mode": {
+            "label": "Mode de nettoyage",
+            "value": {
+                "sweeping": "Balayage",
+                "mopping": "Serpillière",
+                "sweeping and mopping": "Balayage et serpillière",
+                "mopping after sweeping": "Serpillière après balayage"
+            }
+        },
+        "tight_mopping": {
+            "label": "Lavage renforcé",
+            "value": {
+                "true": "Oui",
+                "false": "Non"
+            }
+        },
+        "wetness_level": {
+            "label": "Niveau d'humidité"
+        },
+        "mop_wash_level": {
+            "label": "Niveau de lavage",
+            "value": {
+                "deep": "Profond",
+                "daily": "Quotidien",
+                "water saving": "Économie d'eau"
+            }
+        },
+        "auto_empty_mode": {
+            "label": "Mode de vidage auto",
+            "value": {
+                "off": "Désactivé",
+                "standard": "Standard",
+                "high frequency": "Haute fréquence",
+                "low frequency": "Basse fréquence"
+            }
+        },
+        "cleaning_route": {
+            "label": "Itinéraire de nettoyage",
+            "value": {
+                "quick": "Rapide",
+                "standard": "Standard"
+            }
+        },
+        "cleangenius": {
+            "label": "CleanGenius",
+            "value": {
+                "off": "Désactivé",
+                "routine cleaning": "Nettoyage de routine",
+                "deep cleaning": "Nettoyage en profondeur"
+            }
         }
     },
     "icon": {
@@ -255,6 +306,7 @@
             "map_locked": "Carte verrouillée (optionnel)",
             "two_finger_pan": "Déplacement à deux doigts (optionnel)",
             "map_only": "Carte uniquement (optionnel)",
+            "show_tiles": "Afficher les tuiles d'informations",
             "platforms_documentation": "Documentation de la plateforme choisie ({0})",
             "selection": "Sélection :",
             "copy": "Copier",

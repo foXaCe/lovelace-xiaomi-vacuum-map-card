@@ -389,7 +389,6 @@ export class XiaomiVacuumMapCard extends LitElement {
         `;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected updated(changedProperties: PropertyValues): void {
         const oldHass = changedProperties.get("_hass") as HomeAssistantFixed | undefined;
         const changed = oldHass && this.hass && checkIfEntitiesChanged(this.entitiesToManuallyUpdate, oldHass, this.hass);
@@ -1131,7 +1130,6 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _mouseMove(event: MouseEvent | TouchEvent): void {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         if ((<Element>event.target).classList.contains("draggable")) {
             return;
         }

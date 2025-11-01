@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { css, CSSResultGroup, html, LitElement, PropertyValues, svg, SVGTemplateResult, TemplateResult } from "lit";
+import { css, CSSResultGroup, html, LitElement, nothing, PropertyValues, svg, SVGTemplateResult, TemplateResult } from "lit";
 import { customElement, property, query, queryAll, state } from "lit/decorators";
 import { ActionHandlerEvent, forwardHaptic, LovelaceCard, LovelaceCardEditor } from "custom-card-helpers";
 
@@ -336,6 +336,12 @@ export class XiaomiVacuumMapCard extends LitElement {
                     </pinch-zoom>
                     <div id="map-zoomer-overlay">
                         <div class="map-zoom-icons">
+                            ${this._renderVacuumControls()}
+                            <ha-icon
+                                icon="mdi:select-drag"
+                                class="icon-on-map clickable ripple"
+                                title="Sélectionner une zone"
+                                @click="${this._activateZoneMode}"></ha-icon>
                             <ha-icon
                                 icon="mdi:image-filter-center-focus"
                                 class="icon-on-map clickable ripple"
@@ -1199,6 +1205,73 @@ export class XiaomiVacuumMapCard extends LitElement {
         this.mapScale = 1;
         forwardHaptic("selection");
         delay(300).then(() => (zoomerContent.style.transitionDuration = "0s"));
+    }
+
+    private _activateZoneMode(): void {
+        // Cherche le mode vacuum_clean_zone
+        const zoneMode = this.modes.findIndex(m => m.config.template === "vacuum_clean_zone");
+        if (zoneMode !== -1) {
+            this._setCurrentMode(zoneMode, true);
+            forwardHaptic("selection");
+        }
+    }
+
+    private _renderVacuumControls(): TemplateResult | typeof nothing {
+        const vacuumEntity = this.currentPreset?.entity;
+        if (!vacuumEntity) return nothing;
+
+        const vacuumState = this.hass?.states[vacuumEntity];
+        if (!vacuumState) return nothing;
+
+        const state = vacuumState.state;
+        const isCleaning = ["cleaning", "returning", "zoned_cleaning", "segment_cleaning"].includes(state);
+
+        if (isCleaning) {
+            return html`
+                <ha-icon
+                    icon="mdi:pause"
+                    class="icon-on-map clickable ripple"
+                    title="Pause"
+                    @click="${this._pauseVacuum}"></ha-icon>
+                <ha-icon
+                    icon="mdi:stop"
+                    class="icon-on-map clickable ripple"
+                    title="Stop"
+                    @click="${this._stopVacuum}"></ha-icon>
+            `;
+        }
+
+        return html`
+            <ha-icon
+                icon="mdi:play"
+                class="icon-on-map clickable ripple"
+                title="Nettoyer"
+                @click="${this._startCleaning}"></ha-icon>
+        `;
+    }
+
+    private _startCleaning(): void {
+        const vacuumEntity = this.currentPreset?.entity;
+        if (!vacuumEntity) return;
+
+        this.hass?.callService("vacuum", "start", { entity_id: vacuumEntity });
+        forwardHaptic("success");
+    }
+
+    private _pauseVacuum(): void {
+        const vacuumEntity = this.currentPreset?.entity;
+        if (!vacuumEntity) return;
+
+        this.hass?.callService("vacuum", "pause", { entity_id: vacuumEntity });
+        forwardHaptic("success");
+    }
+
+    private _stopVacuum(): void {
+        const vacuumEntity = this.currentPreset?.entity;
+        if (!vacuumEntity) return;
+
+        this.hass?.callService("vacuum", "stop", { entity_id: vacuumEntity });
+        forwardHaptic("success");
     }
 
     private _getCssProperty(property: string): string {

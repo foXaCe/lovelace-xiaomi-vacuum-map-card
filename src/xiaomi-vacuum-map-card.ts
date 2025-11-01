@@ -1062,13 +1062,13 @@ export class XiaomiVacuumMapCard extends LitElement {
 
         switch (this._getCurrentMode()?.selectionType) {
             case SelectionType.PREDEFINED_RECTANGLE:
-                this.selectablePredefinedRectangles.filter(p => p.isDynamic()).length > 0 && update();
+                if (this.selectablePredefinedRectangles.filter(p => p.isDynamic()).length > 0) update();
                 break;
             case SelectionType.ROOM:
-                this.selectedRooms.filter(p => p.isDynamic()).length > 0 && update();
+                if (this.selectedRooms.filter(p => p.isDynamic()).length > 0) update();
                 break;
             case SelectionType.PREDEFINED_POINT:
-                this.selectablePredefinedPoints.filter(p => p.isDynamic()).length > 0 && update();
+                if (this.selectablePredefinedPoints.filter(p => p.isDynamic()).length > 0) update();
                 break;
         }
     }

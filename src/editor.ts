@@ -116,7 +116,6 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         const entityIds = Object.keys(this.hass.states);
         const cameras = entityIds.filter(e => ["camera", "image"].includes(e.substr(0, e.indexOf("."))));
         const vacuums = entityIds.filter(e => e.substr(0, e.indexOf(".")) === "vacuum");
-        const platforms = PlatformGenerator.getPlatforms();
 
         return html`
             <div class="card-config">
@@ -143,31 +142,6 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                             return html` <mwc-list-item .value="${entity}">${entity}</mwc-list-item> `;
                         })}
                     </ha-select>
-                </div>
-                <div class="values">
-                    <ha-select
-                        naturalMenuWidth
-                        fixedMenuPosition
-                        label="${this._localize("editor.label.vacuum_platform")}"
-                        @selected="${this._platformChanged}"
-                        @closed="${ev => ev.stopPropagation()}"
-                        .configValue="${"vacuum_platform"}"
-                        .value="${this._vacuum_platform}">
-                        ${platforms.map(platform => {
-                            return html` <mwc-list-item .value="${platform}">${platform}</mwc-list-item> `;
-                        })}
-                    </ha-select>
-                    <p>
-                        <a
-                            href="${PlatformGenerator.getPlatformsDocumentationUrl(this._vacuum_platform)}"
-                            target="_blank">
-                            ${this._localize([
-                                "editor.label.platforms_documentation",
-                                "{0}",
-                                this._config?.vacuum_platform ?? PlatformGenerator.XIAOMI_MIIO_PLATFORM,
-                            ])}
-                        </a>
-                    </p>
                 </div>
                 <div class="values">
                     <ha-select

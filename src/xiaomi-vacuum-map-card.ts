@@ -187,7 +187,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                 camera: true,
             },
             entity: vacuums[0],
-            vacuum_platform: PlatformGenerator.XIAOMI_MIIO_PLATFORM,
+            vacuum_platform: PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM,
         };
     }
 

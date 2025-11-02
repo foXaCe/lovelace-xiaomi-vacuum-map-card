@@ -270,7 +270,10 @@ export class XiaomiVacuumMapCard extends LitElement {
         }
         this._updateCalibration(preset);
 
-        const tiles = preset.tiles?.filter(tile => areConditionsMet(tile, this.internalVariables, this.hass));
+        const tiles = preset.tiles?.filter(tile =>
+            areConditionsMet(tile, this.internalVariables, this.hass) &&
+            (tile.visible !== false)
+        );
         const icons = IconsWrapper.preprocessIcons(preset.icons, this.internalVariables, this.hass);
         const modes = this.modes;
 
@@ -356,7 +359,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                     () => html`
                     <div class="controls-wrapper">
                         ${conditional(
-                            validCalibration && (modes.length > 1 || mapControls.length > 0),
+                            !preset.tiles_only && validCalibration && (modes.length > 1 || mapControls.length > 0),
                             () => html`
                                 <div class="map-controls-wrapper">
                                     <div class="map-controls">
@@ -377,11 +380,16 @@ export class XiaomiVacuumMapCard extends LitElement {
                                 </div>
                             `,
                         )}
-                        <xvmc-icons-wrapper
-                            .icons=${icons}
-                            .isInEditor=${this.isInEditor}
-                            .onAction=${(c: ActionableObjectConfig, action?: string) => createActionWithConfigHandler(this, c, action)}>
-                        </xvmc-icons-wrapper>
+                        ${conditional(
+                            !preset.tiles_only,
+                            () => html`
+                                <xvmc-icons-wrapper
+                                    .icons=${icons}
+                                    .isInEditor=${this.isInEditor}
+                                    .onAction=${(c: ActionableObjectConfig, action?: string) => createActionWithConfigHandler(this, c, action)}>
+                                </xvmc-icons-wrapper>
+                            `,
+                        )}
                         ${conditional(
                             preset.show_tiles !== false,
                             () => html`

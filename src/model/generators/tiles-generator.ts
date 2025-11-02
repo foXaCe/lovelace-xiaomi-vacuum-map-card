@@ -236,6 +236,7 @@ export class TilesGenerator {
             unit: tileTemplate.unit ? localize(tileTemplate.unit, language) : undefined,
             precision: tileTemplate.precision ? tileTemplate.precision : 0,
             multiplier: tileTemplate.multiplier ? tileTemplate.multiplier : undefined,
+            visible: tileTemplate.visible !== undefined ? tileTemplate.visible : true,
             translations: TilesGenerator.generateTranslationKeys(
                 tileTemplate.translation_keys ?? [],
                 tileTemplate.tile_id,

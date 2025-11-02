@@ -307,6 +307,7 @@
             "two_finger_pan": "Two finger pan (optional)",
             "map_only": "Map only (optional)",
             "show_tiles": "Show information tiles",
+            "tiles_only": "Show only tiles (optional)",
             "platforms_documentation": "Chosen platform's documentation ({0})",
             "selection": "Selection:",
             "copy": "Copy",

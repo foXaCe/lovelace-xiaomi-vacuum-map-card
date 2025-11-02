@@ -307,6 +307,7 @@
             "two_finger_pan": "Déplacement à deux doigts (optionnel)",
             "map_only": "Carte uniquement (optionnel)",
             "show_tiles": "Afficher les tuiles d'informations",
+            "tiles_only": "Afficher uniquement les tuiles (optionnel)",
             "platforms_documentation": "Documentation de la plateforme choisie ({0})",
             "selection": "Sélection :",
             "copy": "Copier",

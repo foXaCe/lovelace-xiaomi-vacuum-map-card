@@ -62,6 +62,7 @@ export interface CardPresetConfig extends ConditionalObjectConfig {
     readonly two_finger_pan?: boolean;
     readonly map_only?: boolean;
     readonly show_tiles?: boolean;
+    readonly tiles_only?: boolean;
     readonly calibration_source?: CalibrationSourceConfig;
     readonly icons?: IconActionConfig[];
     readonly append_icons?: boolean;
@@ -194,6 +195,7 @@ export interface TileConfig extends ActionableObjectConfig, ConditionalObjectCon
     readonly translations?: Record<string, string>;
     readonly replace_config?: boolean;
     readonly order?: number;
+    readonly visible?: boolean;
 }
 
 export interface ActionableObjectConfig {

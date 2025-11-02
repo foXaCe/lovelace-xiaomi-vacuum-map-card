@@ -1245,14 +1245,41 @@ export class XiaomiVacuumMapCard extends LitElement {
         const mapped = [realMapPos[0] * this.realScale, realMapPos[1] * this.realScale];
 
         // Dessiner 3 cercles animés qui tournent autour du robot (hélices/brosses)
+        const bladeRadius = 15 / this.mapScale; // Rayon de l'orbite
+        const circleSize = 8 / this.mapScale;   // Taille des cercles
+
         return svg`
-            <g class="robot-washing-animation">
-                <circle class="washing-blade washing-blade-1"
-                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
-                <circle class="washing-blade washing-blade-2"
-                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
-                <circle class="washing-blade washing-blade-3"
-                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
+            <g class="robot-washing-animation" transform="translate(${mapped[0]},${mapped[1]})">
+                <g class="washing-orbit">
+                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0"
+                        to="360"
+                        dur="1.5s"
+                        repeatCount="indefinite" />
+                </g>
+                <g class="washing-orbit">
+                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="120"
+                        to="480"
+                        dur="1.5s"
+                        repeatCount="indefinite" />
+                </g>
+                <g class="washing-orbit">
+                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="240"
+                        to="600"
+                        dur="1.5s"
+                        repeatCount="indefinite" />
+                </g>
             </g>
         `;
     }
@@ -2170,40 +2197,19 @@ export class XiaomiVacuumMapCard extends LitElement {
             }
 
             /* Animation des hélices pendant le lavage */
-            @keyframes washing-spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-
             .robot-washing-animation {
                 pointer-events: none;
             }
 
+            .washing-orbit {
+                transform-origin: 0 0;
+            }
+
             .washing-blade {
-                fill: rgba(66, 165, 245, 0.4);
-                stroke: rgba(66, 165, 245, 0.8);
-                stroke-width: calc(2px / var(--map-scale));
-                transform-origin: var(--blade-cx) var(--blade-cy);
-                animation: washing-spin 1s linear infinite;
-            }
-
-            .washing-blade-1 {
-                animation-delay: 0s;
-                transform: translate(calc(15px / var(--map-scale)), 0);
-            }
-
-            .washing-blade-2 {
-                animation-delay: 0.33s;
-                transform: translate(calc(-7.5px / var(--map-scale)), calc(-13px / var(--map-scale)));
-            }
-
-            .washing-blade-3 {
-                animation-delay: 0.66s;
-                transform: translate(calc(-7.5px / var(--map-scale)), calc(13px / var(--map-scale)));
+                fill: rgba(66, 165, 245, 0.5);
+                stroke: rgba(33, 150, 243, 0.9);
+                stroke-width: 2;
+                filter: drop-shadow(0 0 3px rgba(33, 150, 243, 0.6));
             }
 
             ${PresetSelector.styles}

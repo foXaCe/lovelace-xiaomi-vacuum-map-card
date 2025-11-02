@@ -1267,17 +1267,34 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _initializeRooms(): void {
+        console.log("_initializeRooms called");
+        console.log("Modes available:", this.modes?.length);
+
+        if (!this.modes || this.modes.length === 0) {
+            console.warn("Modes not yet initialized, will retry later");
+            // Réessayer après un délai
+            delay(500).then(() => this._initializeRooms());
+            return;
+        }
+
         // Initialiser les pièces au démarrage pour qu'elles soient toujours cliquables
         const roomMode = this.modes.find(m =>
             m.config.template === "vacuum_clean_segment" || m.selectionType === SelectionType.ROOM
         );
 
+        console.log("Room mode found:", roomMode?.config.template);
+
         if (roomMode) {
             console.log("Initializing rooms from mode:", roomMode.config.template);
+            console.log("Predefined selections:", roomMode.predefinedSelections?.length);
+
             this.selectableRooms = roomMode.predefinedSelections.map(
                 s => new Room(s as RoomConfig, this._getContext()),
             );
             console.log("Rooms initialized:", this.selectableRooms.length);
+            this.requestUpdate();
+        } else {
+            console.warn("No room mode found in available modes");
         }
     }
 

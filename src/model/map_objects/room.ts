@@ -40,7 +40,7 @@ export class Room extends PredefinedMapObject {
 
         // Toujours activer le mode nettoyage de pièce lors du clic
         const currentMode = this._context.getCurrentMode();
-        const currentModeIsRoom = currentMode?.selectionType === 0; // SelectionType.ROOM = 0
+        const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
         console.log("Current mode is room?", currentModeIsRoom, "Selection type:", currentMode?.selectionType);
 
         if (!currentModeIsRoom) {

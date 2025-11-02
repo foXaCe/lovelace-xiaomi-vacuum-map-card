@@ -1358,6 +1358,12 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                                         class="icon-on-map clickable ripple"
                                         @click="${this._restoreMap}"></ha-icon>
                                 </div>
+                                <div class="map-return-base-button">
+                                    <ha-icon
+                                        icon="mdi:home-import-outline"
+                                        class="icon-on-map clickable ripple"
+                                        @click="${this._returnToBase}"></ha-icon>
+                                </div>
                             </div>
                         </div>
                         ${Gr(!k,()=>this._showInvalidCalibrationWarning())}
@@ -1478,11 +1484,11 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 class="icon-on-map clickable ripple"
                 title="Sélectionner une zone"
                 @click="${this._activateZoneMode}"></ha-icon>
-        `}_runZoneCleaning(){this._run(!1)}_runRoomCleaning(){this._run(!1)}_cancelZoneMode(){this.selectedManualRectangles=[],this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_cancelRoomMode(){this.selectedRooms=[],this.selectableRooms.forEach(e=>{e.selected&&(e._selected=!1)}),this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_startCleaning(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","start",{entity_id:i}),xe("success"))}_pauseVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","pause",{entity_id:i}),xe("success"))}_stopVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","stop",{entity_id:i}),xe("success"))}_getCssProperty(e){return getComputedStyle(this._getMapImage()).getPropertyValue(e)}_zoomIn(){xe("selection"),this._updateScale(1.5)}_zoomOut(){xe("selection"),this._updateScale(1/1.5)}_updateScale(e){const t=this._getMapZoomerContent(),i=this._getPinchZoom(),a=this._getPinchZoom().getBoundingClientRect();this.mapScale=Math.max(this.mapScale*e,.5),t.style.transitionDuration="200ms",i.scaleTo(this.mapScale,{originX:a.left+a.width/2,originY:a.top+a.height/2,relativeTo:"container",allowChangeEvent:!0}),Jr(300).then(()=>t.style.transitionDuration="0s")}_calculateBasicScale(){const e=this._getMapImage();e&&e.naturalWidth>0&&(this.realImageWidth=e.naturalWidth,this.realImageHeight=e.naturalHeight,this.realScale=e.width/e.naturalWidth)}_calculateScale(){const e=this._getPinchZoom();this.mapScale=e.scale,this.mapX=e.x,this.mapY=e.y}_getPinchZoom(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer")}_getMapImage(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-image")}_getMapZoomerContent(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer-content")}_getSvgWrapper(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.querySelector("#svg-wrapper")}_showConfigErrors(e){e.forEach(e=>console.error(e));const t=document.createElement("hui-error-card");try{return t.setConfig({type:"error",error:e[0],origConfig:this.config}),q` ${t} `}catch(t){return q`
+        `}_runZoneCleaning(){this._run(!1)}_runRoomCleaning(){this._run(!1)}_cancelZoneMode(){this.selectedManualRectangles=[],this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_cancelRoomMode(){this.selectedRooms=[],this.selectableRooms.forEach(e=>{e.selected&&(e._selected=!1)}),this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_startCleaning(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","start",{entity_id:i}),xe("success"))}_pauseVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","pause",{entity_id:i}),xe("success"))}_stopVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","stop",{entity_id:i}),xe("success"))}_returnToBase(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","return_to_base",{entity_id:i}),xe("success"))}_getCssProperty(e){return getComputedStyle(this._getMapImage()).getPropertyValue(e)}_zoomIn(){xe("selection"),this._updateScale(1.5)}_zoomOut(){xe("selection"),this._updateScale(1/1.5)}_updateScale(e){const t=this._getMapZoomerContent(),i=this._getPinchZoom(),a=this._getPinchZoom().getBoundingClientRect();this.mapScale=Math.max(this.mapScale*e,.5),t.style.transitionDuration="200ms",i.scaleTo(this.mapScale,{originX:a.left+a.width/2,originY:a.top+a.height/2,relativeTo:"container",allowChangeEvent:!0}),Jr(300).then(()=>t.style.transitionDuration="0s")}_calculateBasicScale(){const e=this._getMapImage();e&&e.naturalWidth>0&&(this.realImageWidth=e.naturalWidth,this.realImageHeight=e.naturalHeight,this.realScale=e.width/e.naturalWidth)}_calculateScale(){const e=this._getPinchZoom();this.mapScale=e.scale,this.mapX=e.x,this.mapY=e.y}_getPinchZoom(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer")}_getMapImage(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-image")}_getMapZoomerContent(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer-content")}_getSvgWrapper(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.querySelector("#svg-wrapper")}_showConfigErrors(e){e.forEach(e=>console.error(e));const t=document.createElement("hui-error-card");try{return t.setConfig({type:"error",error:e[0],origConfig:this.config}),q` ${t} `}catch(t){return q`
                 <pre style="padding: 10px; background-color: red;">${e[0]}</pre>
             `}}_showOldConfig(){return q`
             <hui-warning>
-                <h1>Xiaomi Vacuum Map Card ${"vv3.5.8"}</h1>
+                <h1>Xiaomi Vacuum Map Card ${"vv3.5.9"}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
                     <a
@@ -1846,6 +1852,18 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
 
             .map-zoom-icons {
                 right: 0;
+                bottom: 0;
+                position: absolute;
+                display: inline-flex;
+                background-color: var(--map-card-internal-secondary-color);
+                color: var(--map-card-internal-secondary-text-color);
+                border-radius: var(--map-card-internal-small-radius);
+                margin: 5px;
+                direction: ltr;
+            }
+
+            .map-return-base-button {
+                left: 0;
                 bottom: 0;
                 position: absolute;
                 display: inline-flex;

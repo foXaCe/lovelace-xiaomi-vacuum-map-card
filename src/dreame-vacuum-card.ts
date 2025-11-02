@@ -344,6 +344,12 @@ export class XiaomiVacuumMapCard extends LitElement {
                                         class="icon-on-map clickable ripple"
                                         @click="${this._restoreMap}"></ha-icon>
                                 </div>
+                                <div class="map-return-base-button">
+                                    <ha-icon
+                                        icon="mdi:home-import-outline"
+                                        class="icon-on-map clickable ripple"
+                                        @click="${this._returnToBase}"></ha-icon>
+                                </div>
                             </div>
                         </div>
                         ${conditional(!validCalibration, () => this._showInvalidCalibrationWarning())}
@@ -1526,6 +1532,14 @@ export class XiaomiVacuumMapCard extends LitElement {
         forwardHaptic("success");
     }
 
+    private _returnToBase(): void {
+        const vacuumEntity = this.currentPreset?.entity;
+        if (!vacuumEntity) return;
+
+        this.hass?.callService("vacuum", "return_to_base", { entity_id: vacuumEntity });
+        forwardHaptic("success");
+    }
+
     private _getCssProperty(property: string): string {
         return getComputedStyle(this._getMapImage()).getPropertyValue(property);
     }
@@ -2004,6 +2018,18 @@ export class XiaomiVacuumMapCard extends LitElement {
 
             .map-zoom-icons {
                 right: 0;
+                bottom: 0;
+                position: absolute;
+                display: inline-flex;
+                background-color: var(--map-card-internal-secondary-color);
+                color: var(--map-card-internal-secondary-text-color);
+                border-radius: var(--map-card-internal-small-radius);
+                margin: 5px;
+                direction: ltr;
+            }
+
+            .map-return-base-button {
+                left: 0;
                 bottom: 0;
                 position: absolute;
                 display: inline-flex;

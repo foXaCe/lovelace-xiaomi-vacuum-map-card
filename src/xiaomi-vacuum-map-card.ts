@@ -343,12 +343,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                             </pinch-zoom>
                             <div id="map-zoomer-overlay">
                                 <div class="map-zoom-icons">
-                                    ${this._renderVacuumControls()}
-                                    <ha-icon
-                                        icon="mdi:select-drag"
-                                        class="icon-on-map clickable ripple"
-                                        title="Sélectionner une zone"
-                                        @click="${this._activateZoneMode}"></ha-icon>
+                                    ${this._renderMapControls()}
                                     <ha-icon
                                         icon="mdi:image-filter-center-focus"
                                         class="icon-on-map clickable ripple"
@@ -1258,6 +1253,36 @@ export class XiaomiVacuumMapCard extends LitElement {
         }
     }
 
+    private _renderMapControls(): TemplateResult | typeof nothing {
+        const currentMode = this._getCurrentMode();
+        const isZoneMode = currentMode?.selectionType === SelectionType.MANUAL_RECTANGLE;
+        const hasZoneSelected = this.selectedManualRectangles.length > 0;
+
+        // Si on est en mode zone et qu'une zone est sélectionnée
+        if (isZoneMode && hasZoneSelected) {
+            return html`
+                <ha-icon
+                    icon="mdi:play"
+                    class="icon-on-map clickable ripple zone-action"
+                    title="Nettoyer la zone"
+                    @click="${this._runZoneCleaning}"></ha-icon>
+                <ha-icon
+                    icon="mdi:plus"
+                    class="icon-on-map clickable ripple zone-action"
+                    title="Ajouter une zone"
+                    @click="${(): void => this._addRectangle()}"></ha-icon>
+                <ha-icon
+                    icon="mdi:close"
+                    class="icon-on-map clickable ripple zone-action"
+                    title="Annuler"
+                    @click="${this._cancelZoneMode}"></ha-icon>
+            `;
+        }
+
+        // Sinon afficher les contrôles normaux de l'aspirateur
+        return this._renderVacuumControls();
+    }
+
     private _renderVacuumControls(): TemplateResult | typeof nothing {
         const vacuumEntity = this.currentPreset?.entity;
         if (!vacuumEntity) return nothing;
@@ -1289,7 +1314,22 @@ export class XiaomiVacuumMapCard extends LitElement {
                 class="icon-on-map clickable ripple"
                 title="Nettoyer"
                 @click="${this._startCleaning}"></ha-icon>
+            <ha-icon
+                icon="mdi:select-drag"
+                class="icon-on-map clickable ripple"
+                title="Sélectionner une zone"
+                @click="${this._activateZoneMode}"></ha-icon>
         `;
+    }
+
+    private _runZoneCleaning(): void {
+        this._run(false);
+    }
+
+    private _cancelZoneMode(): void {
+        // Retourner au premier mode (généralement le mode par défaut)
+        this._setCurrentMode(0, true);
+        forwardHaptic("selection");
     }
 
     private _startCleaning(): void {
@@ -1819,6 +1859,12 @@ export class XiaomiVacuumMapCard extends LitElement {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+
+            .icon-on-map.zone-action {
+                background-color: var(--map-card-internal-primary-color);
+                color: var(--map-card-internal-primary-text-color);
+                border-radius: var(--map-card-internal-small-radius);
             }
 
             .controls-wrapper {

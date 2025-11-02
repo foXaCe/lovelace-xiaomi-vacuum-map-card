@@ -316,44 +316,49 @@ export class XiaomiVacuumMapCard extends LitElement {
                     (this.config.title ?? "").length > 0,
                     () => html`<h1 class="card-header">${this.config.title}</h1>`,
                 )}
-                <xvmc-preset-selector
-                    .availablePresets=${availablePresets}
-                    .availablePresetIndex=${availablePresetIndex}
-                    .openPreviousPreset=${(): void => this._openPreviousPreset()}
-                    .previousPresetIndex=${this._getPreviousPresetIndex()}
-                    .presetActivable=${preset.activate !== undefined}
-                    .presetName=${preset.preset_name}
-                    .executePresetsActivation=${(): void => this._executePresetsActivation()}
-                    .openNextPreset=${(): void => this._openNextPreset()}
-                    .nextPresetIndex=${this._getNextPresetIndex()}>
-                </xvmc-preset-selector>
-                <div class="map-wrapper">
-                    <pinch-zoom
-                        min-scale="0.5"
-                        id="map-zoomer"
-                        @change="${this._calculateScale}"
-                        two-finger-pan="${preset.two_finger_pan}"
-                        locked="${this.mapLocked}"
-                        no-default-pan="${this.mapLocked || preset.two_finger_pan}"
-                        style="touch-action: none;">
-                        ${mapZoomerContent}
-                    </pinch-zoom>
-                    <div id="map-zoomer-overlay">
-                        <div class="map-zoom-icons">
-                            ${this._renderVacuumControls()}
-                            <ha-icon
-                                icon="mdi:select-drag"
-                                class="icon-on-map clickable ripple"
-                                title="Sélectionner une zone"
-                                @click="${this._activateZoneMode}"></ha-icon>
-                            <ha-icon
-                                icon="mdi:image-filter-center-focus"
-                                class="icon-on-map clickable ripple"
-                                @click="${this._restoreMap}"></ha-icon>
+                ${conditional(
+                    !preset.tiles_only,
+                    () => html`
+                        <xvmc-preset-selector
+                            .availablePresets=${availablePresets}
+                            .availablePresetIndex=${availablePresetIndex}
+                            .openPreviousPreset=${(): void => this._openPreviousPreset()}
+                            .previousPresetIndex=${this._getPreviousPresetIndex()}
+                            .presetActivable=${preset.activate !== undefined}
+                            .presetName=${preset.preset_name}
+                            .executePresetsActivation=${(): void => this._executePresetsActivation()}
+                            .openNextPreset=${(): void => this._openNextPreset()}
+                            .nextPresetIndex=${this._getNextPresetIndex()}>
+                        </xvmc-preset-selector>
+                        <div class="map-wrapper">
+                            <pinch-zoom
+                                min-scale="0.5"
+                                id="map-zoomer"
+                                @change="${this._calculateScale}"
+                                two-finger-pan="${preset.two_finger_pan}"
+                                locked="${this.mapLocked}"
+                                no-default-pan="${this.mapLocked || preset.two_finger_pan}"
+                                style="touch-action: none;">
+                                ${mapZoomerContent}
+                            </pinch-zoom>
+                            <div id="map-zoomer-overlay">
+                                <div class="map-zoom-icons">
+                                    ${this._renderVacuumControls()}
+                                    <ha-icon
+                                        icon="mdi:select-drag"
+                                        class="icon-on-map clickable ripple"
+                                        title="Sélectionner une zone"
+                                        @click="${this._activateZoneMode}"></ha-icon>
+                                    <ha-icon
+                                        icon="mdi:image-filter-center-focus"
+                                        class="icon-on-map clickable ripple"
+                                        @click="${this._restoreMap}"></ha-icon>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                ${conditional(!validCalibration, () => this._showInvalidCalibrationWarning())}
+                        ${conditional(!validCalibration, () => this._showInvalidCalibrationWarning())}
+                    `,
+                )}
                 ${conditional(
                     !preset.map_only && (modes.length > 1 || mapControls.length > 0 || (icons?.length??0) !== 0 || (preset.show_tiles !== false && (tiles?.length ?? 0) !== 0)),
                     () => html`

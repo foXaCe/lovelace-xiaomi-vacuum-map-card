@@ -35,21 +35,34 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
-        console.log("Room badge clicked:", this._config.id);
+        console.log("=== Room badge clicked ===");
+        console.log("Room ID:", this._config.id);
         console.log("Current mode:", this._context.getCurrentMode());
 
         // Toujours activer le mode nettoyage de pièce lors du clic
         const currentMode = this._context.getCurrentMode();
         const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
-        console.log("Current mode is room?", currentModeIsRoom, "Selection type:", currentMode?.selectionType);
+        console.log("Is already in room mode?", currentModeIsRoom);
+        console.log("Current selectionType:", currentMode?.selectionType);
+        console.log("Current template:", currentMode?.config?.template);
 
         if (!currentModeIsRoom) {
-            console.log("Activating room mode...");
+            console.log(">>> Switching to room mode...");
             // Basculer vers le mode pièce
             this._context.activateRoomMode();
             // Attendre un peu que le mode soit activé
-            await new Promise(resolve => setTimeout(resolve, 100));
-            console.log("Room mode activated, new mode:", this._context.getCurrentMode());
+            await new Promise(resolve => setTimeout(resolve, 150));
+
+            const newMode = this._context.getCurrentMode();
+            console.log(">>> After switch - new mode:", newMode);
+            console.log(">>> New selectionType:", newMode?.selectionType);
+            console.log(">>> New template:", newMode?.config?.template);
+
+            if (newMode?.selectionType !== 2) {
+                console.error("❌ Failed to switch to room mode!");
+                return;
+            }
+            console.log("✓ Room mode activated successfully");
         }
 
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {

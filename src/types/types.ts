@@ -7,7 +7,7 @@ import {
 } from "custom-card-helpers";
 import { ACTION_HANDLER_CUSTOM_ELEMENT_NAME, CARD_CUSTOM_ELEMENT_NAME, EDITOR_CUSTOM_ELEMENT_NAME } from "../const";
 import { XiaomiVacuumMapCardActionHandler } from "../action-handler-directive";
-import { XiaomiVacuumMapCard } from "../xiaomi-vacuum-map-card";
+import { XiaomiVacuumMapCard } from "../dreame-vacuum-card";
 import { Tile } from "../components/tile";
 
 declare global {

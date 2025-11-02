@@ -86,7 +86,7 @@ import { TilesWrapper } from "./components/tiles-wrapper";
 import { IconsWrapper } from "./components/icons-wrapper";
 import { PresetSelector } from "./components/preset-selector";
 
-const line1 = "   XIAOMI-VACUUM-MAP-CARD";
+const line1 = "   DREAME-VACUUM-CARD";
 const line2 = `   ${localize("common.version")} ${CARD_VERSION}`;
 const length = Math.max(line1.length, line2.length) + 3;
 const pad = (text: string, length: number) => text + " ".repeat(length - text.length);

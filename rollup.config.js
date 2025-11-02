@@ -35,7 +35,7 @@ const plugins = [
 
 export default [
     {
-        input: "src/xiaomi-vacuum-map-card.ts",
+        input: "src/dreame-vacuum-card.ts",
         output: {
             dir: "dist",
             format: "es",

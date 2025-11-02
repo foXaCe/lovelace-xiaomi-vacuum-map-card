@@ -12,7 +12,7 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 const version = packageJson.version;
 
 // Read the dist file
-const distPath = join(__dirname, '../dist/xiaomi-vacuum-map-card.js');
+const distPath = join(__dirname, '../dist/dreame-vacuum-card.js');
 let content = readFileSync(distPath, 'utf8');
 
 // Replace the placeholder
@@ -22,4 +22,4 @@ const updatedContent = content.replace(new RegExp(placeholder, 'g'), version);
 // Write back
 writeFileSync(distPath, updatedContent, 'utf8');
 
-console.log(`✓ Replaced '${placeholder}' with '${version}' in xiaomi-vacuum-map-card.js`);
+console.log(`✓ Replaced '${placeholder}' with '${version}' in dreame-vacuum-card.js`);

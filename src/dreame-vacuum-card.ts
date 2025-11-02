@@ -1006,29 +1006,13 @@ export class XiaomiVacuumMapCard extends LitElement {
                     [room.x1, room.y1],
                     [room.x0, room.y1],
                 ];
-                const keepFloat = outline.toString().includes(".");
-                const formatCoord = (v: number, divide = 1): number =>
-                    keepFloat ? v / divide : Math.round(v / divide);
-                const x = outline.reduce((a, v) => a + (v[0] ?? 0), 0);
-                const y = outline.reduce((a, v) => a + (v[1] ?? 0), 0);
 
                 const roomConfig = {
                     id: room_id,
-                    // Ne pas afficher d'icône si la carte a déjà les badges avec noms
-                    // Afficher uniquement une icône de secours si room.name n'existe pas
-                    icon: room.name ? undefined : {
-                        name: room.icon ?? "mdi:broom",
-                        x: room.x ?? formatCoord(x, outline.length),
-                        y: room.y ?? formatCoord(y, outline.length),
-                    },
-                    // Ne pas afficher de label si la carte a déjà les noms des pièces
-                    // Afficher uniquement un label de secours si room.name n'existe pas
-                    label: room.name ? undefined : {
-                        text: `Room ${room_id}`,
-                        x: room.x ?? formatCoord(x, outline.length),
-                        y: room.y ?? formatCoord(y, outline.length),
-                        offset_y: 35,
-                    },
+                    // Ne jamais afficher d'icône ni de label
+                    // Les pièces ont déjà leurs badges avec noms sur l'image PNG de l'addon
+                    icon: undefined,
+                    label: undefined,
                     outline: outline,
                 } as RoomConfig;
                 roomsConfig.push(roomConfig);

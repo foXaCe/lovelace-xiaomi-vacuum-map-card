@@ -65,6 +65,7 @@ import { PredefinedPoint } from "./model/map_objects/predefined-point";
 import { PredefinedMultiRectangle } from "./model/map_objects/predefined-multi-rectangle";
 import { Room } from "./model/map_objects/room";
 import { Obstacle } from "./model/map_objects/obstacle";
+import { Furniture } from "./model/map_objects/furniture";
 import { areAllEntitiesDefined, isOldConfig, validateConfig } from "./config-validators";
 import { MapMode } from "./model/map_mode/map-mode";
 import { SelectionType } from "./model/map_mode/selection-type";
@@ -136,6 +137,7 @@ export class XiaomiVacuumMapCard extends LitElement {
     private selectablePredefinedRectangles: PredefinedMultiRectangle[] = [];
     private selectableRooms: Room[] = [];
     private obstacles: Obstacle[] = [];
+    private furnitures: Furniture[] = [];
     private selectablePredefinedPoints: PredefinedPoint[] = [];
     private coordinatesConverter?: CoordinatesConverter;
     private entitiesToManuallyUpdate: string[] = [];
@@ -310,6 +312,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mousemove="${(e: MouseEvent): void => this._mouseMove(e)}"
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
                         ${validCalibration ? this._drawRooms() : null}
+                        ${validCalibration ? this._drawFurnitures() : null}
                         ${validCalibration ? this._drawObstacles() : null}
                         ${validCalibration ? this._drawSelection() : null}
                     </svg>
@@ -1079,6 +1082,42 @@ export class XiaomiVacuumMapCard extends LitElement {
         console.log("Extracted obstacles:", this.obstacles.length);
     }
 
+    private _extractFurnitures(): void {
+        const config = this._getCurrentPreset();
+        const furnituresData = this.hass.states[config.map_source?.camera ?? ""]?.attributes["furnitures"] as any[];
+
+        if (!furnituresData || !Array.isArray(furnituresData)) {
+            this.furnitures = [];
+            return;
+        }
+
+        const context = this._getContext();
+        this.furnitures = furnituresData.map((furnitureArray) => {
+            // Format des données de l'addon: [x0, y0, x1, y1, x2, y2, x3, y3, x, y, width, height, type, size_type, angle, scale]
+            const furnitureConfig = {
+                x0: furnitureArray[0],
+                y0: furnitureArray[1],
+                x1: furnitureArray[2],
+                y1: furnitureArray[3],
+                x2: furnitureArray[4],
+                y2: furnitureArray[5],
+                x3: furnitureArray[6],
+                y3: furnitureArray[7],
+                x: furnitureArray[8],
+                y: furnitureArray[9],
+                width: furnitureArray[10],
+                height: furnitureArray[11],
+                type: furnitureArray[12],
+                size_type: furnitureArray[13],
+                angle: furnitureArray[14],
+                scale: furnitureArray[15],
+            };
+            return new Furniture(furnitureConfig, context);
+        });
+
+        console.log("Extracted furnitures:", this.furnitures.length);
+    }
+
     private async _run(debug: boolean): Promise<void> {
         const currentPreset = this._getCurrentPreset();
         const currentMode = this._getCurrentMode();
@@ -1163,6 +1202,13 @@ export class XiaomiVacuumMapCard extends LitElement {
     private _drawObstacles(): SVGTemplateResult | null {
         if (this.obstacles.length > 0) {
             return svg`${this.obstacles.map(o => o.render())}`;
+        }
+        return null;
+    }
+
+    private _drawFurnitures(): SVGTemplateResult | null {
+        if (this.furnitures.length > 0) {
+            return svg`${this.furnitures.map(f => f.render())}`;
         }
         return null;
     }
@@ -1378,8 +1424,9 @@ export class XiaomiVacuumMapCard extends LitElement {
             console.warn("No rooms found in camera attributes");
         }
 
-        // Extraire et afficher les obstacles
+        // Extraire et afficher les obstacles et meubles
         this._extractObstacles();
+        this._extractFurnitures();
     }
 
     private _activateRoomMode(): void {
@@ -2148,6 +2195,7 @@ export class XiaomiVacuumMapCard extends LitElement {
             ${PredefinedPoint.styles}
             ${Room.styles}
             ${Obstacle.styles}
+            ${Furniture.styles}
             ${IconsWrapper.styles}
             ${TilesWrapper.styles}
             ${DropdownMenu.styles}

@@ -1015,8 +1015,10 @@ export class XiaomiVacuumMapCard extends LitElement {
                         x: room.x ?? formatCoord(x, outline.length),
                         y: room.y ?? formatCoord(y, outline.length),
                     },
-                    label: {
-                        text: room.name ?? `Room ${room_id}`,
+                    // Ne pas afficher de label si la carte a déjà les noms des pièces
+                    // Afficher uniquement un label de secours si room.name n'existe pas
+                    label: room.name ? undefined : {
+                        text: `Room ${room_id}`,
                         x: room.x ?? formatCoord(x, outline.length),
                         y: room.y ?? formatCoord(y, outline.length),
                         offset_y: 35,

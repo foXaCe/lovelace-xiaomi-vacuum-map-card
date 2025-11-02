@@ -35,33 +35,45 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
+        console.log("Room badge clicked:", this._config.id);
+        console.log("Current mode:", this._context.getCurrentMode());
+
         // Toujours activer le mode nettoyage de pièce lors du clic
-        const currentModeIsRoom = this._context.getCurrentMode()?.selectionType === 0; // SelectionType.ROOM = 0
+        const currentMode = this._context.getCurrentMode();
+        const currentModeIsRoom = currentMode?.selectionType === 0; // SelectionType.ROOM = 0
+        console.log("Current mode is room?", currentModeIsRoom, "Selection type:", currentMode?.selectionType);
 
         if (!currentModeIsRoom) {
+            console.log("Activating room mode...");
             // Basculer vers le mode pièce
             this._context.activateRoomMode();
             // Attendre un peu que le mode soit activé
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, 100));
+            console.log("Room mode activated, new mode:", this._context.getCurrentMode());
         }
 
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
+            console.log("Max selections reached");
             forwardHaptic("failure");
             return;
         }
         this._toggleSelected();
+        console.log("Room selected:", this._selected);
         if (this._selected) {
             this._context.selectedRooms().push(this);
         } else {
             deleteFromArray(this._context.selectedRooms(), this);
         }
         this._context.selectionChanged();
+        console.log("Running immediately?");
         if (await this._context.runImmediately()) {
+            console.log("Running cleaning immediately");
             this._selected = false;
             deleteFromArray(this._context.selectedRooms(), this);
             this._context.selectionChanged();
             return;
         }
+        console.log("Selection complete");
         forwardHaptic("selection");
         this.update();
     }

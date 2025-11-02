@@ -1256,15 +1256,21 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _activateRoomMode(): void {
+        console.log("_activateRoomMode called");
+        console.log("Available modes:", this.modes.map(m => ({ template: m.config.template, selectionType: m.selectionType })));
+
         // Cherche le mode vacuum_clean_segment ou un mode avec ROOM selection type
         let roomMode = this.modes.findIndex(m => m.config.template === "vacuum_clean_segment");
+        console.log("vacuum_clean_segment mode index:", roomMode);
 
         // Si vacuum_clean_segment n'existe pas, chercher un mode avec ROOM
         if (roomMode === -1) {
             roomMode = this.modes.findIndex(m => m.selectionType === SelectionType.ROOM);
+            console.log("ROOM mode index:", roomMode);
         }
 
         if (roomMode !== -1) {
+            console.log("Setting mode to:", roomMode);
             this._setCurrentMode(roomMode, true);
             forwardHaptic("selection");
         } else {

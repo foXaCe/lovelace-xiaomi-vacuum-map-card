@@ -1348,7 +1348,9 @@ export class XiaomiVacuumMapCard extends LitElement {
     private _renderMapControls(): TemplateResult | typeof nothing {
         const currentMode = this._getCurrentMode();
         const isZoneMode = currentMode?.selectionType === SelectionType.MANUAL_RECTANGLE;
+        const isRoomMode = currentMode?.selectionType === SelectionType.ROOM;
         const hasZoneSelected = this.selectedManualRectangles.length > 0;
+        const hasRoomSelected = this.selectedRooms.length > 0;
 
         // Si on est en mode zone et qu'une zone est sélectionnée
         if (isZoneMode && hasZoneSelected) {
@@ -1368,6 +1370,22 @@ export class XiaomiVacuumMapCard extends LitElement {
                     class="icon-on-map clickable ripple zone-action"
                     title="Annuler"
                     @click="${this._cancelZoneMode}"></ha-icon>
+            `;
+        }
+
+        // Si on est en mode pièce et qu'une pièce est sélectionnée
+        if (isRoomMode && hasRoomSelected) {
+            return html`
+                <ha-icon
+                    icon="mdi:play"
+                    class="icon-on-map clickable ripple zone-action"
+                    title="Nettoyer la pièce"
+                    @click="${this._runRoomCleaning}"></ha-icon>
+                <ha-icon
+                    icon="mdi:close"
+                    class="icon-on-map clickable ripple zone-action"
+                    title="Annuler"
+                    @click="${this._cancelRoomMode}"></ha-icon>
             `;
         }
 
@@ -1418,6 +1436,10 @@ export class XiaomiVacuumMapCard extends LitElement {
         this._run(false);
     }
 
+    private _runRoomCleaning(): void {
+        this._run(false);
+    }
+
     private _cancelZoneMode(): void {
         console.log("_cancelZoneMode called");
         console.log("Current mode:", this.selectedMode);
@@ -1425,6 +1447,26 @@ export class XiaomiVacuumMapCard extends LitElement {
 
         // Effacer les zones sélectionnées
         this.selectedManualRectangles = [];
+
+        // Retourner au premier mode (généralement le mode par défaut)
+        this._setCurrentMode(0, true);
+        forwardHaptic("selection");
+        this.requestUpdate();
+    }
+
+    private _cancelRoomMode(): void {
+        console.log("_cancelRoomMode called");
+
+        // Effacer les pièces sélectionnées
+        this.selectedRooms = [];
+
+        // Réinitialiser toutes les pièces
+        this.selectableRooms.forEach(room => {
+            if (room.selected) {
+                // Force deselect by setting _selected to false
+                (room as any)._selected = false;
+            }
+        });
 
         // Retourner au premier mode (généralement le mode par défaut)
         this._setCurrentMode(0, true);

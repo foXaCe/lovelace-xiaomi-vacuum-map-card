@@ -301,6 +301,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
                         ${validCalibration ? this._drawRooms() : null}
                         ${validCalibration ? this._drawSelection() : null}
+                        ${validCalibration ? this._drawRobotWashingAnimation() : null}
                     </svg>
                 </div>
             </div>
@@ -1193,6 +1194,67 @@ export class XiaomiVacuumMapCard extends LitElement {
             default:
                 return null;
         }
+    }
+
+    private _getRobotPosition(): [number, number] | null {
+        const config = this._getCurrentPreset();
+        if (!config.map_source?.camera) {
+            return null;
+        }
+        const cameraState = this.hass.states[config.map_source.camera];
+        if (!cameraState) {
+            return null;
+        }
+        const robotPosition = cameraState.attributes["robot_position"];
+        if (!robotPosition || !Array.isArray(robotPosition) || robotPosition.length < 2) {
+            return null;
+        }
+        return [robotPosition[0], robotPosition[1]];
+    }
+
+    private _isRobotWashing(): boolean {
+        const config = this._getCurrentPreset();
+        const vacuumEntity = config.entity;
+        if (!vacuumEntity) {
+            return false;
+        }
+        const vacuumState = this.hass?.states[vacuumEntity];
+        if (!vacuumState) {
+            return false;
+        }
+        const state = vacuumState.state;
+        // Vérifier les états de lavage: washing, self_cleaning, etc.
+        return state === "washing" || state === "self_cleaning" ||
+               vacuumState.attributes["self_wash_base_status"] === "washing";
+    }
+
+    private _drawRobotWashingAnimation(): SVGTemplateResult | null {
+        if (!this._isRobotWashing()) {
+            return null;
+        }
+        const robotPos = this._getRobotPosition();
+        if (!robotPos || !this.coordinatesConverter) {
+            return null;
+        }
+        // Convertir les coordonnées vacuum en coordonnées map
+        const realMapPos = this.coordinatesConverter.vacuumToMap(robotPos[0], robotPos[1]);
+        if (!realMapPos) {
+            return null;
+        }
+        // Appliquer le realScale comme le font les MapObject
+        const mapped = [realMapPos[0] * this.realScale, realMapPos[1] * this.realScale];
+
+        // Dessiner 3 cercles animés qui tournent autour du robot (hélices/brosses)
+        return svg`
+            <g class="robot-washing-animation">
+                <circle class="washing-blade washing-blade-1"
+                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
+                <circle class="washing-blade washing-blade-2"
+                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
+                <circle class="washing-blade washing-blade-3"
+                        cx="${mapped[0]}" cy="${mapped[1]}" r="8" />
+            </g>
+        `;
     }
 
     private _toggleLock(): void {
@@ -2105,6 +2167,43 @@ export class XiaomiVacuumMapCard extends LitElement {
                 transform: scale(0, 0);
                 opacity: 0.7;
                 transition: 0s;
+            }
+
+            /* Animation des hélices pendant le lavage */
+            @keyframes washing-spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .robot-washing-animation {
+                pointer-events: none;
+            }
+
+            .washing-blade {
+                fill: rgba(66, 165, 245, 0.4);
+                stroke: rgba(66, 165, 245, 0.8);
+                stroke-width: calc(2px / var(--map-scale));
+                transform-origin: var(--blade-cx) var(--blade-cy);
+                animation: washing-spin 1s linear infinite;
+            }
+
+            .washing-blade-1 {
+                animation-delay: 0s;
+                transform: translate(calc(15px / var(--map-scale)), 0);
+            }
+
+            .washing-blade-2 {
+                animation-delay: 0.33s;
+                transform: translate(calc(-7.5px / var(--map-scale)), calc(-13px / var(--map-scale)));
+            }
+
+            .washing-blade-3 {
+                animation-delay: 0.66s;
+                transform: translate(calc(-7.5px / var(--map-scale)), calc(13px / var(--map-scale)));
             }
 
             ${PresetSelector.styles}

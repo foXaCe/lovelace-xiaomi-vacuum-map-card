@@ -64,6 +64,7 @@ import {
 import { PredefinedPoint } from "./model/map_objects/predefined-point";
 import { PredefinedMultiRectangle } from "./model/map_objects/predefined-multi-rectangle";
 import { Room } from "./model/map_objects/room";
+import { Obstacle } from "./model/map_objects/obstacle";
 import { areAllEntitiesDefined, isOldConfig, validateConfig } from "./config-validators";
 import { MapMode } from "./model/map_mode/map-mode";
 import { SelectionType } from "./model/map_mode/selection-type";
@@ -134,6 +135,7 @@ export class XiaomiVacuumMapCard extends LitElement {
     private selectedPredefinedPoints: PredefinedPoint[] = [];
     private selectablePredefinedRectangles: PredefinedMultiRectangle[] = [];
     private selectableRooms: Room[] = [];
+    private obstacles: Obstacle[] = [];
     private selectablePredefinedPoints: PredefinedPoint[] = [];
     private coordinatesConverter?: CoordinatesConverter;
     private entitiesToManuallyUpdate: string[] = [];
@@ -308,6 +310,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mousemove="${(e: MouseEvent): void => this._mouseMove(e)}"
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
                         ${validCalibration ? this._drawRooms() : null}
+                        ${validCalibration ? this._drawObstacles() : null}
                         ${validCalibration ? this._drawSelection() : null}
                     </svg>
                 </div>
@@ -1042,6 +1045,40 @@ export class XiaomiVacuumMapCard extends LitElement {
         return roomId;
     }
 
+    private _extractObstacles(): void {
+        const config = this._getCurrentPreset();
+        const obstaclesData = this.hass.states[config.map_source?.camera ?? ""]?.attributes["obstacles"] as any[];
+
+        if (!obstaclesData || !Array.isArray(obstaclesData)) {
+            this.obstacles = [];
+            return;
+        }
+
+        const context = this._getContext();
+        this.obstacles = obstaclesData.map((obstacleArray) => {
+            // Format des données de l'addon: [id, x, y, type, possibility, ignore_status, picture_status, object_id, pos_x, pos_y, width, height, segment, color_index]
+            const obstacleConfig = {
+                id: obstacleArray[0],
+                x: obstacleArray[1],
+                y: obstacleArray[2],
+                type: obstacleArray[3],
+                possibility: obstacleArray[4],
+                ignore_status: obstacleArray[5],
+                picture_status: obstacleArray[6],
+                object_id: obstacleArray[7],
+                pos_x: obstacleArray[8],
+                pos_y: obstacleArray[9],
+                width: obstacleArray[10],
+                height: obstacleArray[11],
+                segment: obstacleArray[12],
+                color_index: obstacleArray[13],
+            };
+            return new Obstacle(obstacleConfig, context);
+        });
+
+        console.log("Extracted obstacles:", this.obstacles.length);
+    }
+
     private async _run(debug: boolean): Promise<void> {
         const currentPreset = this._getCurrentPreset();
         const currentMode = this._getCurrentMode();
@@ -1120,6 +1157,13 @@ export class XiaomiVacuumMapCard extends LitElement {
             return result;
         }
         console.log("No rooms to render");
+        return null;
+    }
+
+    private _drawObstacles(): SVGTemplateResult | null {
+        if (this.obstacles.length > 0) {
+            return svg`${this.obstacles.map(o => o.render())}`;
+        }
         return null;
     }
 
@@ -1333,6 +1377,9 @@ export class XiaomiVacuumMapCard extends LitElement {
         } else {
             console.warn("No rooms found in camera attributes");
         }
+
+        // Extraire et afficher les obstacles
+        this._extractObstacles();
     }
 
     private _activateRoomMode(): void {
@@ -2100,6 +2147,7 @@ export class XiaomiVacuumMapCard extends LitElement {
             ${ManualPoint.styles}
             ${PredefinedPoint.styles}
             ${Room.styles}
+            ${Obstacle.styles}
             ${IconsWrapper.styles}
             ${TilesWrapper.styles}
             ${DropdownMenu.styles}

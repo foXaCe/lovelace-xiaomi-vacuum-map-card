@@ -308,6 +308,8 @@
             "map_only": "Carte uniquement (optionnel)",
             "show_tiles": "Afficher les tuiles d'informations",
             "tiles_only": "Afficher uniquement les tuiles (optionnel)",
+            "configure_tiles": "Configurer les tuiles",
+            "tiles_loading": "Chargement des tuiles...",
             "platforms_documentation": "Documentation de la plateforme choisie ({0})",
             "selection": "Sélection :",
             "copy": "Copier",

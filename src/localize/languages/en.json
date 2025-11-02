@@ -308,6 +308,8 @@
             "map_only": "Map only (optional)",
             "show_tiles": "Show information tiles",
             "tiles_only": "Show only tiles (optional)",
+            "configure_tiles": "Configure tiles",
+            "tiles_loading": "Loading tiles...",
             "platforms_documentation": "Chosen platform's documentation ({0})",
             "selection": "Selection:",
             "copy": "Copy",

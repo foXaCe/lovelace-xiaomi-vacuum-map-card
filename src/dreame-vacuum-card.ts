@@ -88,17 +88,6 @@ import { TilesWrapper } from "./components/tiles-wrapper";
 import { IconsWrapper } from "./components/icons-wrapper";
 import { PresetSelector } from "./components/preset-selector";
 
-const line1 = "   DREAME-VACUUM-CARD";
-const line2 = `   ${localize("common.version")} ${CARD_VERSION}`;
-const length = Math.max(line1.length, line2.length) + 3;
-const pad = (text: string, length: number) => text + " ".repeat(length - text.length);
-/* eslint no-console: 0 */
-console.info(
-    `%c${pad(line1, length)}\n%c${pad(line2, length)}`,
-    "color: orange; font-weight: bold; background: black",
-    "color: white; font-weight: bold; background: dimgray",
-);
-
 const windowWithCards = window as unknown as Window & { customCards: unknown[] };
 windowWithCards.customCards = windowWithCards.customCards || [];
 windowWithCards.customCards.push({
@@ -284,7 +273,6 @@ export class XiaomiVacuumMapCard extends LitElement {
 
         const mapSrc = this._getMapSrc(preset);
         const validCalibration = !!this.coordinatesConverter && this.coordinatesConverter.calibrated;
-        console.log("validCalibration:", validCalibration, "coordinatesConverter:", !!this.coordinatesConverter, "calibrated:", this.coordinatesConverter?.calibrated);
         const mapControls = validCalibration ? this._createMapControls() : [];
 
         const mapZoomerContent = html`
@@ -1061,7 +1049,6 @@ export class XiaomiVacuumMapCard extends LitElement {
             return new Obstacle(obstacleConfig, context);
         });
 
-        console.log("Extracted obstacles:", this.obstacles.length);
     }
 
     private _extractFurnitures(): void {
@@ -1097,7 +1084,6 @@ export class XiaomiVacuumMapCard extends LitElement {
             return new Furniture(furnitureConfig, context);
         });
 
-        console.log("Extracted furnitures:", this.furnitures.length);
     }
 
     private async _run(debug: boolean): Promise<void> {
@@ -1116,7 +1102,6 @@ export class XiaomiVacuumMapCard extends LitElement {
             if (debug || (this.config.debug ?? false)) {
                 const message = JSON.stringify(serviceCall, null, 2);
                 this._showToast("popups.success", "mdi:check", true);
-                console.log(message);
                 window.alert(message);
                 forwardHaptic("success");
             } else {
@@ -1170,14 +1155,9 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _drawRooms(): SVGTemplateResult | null {
-        // Toujours afficher les pièces si elles existent
-        console.log("_drawRooms called, selectableRooms count:", this.selectableRooms.length);
         if (this.selectableRooms.length > 0) {
-            const result = svg`${this.selectableRooms.map(r => r.render())}`;
-            console.log("Rendering rooms:", result);
-            return result;
+            return svg`${this.selectableRooms.map(r => r.render())}`;
         }
-        console.log("No rooms to render");
         return null;
     }
 
@@ -1296,18 +1276,6 @@ export class XiaomiVacuumMapCard extends LitElement {
                         await this._run(true);
                         break;
                     case "double_tap":
-                        console.log(
-                            JSON.stringify(
-                                {
-                                    ...this._getCurrentPreset(),
-                                    additional_presets: undefined,
-                                    title: undefined,
-                                    type: undefined,
-                                },
-                                null,
-                                2,
-                            ),
-                        );
                         window.alert("Configuration available in browser's console");
                         forwardHaptic("success");
                         break;
@@ -1347,16 +1315,11 @@ export class XiaomiVacuumMapCard extends LitElement {
         } else {
             // Afficher un message si aucun mode de zone n'est trouvé
             this._showToast("popups.no_zone_mode", "mdi:alert-circle", false);
-            console.warn("No zone mode found in map modes");
         }
     }
 
     private _initializeRooms(): void {
-        console.log("_initializeRooms called");
-        console.log("Modes available:", this.modes?.length);
-
         if (!this.modes || this.modes.length === 0) {
-            console.warn("Modes not yet initialized, will retry later");
             // Réessayer après un délai
             delay(500).then(() => this._initializeRooms());
             return;
@@ -1368,15 +1331,11 @@ export class XiaomiVacuumMapCard extends LitElement {
         );
 
         if (!roomMode) {
-            console.warn("No room mode found, cannot initialize clickable rooms");
             return;
         }
 
-        console.log("✓ Room mode found! Template:", roomMode.config.template);
-
         // Si le mode a déjà des predefinedSelections configurées, les utiliser
         if (roomMode.predefinedSelections && roomMode.predefinedSelections.length > 0) {
-            console.log("Using predefined room selections:", roomMode.predefinedSelections.length);
             this.selectableRooms = roomMode.predefinedSelections.map(
                 s => new Room(s as RoomConfig, this._getContext()),
             );
@@ -1385,13 +1344,11 @@ export class XiaomiVacuumMapCard extends LitElement {
         }
 
         // Sinon, essayer d'extraire les pièces des attributs de la caméra
-        console.log("Attempting to extract rooms from camera attributes...");
         const roomsConfig = this._getRoomsConfig();
 
         if (roomsConfig && roomsConfig.rooms.length > 0) {
-            console.log("✓ Rooms extracted from camera:", roomsConfig.rooms.length);
 
-            // Ajouter les pièces au mode si elles n'existent pas déjà
+            // Ajouter les pièces au mode
             if (!roomMode.predefinedSelections || roomMode.predefinedSelections.length === 0) {
                 roomMode.predefinedSelections = roomsConfig.rooms;
             }
@@ -1400,10 +1357,7 @@ export class XiaomiVacuumMapCard extends LitElement {
             this.selectableRooms = roomsConfig.rooms.map(
                 s => new Room(s as RoomConfig, this._getContext()),
             );
-            console.log("  Rooms initialized and clickable:", this.selectableRooms.length);
             this.requestUpdate();
-        } else {
-            console.warn("No rooms found in camera attributes");
         }
 
         // Les obstacles et meubles sont affichés par l'addon directement sur l'image PNG
@@ -1411,25 +1365,17 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _activateRoomMode(): void {
-        console.log("_activateRoomMode called");
-        console.log("Available modes:", this.modes.map(m => ({ template: m.config.template, selectionType: m.selectionType })));
-
         // Cherche le mode vacuum_clean_segment ou un mode avec ROOM selection type
         let roomMode = this.modes.findIndex(m => m.config.template === "vacuum_clean_segment");
-        console.log("vacuum_clean_segment mode index:", roomMode);
 
         // Si vacuum_clean_segment n'existe pas, chercher un mode avec ROOM
         if (roomMode === -1) {
             roomMode = this.modes.findIndex(m => m.selectionType === SelectionType.ROOM);
-            console.log("ROOM mode index:", roomMode);
         }
 
         if (roomMode !== -1) {
-            console.log("Setting mode to:", roomMode);
             this._setCurrentMode(roomMode, true);
             forwardHaptic("selection");
-        } else {
-            console.warn("No room mode found in map modes");
         }
     }
 
@@ -1529,10 +1475,6 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _cancelZoneMode(): void {
-        console.log("_cancelZoneMode called");
-        console.log("Current mode:", this.selectedMode);
-        console.log("Available modes:", this.modes.length);
-
         // Effacer les zones sélectionnées
         this.selectedManualRectangles = [];
 
@@ -1543,8 +1485,6 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _cancelRoomMode(): void {
-        console.log("_cancelRoomMode called");
-
         // Effacer les pièces sélectionnées
         this.selectedRooms = [];
 

@@ -38,7 +38,6 @@ export class ManualRectangle extends MapObject {
             .filter(p => !isNaN(p[0]) && !isNaN(p[1]))
             .map(p => p.join(", "))
             .join(" ");
-        if (points.length == 3) console.error(`Points: ${points}`);
         return points;
     }
 

@@ -280,6 +280,7 @@ export class XiaomiVacuumMapCard extends LitElement {
 
         const mapSrc = this._getMapSrc(preset);
         const validCalibration = !!this.coordinatesConverter && this.coordinatesConverter.calibrated;
+        console.log("validCalibration:", validCalibration, "coordinatesConverter:", !!this.coordinatesConverter, "calibrated:", this.coordinatesConverter?.calibrated);
         const mapControls = validCalibration ? this._createMapControls() : [];
 
         const mapZoomerContent = html`
@@ -1104,9 +1105,13 @@ export class XiaomiVacuumMapCard extends LitElement {
 
     private _drawRooms(): SVGTemplateResult | null {
         // Toujours afficher les pièces si elles existent
+        console.log("_drawRooms called, selectableRooms count:", this.selectableRooms.length);
         if (this.selectableRooms.length > 0) {
-            return svg`${this.selectableRooms.map(r => r.render())}`;
+            const result = svg`${this.selectableRooms.map(r => r.render())}`;
+            console.log("Rendering rooms:", result);
+            return result;
         }
+        console.log("No rooms to render");
         return null;
     }
 

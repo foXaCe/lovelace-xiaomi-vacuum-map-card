@@ -711,6 +711,8 @@ export class XiaomiVacuumMapCard extends LitElement {
             string => this._localize(string),
             entity => this._hass.states[entity].state,
             entity => this._hass.callService("homeassistant", "toggle", {"entity_id": entity}),
+            () => this._getCurrentMode(),
+            () => this._activateRoomMode(),
         );
     }
 
@@ -1250,6 +1252,23 @@ export class XiaomiVacuumMapCard extends LitElement {
             // Afficher un message si aucun mode de zone n'est trouvé
             this._showToast("popups.no_zone_mode", "mdi:alert-circle", false);
             console.warn("No zone mode found in map modes");
+        }
+    }
+
+    private _activateRoomMode(): void {
+        // Cherche le mode vacuum_clean_segment ou un mode avec ROOM selection type
+        let roomMode = this.modes.findIndex(m => m.config.template === "vacuum_clean_segment");
+
+        // Si vacuum_clean_segment n'existe pas, chercher un mode avec ROOM
+        if (roomMode === -1) {
+            roomMode = this.modes.findIndex(m => m.selectionType === SelectionType.ROOM);
+        }
+
+        if (roomMode !== -1) {
+            this._setCurrentMode(roomMode, true);
+            forwardHaptic("selection");
+        } else {
+            console.warn("No room mode found in map modes");
         }
     }
 

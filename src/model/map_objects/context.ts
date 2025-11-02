@@ -5,6 +5,7 @@ import { PredefinedPoint } from "./predefined-point";
 import { ManualRectangle } from "./manual-rectangle";
 import { CoordinatesConverter } from "./coordinates-converter";
 import { TranslatableString } from "../../types/types";
+import { MapMode } from "../map_mode/map-mode";
 
 export class Context {
     constructor(
@@ -26,6 +27,8 @@ export class Context {
         public readonly localize: (_: TranslatableString) => string,
         public readonly getState: (_: string) => string,
         public readonly toggleEntity: (_: string) => void,
+        public readonly getCurrentMode: () => MapMode | undefined,
+        public readonly activateRoomMode: () => void,
     ) {}
 
     public roundMap([x, y]: PointArrayNotation): PointArrayNotation {

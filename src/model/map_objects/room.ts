@@ -35,6 +35,16 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
+        // Toujours activer le mode nettoyage de pièce lors du clic
+        const currentModeIsRoom = this._context.getCurrentMode()?.selectionType === 0; // SelectionType.ROOM = 0
+
+        if (!currentModeIsRoom) {
+            // Basculer vers le mode pièce
+            this._context.activateRoomMode();
+            // Attendre un peu que le mode soit activé
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
             forwardHaptic("failure");
             return;

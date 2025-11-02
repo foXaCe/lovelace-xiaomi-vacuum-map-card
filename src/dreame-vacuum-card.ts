@@ -1277,44 +1277,48 @@ export class XiaomiVacuumMapCard extends LitElement {
             return;
         }
 
-        // Log chaque mode individuellement pour debug détaillé
-        console.log("=== Checking all modes ===");
-        this.modes.forEach((mode, index) => {
-            console.log(`Mode ${index}:`);
-            console.log("  - template:", mode.config.template);
-            console.log("  - selectionType:", mode.selectionType, `(${SelectionType[mode.selectionType]})`);
-            console.log("  - predefinedSelections:", mode.predefinedSelections?.length || 0);
-        });
-        console.log("=========================");
+        // Trouver le mode pièce
+        const roomMode = this.modes.find(m =>
+            m.config.template === "vacuum_clean_segment" || m.selectionType === SelectionType.ROOM
+        );
 
-        // Essayer de trouver le mode pièce
-        console.log("Looking for room mode with:");
-        console.log("  - template === 'vacuum_clean_segment' OR");
-        console.log("  - selectionType === SelectionType.ROOM (" + SelectionType.ROOM + ")");
+        if (!roomMode) {
+            console.warn("No room mode found, cannot initialize clickable rooms");
+            return;
+        }
 
-        const roomMode = this.modes.find(m => {
-            const matchTemplate = m.config.template === "vacuum_clean_segment";
-            const matchType = m.selectionType === SelectionType.ROOM;
-            console.log(`Checking mode with template '${m.config.template}':`, {
-                matchTemplate,
-                matchType,
-                result: matchTemplate || matchType
-            });
-            return matchTemplate || matchType;
-        });
+        console.log("✓ Room mode found! Template:", roomMode.config.template);
 
-        if (roomMode) {
-            console.log("✓ Room mode found! Template:", roomMode.config.template);
-            console.log("  Predefined selections:", roomMode.predefinedSelections?.length);
-
+        // Si le mode a déjà des predefinedSelections configurées, les utiliser
+        if (roomMode.predefinedSelections && roomMode.predefinedSelections.length > 0) {
+            console.log("Using predefined room selections:", roomMode.predefinedSelections.length);
             this.selectableRooms = roomMode.predefinedSelections.map(
                 s => new Room(s as RoomConfig, this._getContext()),
             );
-            console.log("  Rooms initialized:", this.selectableRooms.length);
+            this.requestUpdate();
+            return;
+        }
+
+        // Sinon, essayer d'extraire les pièces des attributs de la caméra
+        console.log("Attempting to extract rooms from camera attributes...");
+        const roomsConfig = this._getRoomsConfig();
+
+        if (roomsConfig && roomsConfig.rooms.length > 0) {
+            console.log("✓ Rooms extracted from camera:", roomsConfig.rooms.length);
+
+            // Ajouter les pièces au mode si elles n'existent pas déjà
+            if (!roomMode.predefinedSelections || roomMode.predefinedSelections.length === 0) {
+                roomMode.predefinedSelections = roomsConfig.rooms;
+            }
+
+            // Initialiser les pièces sélectionnables
+            this.selectableRooms = roomsConfig.rooms.map(
+                s => new Room(s as RoomConfig, this._getContext()),
+            );
+            console.log("  Rooms initialized and clickable:", this.selectableRooms.length);
             this.requestUpdate();
         } else {
-            console.error("✗ No room mode found in available modes");
-            console.log("Available templates:", this.modes.map(m => m.config.template));
+            console.warn("No rooms found in camera attributes");
         }
     }
 

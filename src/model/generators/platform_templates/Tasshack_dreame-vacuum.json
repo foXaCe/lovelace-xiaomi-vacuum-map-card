@@ -2,6 +2,7 @@
     "map_modes": {
         "default_templates": [
             "vacuum_clean_zone",
+            "vacuum_clean_segment",
             "vacuum_clean_point",
             "vacuum_goto"
         ],

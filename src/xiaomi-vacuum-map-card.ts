@@ -1327,9 +1327,17 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _cancelZoneMode(): void {
+        console.log("_cancelZoneMode called");
+        console.log("Current mode:", this.selectedMode);
+        console.log("Available modes:", this.modes.length);
+
+        // Effacer les zones sélectionnées
+        this.selectedManualRectangles = [];
+
         // Retourner au premier mode (généralement le mode par défaut)
         this._setCurrentMode(0, true);
         forwardHaptic("selection");
+        this.requestUpdate();
     }
 
     private _startCleaning(): void {

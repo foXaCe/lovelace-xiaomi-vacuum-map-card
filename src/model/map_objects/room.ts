@@ -105,6 +105,8 @@ export class Room extends PredefinedMapObject {
                     calc(var(--map-card-internal-room-outline-line-segment-gap) / var(--map-scale));
                 transition: stroke var(--map-card-internal-transitions-duration) ease,
                     fill var(--map-card-internal-transitions-duration) ease;
+                pointer-events: auto;
+                cursor: pointer;
             }
 
             .room-icon-wrapper {

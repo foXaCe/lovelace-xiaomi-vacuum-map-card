@@ -16,9 +16,9 @@ const plugins = [
         extensions: [".js", ".ts"],
         browser: true,
         preferBuiltins: false,
-        exportConditions: ["default", "module", "import", "development"],
+        exportConditions: ["production", "default", "module", "import"],
         mainFields: ["module", "main"],
-        dedupe: ["lit"],
+        dedupe: ["lit", "lit-element", "lit-html", "@lit/reactive-element"],
     }),
     commonjs({
         include: /node_modules/,

@@ -225,6 +225,7 @@ export class XiaomiVacuumMapCard extends LitElement {
         document.addEventListener(EVENT_LOVELACE_DOM, this._handleLovelaceDomEvent);
         this.connected = true;
         this._updateElements();
+        this._initializeRooms();
         delay(100).then(() => this.requestUpdate());
     }
 
@@ -305,6 +306,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mousedown="${(e: MouseEvent): void => this._mouseDown(e)}"
                         @mousemove="${(e: MouseEvent): void => this._mouseMove(e)}"
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
+                        ${validCalibration ? this._drawRooms() : null}
                         ${validCalibration ? this._drawSelection() : null}
                     </svg>
                 </div>
@@ -1100,6 +1102,14 @@ export class XiaomiVacuumMapCard extends LitElement {
         }
     }
 
+    private _drawRooms(): SVGTemplateResult | null {
+        // Toujours afficher les pièces si elles existent
+        if (this.selectableRooms.length > 0) {
+            return svg`${this.selectableRooms.map(r => r.render())}`;
+        }
+        return null;
+    }
+
     private _drawSelection(): SVGTemplateResult | null {
         switch (this._getCurrentMode()?.selectionType) {
             case SelectionType.MANUAL_RECTANGLE:
@@ -1107,7 +1117,8 @@ export class XiaomiVacuumMapCard extends LitElement {
             case SelectionType.PREDEFINED_RECTANGLE:
                 return svg`${this.selectablePredefinedRectangles.map(r => r.render())}`;
             case SelectionType.ROOM:
-                return svg`${this.selectableRooms.map(r => r.render())}`;
+                // Les pièces sont déjà affichées par _drawRooms(), ne pas les afficher deux fois
+                return null;
             case SelectionType.MANUAL_PATH:
                 return svg`${this.selectedManualPath?.render()}`;
             case SelectionType.MANUAL_POINT:
@@ -1252,6 +1263,21 @@ export class XiaomiVacuumMapCard extends LitElement {
             // Afficher un message si aucun mode de zone n'est trouvé
             this._showToast("popups.no_zone_mode", "mdi:alert-circle", false);
             console.warn("No zone mode found in map modes");
+        }
+    }
+
+    private _initializeRooms(): void {
+        // Initialiser les pièces au démarrage pour qu'elles soient toujours cliquables
+        const roomMode = this.modes.find(m =>
+            m.config.template === "vacuum_clean_segment" || m.selectionType === SelectionType.ROOM
+        );
+
+        if (roomMode) {
+            console.log("Initializing rooms from mode:", roomMode.config.template);
+            this.selectableRooms = roomMode.predefinedSelections.map(
+                s => new Room(s as RoomConfig, this._getContext()),
+            );
+            console.log("Rooms initialized:", this.selectableRooms.length);
         }
     }
 

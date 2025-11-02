@@ -68,6 +68,10 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         return this._config?.show_tiles !== false;
     }
 
+    get _tiles_only(): boolean {
+        return this._config?.tiles_only || false;
+    }
+
     private static _copyServiceCall(): void {
         window.dispatchEvent(new Event(EVENT_SERVICE_CALL_GET));
     }
@@ -190,6 +194,14 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._show_tiles}"
                             .configValue="${"show_tiles"}"
+                            @change="${this._valueChanged}"></ha-switch>
+                    </ha-formfield>
+                </div>
+                <div class="values">
+                    <ha-formfield class="switch-wrapper" .label="${this._localize("editor.label.tiles_only")}">
+                        <ha-switch
+                            .checked="${this._tiles_only}"
+                            .configValue="${"tiles_only"}"
                             @change="${this._valueChanged}"></ha-switch>
                     </ha-formfield>
                 </div>

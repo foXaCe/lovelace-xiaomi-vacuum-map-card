@@ -301,7 +301,6 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
                         ${validCalibration ? this._drawRooms() : null}
                         ${validCalibration ? this._drawSelection() : null}
-                        ${validCalibration ? this._drawRobotWashingAnimation() : null}
                     </svg>
                 </div>
             </div>
@@ -1194,94 +1193,6 @@ export class XiaomiVacuumMapCard extends LitElement {
             default:
                 return null;
         }
-    }
-
-    private _getRobotPosition(): [number, number] | null {
-        const config = this._getCurrentPreset();
-        if (!config.map_source?.camera) {
-            return null;
-        }
-        const cameraState = this.hass.states[config.map_source.camera];
-        if (!cameraState) {
-            return null;
-        }
-        const robotPosition = cameraState.attributes["robot_position"];
-        if (!robotPosition || !Array.isArray(robotPosition) || robotPosition.length < 2) {
-            return null;
-        }
-        return [robotPosition[0], robotPosition[1]];
-    }
-
-    private _isRobotWashing(): boolean {
-        const config = this._getCurrentPreset();
-        const vacuumEntity = config.entity;
-        if (!vacuumEntity) {
-            return false;
-        }
-        const vacuumState = this.hass?.states[vacuumEntity];
-        if (!vacuumState) {
-            return false;
-        }
-        const state = vacuumState.state;
-        // Vérifier les états de lavage: washing, self_cleaning, etc.
-        return state === "washing" || state === "self_cleaning" ||
-               vacuumState.attributes["self_wash_base_status"] === "washing";
-    }
-
-    private _drawRobotWashingAnimation(): SVGTemplateResult | null {
-        if (!this._isRobotWashing()) {
-            return null;
-        }
-        const robotPos = this._getRobotPosition();
-        if (!robotPos || !this.coordinatesConverter) {
-            return null;
-        }
-        // Convertir les coordonnées vacuum en coordonnées map
-        const realMapPos = this.coordinatesConverter.vacuumToMap(robotPos[0], robotPos[1]);
-        if (!realMapPos) {
-            return null;
-        }
-        // Appliquer le realScale comme le font les MapObject
-        const mapped = [realMapPos[0] * this.realScale, realMapPos[1] * this.realScale];
-
-        // Dessiner 3 cercles animés qui tournent autour du robot (hélices/brosses)
-        const bladeRadius = 15 / this.mapScale; // Rayon de l'orbite
-        const circleSize = 8 / this.mapScale;   // Taille des cercles
-
-        return svg`
-            <g class="robot-washing-animation" transform="translate(${mapped[0]},${mapped[1]})">
-                <g class="washing-orbit">
-                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
-                    <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        from="0"
-                        to="360"
-                        dur="1.5s"
-                        repeatCount="indefinite" />
-                </g>
-                <g class="washing-orbit">
-                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
-                    <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        from="120"
-                        to="480"
-                        dur="1.5s"
-                        repeatCount="indefinite" />
-                </g>
-                <g class="washing-orbit">
-                    <circle class="washing-blade" cx="${bladeRadius}" cy="0" r="${circleSize}" />
-                    <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        from="240"
-                        to="600"
-                        dur="1.5s"
-                        repeatCount="indefinite" />
-                </g>
-            </g>
-        `;
     }
 
     private _toggleLock(): void {
@@ -2194,22 +2105,6 @@ export class XiaomiVacuumMapCard extends LitElement {
                 transform: scale(0, 0);
                 opacity: 0.7;
                 transition: 0s;
-            }
-
-            /* Animation des hélices pendant le lavage */
-            .robot-washing-animation {
-                pointer-events: none;
-            }
-
-            .washing-orbit {
-                transform-origin: 0 0;
-            }
-
-            .washing-blade {
-                fill: rgba(66, 165, 245, 0.5);
-                stroke: rgba(33, 150, 243, 0.9);
-                stroke-width: 2;
-                filter: drop-shadow(0 0 3px rgba(33, 150, 243, 0.6));
             }
 
             ${PresetSelector.styles}

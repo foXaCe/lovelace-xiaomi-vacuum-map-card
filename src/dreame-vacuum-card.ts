@@ -312,8 +312,6 @@ export class XiaomiVacuumMapCard extends LitElement {
                         @mousemove="${(e: MouseEvent): void => this._mouseMove(e)}"
                         @mouseup="${(e: PointerEvent): void => this._mouseUp(e)}">
                         ${validCalibration ? this._drawRooms() : null}
-                        ${validCalibration ? this._drawFurnitures() : null}
-                        ${validCalibration ? this._drawObstacles() : null}
                         ${validCalibration ? this._drawSelection() : null}
                     </svg>
                 </div>
@@ -1424,9 +1422,8 @@ export class XiaomiVacuumMapCard extends LitElement {
             console.warn("No rooms found in camera attributes");
         }
 
-        // Extraire et afficher les obstacles et meubles
-        this._extractObstacles();
-        this._extractFurnitures();
+        // Les obstacles et meubles sont affichés par l'addon directement sur l'image PNG
+        // avec le vrai style Dreame, pas besoin de les extraire en SVG
     }
 
     private _activateRoomMode(): void {

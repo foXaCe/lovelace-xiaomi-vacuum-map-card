@@ -1277,33 +1277,44 @@ export class XiaomiVacuumMapCard extends LitElement {
             return;
         }
 
-        // Log tous les modes pour debug
-        console.log("All modes:", this.modes.map(m => ({
-            template: m.config.template,
-            selectionType: m.selectionType,
-            selectionTypeName: SelectionType[m.selectionType],
-            predefinedSelections: m.predefinedSelections?.length
-        })));
+        // Log chaque mode individuellement pour debug détaillé
+        console.log("=== Checking all modes ===");
+        this.modes.forEach((mode, index) => {
+            console.log(`Mode ${index}:`);
+            console.log("  - template:", mode.config.template);
+            console.log("  - selectionType:", mode.selectionType, `(${SelectionType[mode.selectionType]})`);
+            console.log("  - predefinedSelections:", mode.predefinedSelections?.length || 0);
+        });
+        console.log("=========================");
 
-        // Initialiser les pièces au démarrage pour qu'elles soient toujours cliquables
-        const roomMode = this.modes.find(m =>
-            m.config.template === "vacuum_clean_segment" || m.selectionType === SelectionType.ROOM
-        );
+        // Essayer de trouver le mode pièce
+        console.log("Looking for room mode with:");
+        console.log("  - template === 'vacuum_clean_segment' OR");
+        console.log("  - selectionType === SelectionType.ROOM (" + SelectionType.ROOM + ")");
 
-        console.log("Room mode found:", roomMode?.config.template);
-        console.log("SelectionType.ROOM value:", SelectionType.ROOM);
+        const roomMode = this.modes.find(m => {
+            const matchTemplate = m.config.template === "vacuum_clean_segment";
+            const matchType = m.selectionType === SelectionType.ROOM;
+            console.log(`Checking mode with template '${m.config.template}':`, {
+                matchTemplate,
+                matchType,
+                result: matchTemplate || matchType
+            });
+            return matchTemplate || matchType;
+        });
 
         if (roomMode) {
-            console.log("Initializing rooms from mode:", roomMode.config.template);
-            console.log("Predefined selections:", roomMode.predefinedSelections?.length);
+            console.log("✓ Room mode found! Template:", roomMode.config.template);
+            console.log("  Predefined selections:", roomMode.predefinedSelections?.length);
 
             this.selectableRooms = roomMode.predefinedSelections.map(
                 s => new Room(s as RoomConfig, this._getContext()),
             );
-            console.log("Rooms initialized:", this.selectableRooms.length);
+            console.log("  Rooms initialized:", this.selectableRooms.length);
             this.requestUpdate();
         } else {
-            console.warn("No room mode found in available modes");
+            console.error("✗ No room mode found in available modes");
+            console.log("Available templates:", this.modes.map(m => m.config.template));
         }
     }
 

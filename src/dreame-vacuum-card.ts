@@ -732,7 +732,8 @@ export class XiaomiVacuumMapCard extends LitElement {
         this.selectedRooms = [];
         this.selectedPredefinedPoints = [];
         this.selectablePredefinedRectangles = [];
-        this.selectableRooms = [];
+        // Ne pas vider selectableRooms - les pièces doivent rester visibles en permanence
+        // this.selectableRooms = [];
         this.selectablePredefinedPoints = [];
 
         switch (newMode?.selectionType) {
@@ -751,9 +752,12 @@ export class XiaomiVacuumMapCard extends LitElement {
                     .map(s => s.state_entity as string);
                 break;
             case SelectionType.ROOM:
-                this.selectableRooms = newMode.predefinedSelections.map(
-                    ps => new Room(ps as RoomConfig, this._getContext()),
-                );
+                // Ne recréer les pièces que si elles n'existent pas déjà
+                if (this.selectableRooms.length === 0) {
+                    this.selectableRooms = newMode.predefinedSelections.map(
+                        ps => new Room(ps as RoomConfig, this._getContext()),
+                    );
+                }
                 this.selectedRooms = this.selectableRooms.filter(s => s.selected);
                 this.entitiesToManuallyUpdate = newMode.predefinedSelections
                     .filter(s => s.state_entity)

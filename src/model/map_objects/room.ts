@@ -17,8 +17,6 @@ export class Room extends PredefinedMapObject {
 
     public render(): SVGTemplateResult {
         const poly = (this._config?.outline ?? []).map(p => this.vacuumToScaledMap(p[0], p[1]));
-        console.log(`Room ${this._config.id} - Outline points:`, this._config?.outline);
-        console.log(`Room ${this._config.id} - Polygon points:`, poly);
         return svg`
             <g class="room-wrapper ${this._selected ? "selected" : ""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
@@ -37,61 +35,36 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
-        console.log("=== Room badge clicked ===");
-        console.log("Room ID:", this._config.id);
-        console.log("Room outline:", this._config.outline);
-        console.log("Room icon config:", this._config.icon);
-        console.log("Room label config:", this._config.label);
-        console.log("Current mode:", this._context.getCurrentMode());
-
-        // Toujours activer le mode nettoyage de pièce lors du clic
         const currentMode = this._context.getCurrentMode();
         const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
-        console.log("Is already in room mode?", currentModeIsRoom);
-        console.log("Current selectionType:", currentMode?.selectionType);
-        console.log("Current template:", currentMode?.config?.template);
 
         if (!currentModeIsRoom) {
-            console.log(">>> Switching to room mode...");
-            // Basculer vers le mode pièce
             this._context.activateRoomMode();
-            // Attendre un peu que le mode soit activé
             await new Promise(resolve => setTimeout(resolve, 150));
 
             const newMode = this._context.getCurrentMode();
-            console.log(">>> After switch - new mode:", newMode);
-            console.log(">>> New selectionType:", newMode?.selectionType);
-            console.log(">>> New template:", newMode?.config?.template);
-
             if (newMode?.selectionType !== 2) {
-                console.error("❌ Failed to switch to room mode!");
                 return;
             }
-            console.log("✓ Room mode activated successfully");
         }
 
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
-            console.log("Max selections reached");
             forwardHaptic("failure");
             return;
         }
         this._toggleSelected();
-        console.log("Room selected:", this._selected);
         if (this._selected) {
             this._context.selectedRooms().push(this);
         } else {
             deleteFromArray(this._context.selectedRooms(), this);
         }
         this._context.selectionChanged();
-        console.log("Running immediately?");
         if (await this._context.runImmediately()) {
-            console.log("Running cleaning immediately");
             this._selected = false;
             deleteFromArray(this._context.selectedRooms(), this);
             this._context.selectionChanged();
             return;
         }
-        console.log("Selection complete");
         forwardHaptic("selection");
         this.update();
     }

@@ -292,7 +292,8 @@
     "popups": {
         "success": "Success!",
         "no_selection": "No selection provided",
-        "failed": "Failed to call service"
+        "failed": "Failed to call service",
+        "no_zone_mode": "No zone mode available. Check your configuration."
     },
     "editor": {
         "description": {

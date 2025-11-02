@@ -292,7 +292,8 @@
     "popups": {
         "success": "Réussi !",
         "no_selection": "Sélection non fournie",
-        "failed": "L'appel au service a échoué"
+        "failed": "L'appel au service a échoué",
+        "no_zone_mode": "Aucun mode de zone disponible. Vérifiez votre configuration."
     },
     "editor": {
         "description": {

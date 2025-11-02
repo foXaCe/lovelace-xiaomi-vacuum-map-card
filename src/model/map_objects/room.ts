@@ -17,8 +17,10 @@ export class Room extends PredefinedMapObject {
 
     public render(): SVGTemplateResult {
         const poly = (this._config?.outline ?? []).map(p => this.vacuumToScaledMap(p[0], p[1]));
+        console.log(`Room ${this._config.id} - Outline points:`, this._config?.outline);
+        console.log(`Room ${this._config.id} - Polygon points:`, poly);
         return svg`
-            <g class="room-wrapper ${this._selected ? "selected" : ""} 
+            <g class="room-wrapper ${this._selected ? "selected" : ""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
                 <polygon class="room-outline clickable"
                          points="${poly.map(p => p.join(", ")).join(" ")}"
@@ -37,6 +39,9 @@ export class Room extends PredefinedMapObject {
     private async _click(): Promise<void> {
         console.log("=== Room badge clicked ===");
         console.log("Room ID:", this._config.id);
+        console.log("Room outline:", this._config.outline);
+        console.log("Room icon config:", this._config.icon);
+        console.log("Room label config:", this._config.label);
         console.log("Current mode:", this._context.getCurrentMode());
 
         // Toujours activer le mode nettoyage de pièce lors du clic

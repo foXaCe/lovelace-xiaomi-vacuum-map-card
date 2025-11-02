@@ -188,7 +188,7 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._map_only}"
                             .configValue="${"map_only"}"
-                            @change="${this._valueChanged}"></ha-switch>
+                            @change="${this._mapOnlyChanged}"></ha-switch>
                     </ha-formfield>
                 </div>
                 <div class="values">
@@ -331,6 +331,19 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         fireEvent(this, "config-changed", { config: this._config });
     }
 
+    private _mapOnlyChanged(ev): void {
+        if (!this._config || !this.hass) {
+            return;
+        }
+        const checked = ev.target.checked;
+        this._config = {
+            ...this._config,
+            map_only: checked,
+            tiles_only: checked ? false : this._config.tiles_only, // Désactiver tiles_only si map_only est activé
+        };
+        fireEvent(this, "config-changed", { config: this._config });
+    }
+
     private _tilesOnlyChanged(ev): void {
         if (!this._config || !this.hass) {
             return;
@@ -339,6 +352,7 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         this._config = {
             ...this._config,
             tiles_only: checked,
+            map_only: checked ? false : this._config.map_only, // Désactiver map_only si tiles_only est activé
         };
         fireEvent(this, "config-changed", { config: this._config });
 

@@ -1233,27 +1233,28 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _activateZoneMode(): void {
-        console.log("_activateZoneMode called");
-        console.log("Available modes:", this.modes.map(m => ({ template: m.config.template, selectionType: m.selectionType })));
-
         // Cherche le mode vacuum_clean_zone ou vacuum_clean_zone_predefined
         let zoneMode = this.modes.findIndex(m => m.config.template === "vacuum_clean_zone");
-        console.log("vacuum_clean_zone mode index:", zoneMode);
 
         // Si vacuum_clean_zone n'existe pas, chercher un mode avec MANUAL_RECTANGLE
         if (zoneMode === -1) {
             zoneMode = this.modes.findIndex(m => m.selectionType === SelectionType.MANUAL_RECTANGLE);
-            console.log("MANUAL_RECTANGLE mode index:", zoneMode);
         }
 
         if (zoneMode !== -1) {
-            console.log("Setting mode to:", zoneMode);
             this._setCurrentMode(zoneMode, true);
             forwardHaptic("selection");
+
+            // Ajouter automatiquement un rectangle si on est en mode MANUAL_RECTANGLE
+            const currentMode = this._getCurrentMode();
+            if (currentMode?.selectionType === SelectionType.MANUAL_RECTANGLE) {
+                // Attendre un peu que le mode soit bien activé avant d'ajouter le rectangle
+                setTimeout(() => this._addRectangle(), 100);
+            }
         } else {
             // Afficher un message si aucun mode de zone n'est trouvé
-            console.warn("No zone mode found in map modes");
             this._showToast("popups.no_zone_mode", "mdi:alert-circle", false);
+            console.warn("No zone mode found in map modes");
         }
     }
 

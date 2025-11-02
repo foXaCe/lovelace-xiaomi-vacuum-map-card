@@ -1010,7 +1010,9 @@ export class XiaomiVacuumMapCard extends LitElement {
 
                 const roomConfig = {
                     id: room_id,
-                    icon: {
+                    // Ne pas afficher d'icône si la carte a déjà les badges avec noms
+                    // Afficher uniquement une icône de secours si room.name n'existe pas
+                    icon: room.name ? undefined : {
                         name: room.icon ?? "mdi:broom",
                         x: room.x ?? formatCoord(x, outline.length),
                         y: room.y ?? formatCoord(y, outline.length),

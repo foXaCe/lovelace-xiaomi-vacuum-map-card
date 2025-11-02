@@ -99,12 +99,16 @@ export class Room extends PredefinedMapObject {
             .room-outline {
                 stroke: var(--map-card-internal-room-outline-line-color);
                 stroke-width: calc(var(--map-card-internal-room-outline-line-width) / var(--map-scale));
-                fill: var(--map-card-internal-room-outline-fill-color);
+                fill: transparent;
+                fill-opacity: 0;
+                stroke-opacity: 0;
                 stroke-linejoin: round;
                 stroke-dasharray: calc(var(--map-card-internal-room-outline-line-segment-line) / var(--map-scale)),
                     calc(var(--map-card-internal-room-outline-line-segment-gap) / var(--map-scale));
                 transition: stroke var(--map-card-internal-transitions-duration) ease,
-                    fill var(--map-card-internal-transitions-duration) ease;
+                    fill var(--map-card-internal-transitions-duration) ease,
+                    stroke-opacity var(--map-card-internal-transitions-duration) ease,
+                    fill-opacity var(--map-card-internal-transitions-duration) ease;
                 pointer-events: auto;
                 cursor: pointer;
             }
@@ -142,6 +146,8 @@ export class Room extends PredefinedMapObject {
             .room-wrapper.selected > .room-outline {
                 stroke: var(--map-card-internal-room-outline-line-color-selected);
                 fill: var(--map-card-internal-room-outline-fill-color-selected);
+                stroke-opacity: 1;
+                fill-opacity: 1;
             }
 
             .room-wrapper.selected > * > .room-icon-wrapper {

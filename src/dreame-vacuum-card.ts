@@ -272,7 +272,11 @@ export class XiaomiVacuumMapCard extends LitElement {
         const modes = this.modes;
 
         const mapSrc = this._getMapSrc(preset);
-        const validCalibration = !!this.coordinatesConverter && this.coordinatesConverter.calibrated;
+        const platformsWithDefaultCalibration = PlatformGenerator.getPlatformsWithDefaultCalibration();
+        const platformHasDefaultCalibration = platformsWithDefaultCalibration.includes(
+            PlatformGenerator.getPlatformName(preset.vacuum_platform)
+        );
+        const validCalibration = (!!this.coordinatesConverter && this.coordinatesConverter.calibrated) || platformHasDefaultCalibration;
         const mapControls = validCalibration ? this._createMapControls() : [];
 
         const mapZoomerContent = html`

@@ -34,7 +34,9 @@ export class CoordinatesConverter {
                 this.calibrated = true;
             }
         } else {
-            this.calibrated = false;
+            // For platforms with default calibration (no calibration points needed),
+            // use identity transformation (map coordinates = vacuum coordinates)
+            this.calibrated = true;
         }
     }
 
@@ -45,6 +47,10 @@ export class CoordinatesConverter {
         if (this.transformMode === TransformMode.PERSPECTIVE && this.mapToVacuumTransformer) {
             return this.mapToVacuumTransformer(x, y);
         }
+        // Identity transformation for platforms with default calibration
+        if (!this.transformMode) {
+            return [x, y];
+        }
         throw Error("Missing calibration");
     }
 
@@ -54,6 +60,10 @@ export class CoordinatesConverter {
         }
         if (this.transformMode === TransformMode.PERSPECTIVE && this.vacuumToMapTransformer) {
             return this.vacuumToMapTransformer(x, y);
+        }
+        // Identity transformation for platforms with default calibration
+        if (!this.transformMode) {
+            return [x, y];
         }
         throw Error("Missing calibration");
     }

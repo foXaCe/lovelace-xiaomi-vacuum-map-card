@@ -26,7 +26,7 @@ export class PlatformGenerator {
     ]);
 
     public static getPlatformsWithDefaultCalibration(): string[] {
-        return [];
+        return [PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM];
     }
 
     public static getPlatforms(): string[] {

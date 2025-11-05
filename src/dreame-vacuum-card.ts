@@ -998,6 +998,9 @@ export class XiaomiVacuumMapCard extends LitElement {
                 const room = rooms[room_id];
                 if(!room.outline && !room.x0 && !room.y0 && !room.x1 && !room.y1)
                     continue;
+                // Skip hidden rooms (visibility = "Hidden")
+                if (room.visibility === "Hidden")
+                    continue;
                 const outline = room.outline ?? [
                     [room.x0, room.y0],
                     [room.x1, room.y0],

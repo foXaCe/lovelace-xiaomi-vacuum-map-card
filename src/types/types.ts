@@ -286,6 +286,7 @@ export interface MapExtractorRoom {
     readonly icon: string | undefined;
     readonly x: number | undefined;
     readonly y: number | undefined;
+    readonly visibility: string | undefined;
 }
 
 export interface RoomConfigEventData {

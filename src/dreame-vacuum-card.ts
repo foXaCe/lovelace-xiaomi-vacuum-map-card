@@ -1270,13 +1270,18 @@ export class XiaomiVacuumMapCard extends LitElement {
     private _mouseUp(event: PointerEvent | MouseEvent | TouchEvent): void {
         const target = event.target as SVGElement;
         // Pour les éléments SVG, className est un SVGAnimatedString, pas une string
-        const classNames = target?.className?.baseVal || target?.getAttribute?.("class") || "";
+        const classNameObj = target?.className;
+        const classNames = (typeof classNameObj === "string"
+            ? classNameObj
+            : classNameObj?.baseVal) || target?.getAttribute?.("class") || "";
         const isRoomPolygon = classNames.includes("room-polygon");
 
         console.log("🖱️ [MOUSEUP] _mouseUp called", {
             eventType: event.type,
             target: target?.tagName,
             targetId: target?.id,
+            classNameType: typeof classNameObj,
+            classNameBaseVal: classNameObj?.baseVal,
             classNames: classNames,
             isRoomPolygon: isRoomPolygon,
             shouldHandleMouseUp: this.shouldHandleMouseUp

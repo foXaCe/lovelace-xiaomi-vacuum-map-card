@@ -1276,17 +1276,21 @@ export class XiaomiVacuumMapCard extends LitElement {
                     forwardHaptic("selection");
                     this.selectedManualPath.addPoint(x, y);
                     this._selectionChanged();
+                    stopEvent(event);
+                    this.requestUpdate();
                     break;
                 case SelectionType.MANUAL_POINT:
                     forwardHaptic("selection");
                     this.selectedManualPoint = new ManualPoint(x, y, this._getContext());
                     this._selectionChanged();
+                    stopEvent(event);
+                    this.requestUpdate();
                     break;
                 default:
-                    return;
+                    // Ne pas bloquer l'événement pour les autres modes (ROOM, etc.)
+                    // L'événement doit se propager aux polygones des pièces
+                    break;
             }
-            stopEvent(event);
-            this.requestUpdate();
         }
         this.shouldHandleMouseUp = false;
     }

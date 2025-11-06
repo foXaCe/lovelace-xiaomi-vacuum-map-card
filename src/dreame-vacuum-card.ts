@@ -2009,6 +2009,7 @@ export class XiaomiVacuumMapCard extends LitElement {
             #map-image {
                 width: 100%;
                 margin-bottom: -6px;
+                pointer-events: none;
             }
 
             #map-image.zoomed {

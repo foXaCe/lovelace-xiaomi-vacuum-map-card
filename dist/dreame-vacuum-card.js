@@ -1826,6 +1826,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
             #map-image {
                 width: 100%;
                 margin-bottom: -6px;
+                pointer-events: none;
             }
 
             #map-image.zoomed {

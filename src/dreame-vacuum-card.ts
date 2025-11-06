@@ -1202,7 +1202,11 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _drawSelection(): SVGTemplateResult | null {
-        switch (this._getCurrentMode()?.selectionType) {
+        const currentMode = this._getCurrentMode();
+        // Ne pas afficher les zones prédéfinies en mode ROOM car elles bloquent les clicks sur les pièces
+        const shouldHidePredefinedRectangles = currentMode?.selectionType === SelectionType.ROOM;
+
+        switch (currentMode?.selectionType) {
             case SelectionType.MANUAL_RECTANGLE:
                 return svg`${this.selectedManualRectangles.map(r => r.render())}`;
             case SelectionType.PREDEFINED_RECTANGLE:
@@ -1217,7 +1221,12 @@ export class XiaomiVacuumMapCard extends LitElement {
             case SelectionType.PREDEFINED_POINT:
                 return svg`${this.selectablePredefinedPoints.map(p => p.render())}`;
             default:
-                return null;
+                // Si on est en mode ROOM, ne pas afficher les zones prédéfinies
+                if (shouldHidePredefinedRectangles) {
+                    return null;
+                }
+                // Sinon, afficher les zones prédéfinies en mode par défaut
+                return svg`${this.selectablePredefinedRectangles.map(r => r.render())}`;
         }
     }
 

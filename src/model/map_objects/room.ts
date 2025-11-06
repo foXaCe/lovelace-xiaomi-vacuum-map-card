@@ -32,11 +32,15 @@ export class Room extends PredefinedMapObject {
                 <polygon class="room-outline clickable room-polygon"
                          data-room-id="${this._config.id}"
                          points="${pointsStr}"
-                         @mouseup="${async (e: MouseEvent): Promise<void> => {
-                             console.log(`🖱️ [ROOM POLYGON MOUSEUP] Room ${this._config.id} polygon mouseup`, e);
+                         @click="${async (e: MouseEvent): Promise<void> => {
+                             console.log(`🖱️ [ROOM POLYGON CLICK] Room ${this._config.id} polygon clicked`, e);
                              e.stopPropagation();
                              e.preventDefault();
                              await this._click();
+                         }}"
+                         @mousedown="${(e: MouseEvent): void => {
+                             console.log(`🖱️ [ROOM POLYGON MOUSEDOWN] Room ${this._config.id}`);
+                             e.stopPropagation();
                          }}"
                          @mouseenter="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse enter`)}"
                          @mouseleave="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse leave`)}">

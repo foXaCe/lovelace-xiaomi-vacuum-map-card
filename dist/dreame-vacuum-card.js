@@ -1488,7 +1488,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 <pre style="padding: 10px; background-color: red;">${e[0]}</pre>
             `}}_showOldConfig(){return K`
             <hui-warning>
-                <h1>Xiaomi Vacuum Map Card ${"vv3.5.11"}</h1>
+                <h1>Xiaomi Vacuum Map Card ${"vv3.5.12"}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
                     <a

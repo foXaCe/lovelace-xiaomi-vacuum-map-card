@@ -1268,12 +1268,26 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _mouseUp(event: PointerEvent | MouseEvent | TouchEvent): void {
+        const target = event.target as Element;
+        const isRoomPolygon = target?.classList?.contains("room-polygon");
+
         console.log("🖱️ [MOUSEUP] _mouseUp called", {
             eventType: event.type,
-            target: (event.target as Element)?.tagName,
-            targetId: (event.target as Element)?.id,
+            target: target?.tagName,
+            targetId: target?.id,
+            targetClass: target?.className,
+            isRoomPolygon: isRoomPolygon,
             shouldHandleMouseUp: this.shouldHandleMouseUp
         });
+
+        // Si le click provient d'un polygone de pièce, ne rien faire ici
+        // Le handler du polygone va gérer le click
+        if (isRoomPolygon) {
+            console.log("🖱️ [MOUSEUP] Click on room polygon, letting polygon handler take over");
+            this.shouldHandleMouseUp = false;
+            return;
+        }
+
         const currentMode = this._getCurrentMode();
         console.log("🖱️ [MOUSEUP] currentMode:", currentMode?.selectionType);
         if (!(event instanceof MouseEvent && event.button != 0) && this.shouldHandleMouseUp && currentMode) {

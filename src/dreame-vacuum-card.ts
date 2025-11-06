@@ -1268,8 +1268,16 @@ export class XiaomiVacuumMapCard extends LitElement {
     }
 
     private _mouseUp(event: PointerEvent | MouseEvent | TouchEvent): void {
+        console.log("🖱️ [MOUSEUP] _mouseUp called", {
+            eventType: event.type,
+            target: (event.target as Element)?.tagName,
+            targetId: (event.target as Element)?.id,
+            shouldHandleMouseUp: this.shouldHandleMouseUp
+        });
         const currentMode = this._getCurrentMode();
+        console.log("🖱️ [MOUSEUP] currentMode:", currentMode?.selectionType);
         if (!(event instanceof MouseEvent && event.button != 0) && this.shouldHandleMouseUp && currentMode) {
+            console.log("🖱️ [MOUSEUP] Entering handler, selectionType:", currentMode.selectionType);
             const { x, y } = getMousePosition(event, this._getSvgWrapper(), 1);
             switch (currentMode.selectionType) {
                 case SelectionType.MANUAL_PATH:
@@ -1287,10 +1295,17 @@ export class XiaomiVacuumMapCard extends LitElement {
                     this.requestUpdate();
                     break;
                 default:
+                    console.log("🖱️ [MOUSEUP] In default case, NOT stopping event propagation");
                     // Ne pas bloquer l'événement pour les autres modes (ROOM, etc.)
                     // L'événement doit se propager aux polygones des pièces
                     break;
             }
+        } else {
+            console.log("🖱️ [MOUSEUP] Handler skipped because:", {
+                isRightClick: event instanceof MouseEvent && event.button != 0,
+                shouldHandleMouseUp: this.shouldHandleMouseUp,
+                hasCurrentMode: !!currentMode
+            });
         }
         this.shouldHandleMouseUp = false;
     }

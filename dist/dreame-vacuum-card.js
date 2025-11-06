@@ -737,8 +737,8 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
             .room-outline {
                 stroke: var(--map-card-internal-room-outline-line-color);
                 stroke-width: calc(var(--map-card-internal-room-outline-line-width) / var(--map-scale));
-                fill: transparent;
-                fill-opacity: 0;
+                fill: rgba(255, 0, 0, 0.01);
+                fill-opacity: 1;
                 stroke-opacity: 0;
                 stroke-linejoin: round;
                 stroke-dasharray: calc(var(--map-card-internal-room-outline-line-segment-line) / var(--map-scale)),
@@ -747,7 +747,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                     fill var(--map-card-internal-transitions-duration) ease,
                     stroke-opacity var(--map-card-internal-transitions-duration) ease,
                     fill-opacity var(--map-card-internal-transitions-duration) ease;
-                pointer-events: auto;
+                pointer-events: all !important;
                 cursor: pointer;
             }
 
@@ -1493,7 +1493,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 <pre style="padding: 10px; background-color: red;">${e[0]}</pre>
             `}}_showOldConfig(){return K`
             <hui-warning>
-                <h1>Xiaomi Vacuum Map Card ${"vv3.5.20"}</h1>
+                <h1>Xiaomi Vacuum Map Card ${"vv3.5.21"}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
                     <a

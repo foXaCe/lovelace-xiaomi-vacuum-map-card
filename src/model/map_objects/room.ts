@@ -17,12 +17,26 @@ export class Room extends PredefinedMapObject {
 
     public render(): SVGTemplateResult {
         const poly = (this._config?.outline ?? []).map(p => this.vacuumToScaledMap(p[0], p[1]));
+        const pointsStr = poly.map(p => p.join(", ")).join(" ");
+        console.log(`🔍 [ROOM RENDER] Room ${this._config.id}:`, {
+            outlinePoints: this._config?.outline?.length || 0,
+            scaledPoints: poly.length,
+            pointsString: pointsStr,
+            selected: this._selected,
+            hasIcon: !!this._config.icon,
+            hasLabel: !!this._config.label
+        });
         return svg`
             <g class="room-wrapper ${this._selected ? "selected" : ""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
                 <polygon class="room-outline clickable"
-                         points="${poly.map(p => p.join(", ")).join(" ")}"
-                         @click="${async (): Promise<void> => this._click()}">
+                         points="${pointsStr}"
+                         @click="${async (e: MouseEvent): Promise<void> => {
+                             console.log(`🖱️ [ROOM POLYGON CLICK] Room ${this._config.id} polygon clicked`, e);
+                             await this._click();
+                         }}"
+                         @mouseenter="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse enter`)}"
+                         @mouseleave="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse leave`)}">
                 </polygon>
                 ${this.renderIcon(this._config.icon, () => this._click(), "room-icon-wrapper")}
                 ${this.renderLabel(this._config.label, "room-label")}

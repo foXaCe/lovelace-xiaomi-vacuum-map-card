@@ -721,7 +721,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm,"_")}-wrapper">
                 <polygon class="room-outline clickable"
                          points="${o}"
-                         @click="${async e=>{console.log(`🖱️ [ROOM POLYGON CLICK] Room ${this._config.id} polygon clicked`,e),await this._click()}}"
+                         @mouseup="${async e=>{console.log(`🖱️ [ROOM POLYGON MOUSEUP] Room ${this._config.id} polygon mouseup`,e),e.stopPropagation(),await this._click()}}"
                          @mouseenter="${()=>console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse enter`)}"
                          @mouseleave="${()=>console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse leave`)}">
                 </polygon>
@@ -1491,7 +1491,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 <pre style="padding: 10px; background-color: red;">${e[0]}</pre>
             `}}_showOldConfig(){return K`
             <hui-warning>
-                <h1>Xiaomi Vacuum Map Card ${"vv3.5.17"}</h1>
+                <h1>Xiaomi Vacuum Map Card ${"vv3.5.18"}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
                     <a

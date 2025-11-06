@@ -31,8 +31,9 @@ export class Room extends PredefinedMapObject {
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
                 <polygon class="room-outline clickable"
                          points="${pointsStr}"
-                         @click="${async (e: MouseEvent): Promise<void> => {
-                             console.log(`🖱️ [ROOM POLYGON CLICK] Room ${this._config.id} polygon clicked`, e);
+                         @mouseup="${async (e: MouseEvent): Promise<void> => {
+                             console.log(`🖱️ [ROOM POLYGON MOUSEUP] Room ${this._config.id} polygon mouseup`, e);
+                             e.stopPropagation();
                              await this._click();
                          }}"
                          @mouseenter="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse enter`)}"

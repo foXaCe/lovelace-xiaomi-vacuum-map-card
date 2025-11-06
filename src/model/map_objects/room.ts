@@ -35,31 +35,42 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
+        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} clicked`);
         const currentMode = this._context.getCurrentMode();
         const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
+        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - currentModeIsRoom:`, currentModeIsRoom);
 
         if (!currentModeIsRoom) {
+            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - Activating room mode`);
             this._context.activateRoomMode();
             await new Promise(resolve => setTimeout(resolve, 150));
 
             const newMode = this._context.getCurrentMode();
+            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - newMode selectionType:`, newMode?.selectionType);
             if (newMode?.selectionType !== 2) {
+                console.log(`❌ [ROOM CLICK] Room ${this._config.id} - Failed to activate room mode, aborting`);
                 return;
             }
         }
 
+        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - selected: ${this._selected}, selectedRooms: ${this._context.selectedRooms().length}, maxSelections: ${this._context.maxSelections()}`);
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
+            console.log(`❌ [ROOM CLICK] Room ${this._config.id} - Max selections reached`);
             forwardHaptic("failure");
             return;
         }
         this._toggleSelected();
+        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - toggled to: ${this._selected}`);
         if (this._selected) {
             this._context.selectedRooms().push(this);
+            console.log(`✅ [ROOM CLICK] Room ${this._config.id} - Added to selection`);
         } else {
             deleteFromArray(this._context.selectedRooms(), this);
+            console.log(`➖ [ROOM CLICK] Room ${this._config.id} - Removed from selection`);
         }
         this._context.selectionChanged();
         if (await this._context.runImmediately()) {
+            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - Running immediately, clearing selection`);
             this._selected = false;
             deleteFromArray(this._context.selectedRooms(), this);
             this._context.selectionChanged();
@@ -67,6 +78,7 @@ export class Room extends PredefinedMapObject {
         }
         forwardHaptic("selection");
         this.update();
+        console.log(`✅ [ROOM CLICK] Room ${this._config.id} - Click completed successfully`);
     }
 
     public static get styles(): CSSResultGroup {

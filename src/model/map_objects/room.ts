@@ -5,7 +5,7 @@ import { forwardHaptic } from "custom-card-helpers";
 import { Context } from "./context";
 import { deleteFromArray } from "../../utils";
 import { RoomConfig } from "../../types/types";
-import {PredefinedMapObject} from "./predefined-map-object";
+import { PredefinedMapObject } from "./predefined-map-object";
 
 export class Room extends PredefinedMapObject {
     private readonly _config: RoomConfig;
@@ -16,15 +16,15 @@ export class Room extends PredefinedMapObject {
     }
 
     public render(): SVGTemplateResult {
-        const poly = (this._config?.outline ?? []).map(p => this.vacuumToScaledMap(p[0], p[1]));
-        const pointsStr = poly.map(p => p.join(", ")).join(" ");
+        const poly = (this._config?.outline ?? []).map((p) => this.vacuumToScaledMap(p[0], p[1]));
+        const pointsStr = poly.map((p) => p.join(", ")).join(" ");
         console.log(`🔍 [ROOM RENDER] Room ${this._config.id}:`, {
             outlinePoints: this._config?.outline?.length || 0,
             scaledPoints: poly.length,
             pointsString: pointsStr,
             selected: this._selected,
             hasIcon: !!this._config.icon,
-            hasLabel: !!this._config.label
+            hasLabel: !!this._config.label,
         });
         return svg`
             <g class="room-wrapper ${this._selected ? "selected" : ""}
@@ -64,7 +64,7 @@ export class Room extends PredefinedMapObject {
         if (!currentModeIsRoom) {
             console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - Activating room mode`);
             this._context.activateRoomMode();
-            await new Promise(resolve => setTimeout(resolve, 150));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             const newMode = this._context.getCurrentMode();
             console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - newMode selectionType:`, newMode?.selectionType);
@@ -74,7 +74,9 @@ export class Room extends PredefinedMapObject {
             }
         }
 
-        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - selected: ${this._selected}, selectedRooms: ${this._context.selectedRooms().length}, maxSelections: ${this._context.maxSelections()}`);
+        console.log(
+            `🔍 [ROOM CLICK] Room ${this._config.id} - selected: ${this._selected}, selectedRooms: ${this._context.selectedRooms().length}, maxSelections: ${this._context.maxSelections()}`
+        );
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
             console.log(`❌ [ROOM CLICK] Room ${this._config.id} - Max selections reached`);
             forwardHaptic("failure");
@@ -114,9 +116,11 @@ export class Room extends PredefinedMapObject {
                 fill-opacity: 1;
                 stroke-opacity: 0;
                 stroke-linejoin: round;
-                stroke-dasharray: calc(var(--map-card-internal-room-outline-line-segment-line) / var(--map-scale)),
+                stroke-dasharray:
+                    calc(var(--map-card-internal-room-outline-line-segment-line) / var(--map-scale)),
                     calc(var(--map-card-internal-room-outline-line-segment-gap) / var(--map-scale));
-                transition: stroke var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    stroke var(--map-card-internal-transitions-duration) ease,
                     fill var(--map-card-internal-transitions-duration) ease,
                     stroke-opacity var(--map-card-internal-transitions-duration) ease,
                     fill-opacity var(--map-card-internal-transitions-duration) ease;
@@ -140,7 +144,8 @@ export class Room extends PredefinedMapObject {
                 background: var(--map-card-internal-room-icon-background-color);
                 color: var(--map-card-internal-room-icon-color);
                 --mdc-icon-size: var(--map-card-internal-room-icon-size);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 
@@ -150,7 +155,8 @@ export class Room extends PredefinedMapObject {
                 pointer-events: none;
                 font-size: calc(var(--map-card-internal-room-label-font-size) / var(--map-scale));
                 fill: var(--map-card-internal-room-label-color);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 

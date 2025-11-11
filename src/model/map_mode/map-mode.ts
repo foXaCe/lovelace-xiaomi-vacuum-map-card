@@ -36,7 +36,11 @@ export class MapMode {
     public predefinedSelections: PredefinedSelectionConfig[];
     public variables: VariablesStorage;
 
-    constructor(vacuumPlatform: string, public readonly config: MapModeConfig, language: Language) {
+    constructor(
+        vacuumPlatform: string,
+        public readonly config: MapModeConfig,
+        language: Language
+    ) {
         this.name = config.name ?? localize("map_mode.invalid", language);
         this.icon = config.icon ?? "mdi:help";
         this.idType = config.id_type;
@@ -63,7 +67,7 @@ export class MapMode {
         entityId: string,
         selection: unknown[],
         repeats: number,
-        selectionVariables: VariablesStorage,
+        selectionVariables: VariablesStorage
     ): Promise<ServiceCall> {
         let serviceCall = this._applyData(entityId, selection, repeats, selectionVariables);
         if (this.serviceCallSchema.evaluateDataAsTemplate) {
@@ -71,8 +75,8 @@ export class MapMode {
                 const output = await evaluateJinjaTemplate(hass, JSON.stringify(serviceCall.serviceData));
                 try {
                     const serviceData = typeof output === "string" ? JSON.parse(output) : output;
-                    replaceInTarget(serviceData, v =>
-                        v.endsWith(Modifier.JSONIFY_JINJA) ? JSON.parse(v.replace(Modifier.JSONIFY_JINJA, "")) : v,
+                    replaceInTarget(serviceData, (v) =>
+                        v.endsWith(Modifier.JSONIFY_JINJA) ? JSON.parse(v.replace(Modifier.JSONIFY_JINJA, "")) : v
                     );
                     serviceCall = { ...serviceCall, serviceData: serviceData };
                 } catch (e) {
@@ -102,7 +106,7 @@ export class MapMode {
             service_call_schema: JSON.parse(JSON.stringify(this.serviceCallSchema.config)),
             predefined_selections: this.predefinedSelections,
             variables: Object.fromEntries(
-                Object.entries(this.variables ?? {}).map(([k, v]) => [k.substr(2, k.length - 4), v]),
+                Object.entries(this.variables ?? {}).map(([k, v]) => [k.substr(2, k.length - 4), v])
             ),
         };
     }
@@ -114,12 +118,14 @@ export class MapMode {
         if (!config.icon && templateValue.icon) this.icon = templateValue.icon;
         if (!config.selection_type && templateValue.selection_type)
             this.selectionType = SelectionType[templateValue.selection_type];
-        if (!config.id_type && templateValue.id_type)
-            this.idType = templateValue.id_type;
+        if (!config.id_type && templateValue.id_type) this.idType = templateValue.id_type;
         if (!config.max_selections && templateValue.max_selections) this.maxSelections = templateValue.max_selections;
         if (config.coordinates_rounding === undefined && templateValue.coordinates_rounding !== undefined)
             this.coordinatesRounding = templateValue.coordinates_rounding;
-        if (config.coordinates_to_meters_divider === undefined && templateValue.coordinates_to_meters_divider !== undefined)
+        if (
+            config.coordinates_to_meters_divider === undefined &&
+            templateValue.coordinates_to_meters_divider !== undefined
+        )
             this.coordinatesToMetersDivider = templateValue.coordinates_to_meters_divider;
         if (config.run_immediately === undefined && templateValue.run_immediately !== undefined)
             this.runImmediately = templateValue.run_immediately;
@@ -134,7 +140,7 @@ export class MapMode {
         entityId: string,
         selection: unknown[],
         repeats: number,
-        selectionVariables: VariablesStorage,
+        selectionVariables: VariablesStorage
     ): ServiceCall {
         return this.serviceCallSchema.apply(entityId, selection, repeats, { ...this.variables, ...selectionVariables });
     }

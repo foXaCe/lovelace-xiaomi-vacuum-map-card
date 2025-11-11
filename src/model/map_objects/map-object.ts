@@ -126,7 +126,7 @@ export abstract class MapObject {
                       </div>
                     </body>
                 </foreignObject>
-            `,
+            `
         )}`;
     }
 
@@ -140,7 +140,7 @@ export abstract class MapObject {
                       y="${mapped[1] + this.scaled(config?.offset_y ?? 0)}px">
                     ${config?.text}
                 </text>
-            `,
+            `
         )}`;
     }
 

@@ -22,19 +22,19 @@ export interface ObstacleConfig {
 
 // Types d'obstacles de l'app Dreame
 const OBSTACLE_ICONS: Record<number, string> = {
-    0: "mdi:help-circle",           // Unknown
-    1: "mdi:power-socket",          // Power cord
-    2: "mdi:shoe-heel",             // Shoes
-    3: "mdi:excrement",             // Pet waste
-    4: "mdi:table-furniture",       // Table/Furniture base
-    5: "mdi:hanger",                // Clothes
-    6: "mdi:teddy-bear",            // Toy
-    7: "mdi:chair-rolling",         // Chair
-    8: "mdi:scale",                 // Scale
-    9: "mdi:water-outline",         // Liquid stain
-    10: "mdi:water-off-outline",    // Dried stain
-    11: "mdi:water-alert-outline",  // Mixed stain
-    12: "mdi:water-check-outline",  // Detected stain
+    0: "mdi:help-circle", // Unknown
+    1: "mdi:power-socket", // Power cord
+    2: "mdi:shoe-heel", // Shoes
+    3: "mdi:excrement", // Pet waste
+    4: "mdi:table-furniture", // Table/Furniture base
+    5: "mdi:hanger", // Clothes
+    6: "mdi:teddy-bear", // Toy
+    7: "mdi:chair-rolling", // Chair
+    8: "mdi:scale", // Scale
+    9: "mdi:water-outline", // Liquid stain
+    10: "mdi:water-off-outline", // Dried stain
+    11: "mdi:water-alert-outline", // Mixed stain
+    12: "mdi:water-check-outline", // Detected stain
 };
 
 export class Obstacle extends MapObject {
@@ -62,9 +62,13 @@ export class Obstacle extends MapObject {
                         <div class="obstacle-icon-wrapper ${isIgnored ? "obstacle-ignored" : ""}">
                             <div class="obstacle-background"></div>
                             <ha-icon icon="${icon}"></ha-icon>
-                            ${this._config.possibility ? svg`
+                            ${
+                                this._config.possibility
+                                    ? svg`
                                 <div class="obstacle-probability">${this._config.possibility}%</div>
-                            ` : ''}
+                            `
+                                    : ""
+                            }
                         </div>
                     </body>
                 </foreignObject>

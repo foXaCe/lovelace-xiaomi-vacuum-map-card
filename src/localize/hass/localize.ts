@@ -35,16 +35,10 @@ export type LocalizeKeys =
     | `ui.panel.page-authorize.form.${string}`
     | `component.${string}`;
 
-export type LocalizeFunc<Keys extends string = LocalizeKeys> = (
-    key: Keys,
-    ...args: any[]
-) => string;
+export type LocalizeFunc<Keys extends string = LocalizeKeys> = (key: Keys, ...args: any[]) => string;
 
 // Tweaked from https://www.raygesualdo.com/posts/flattening-object-keys-with-typescript-types
-export type FlattenObjectKeys<
-    T extends Record<string, any>,
-    Key extends keyof T = keyof T
-> = Key extends string
+export type FlattenObjectKeys<T extends Record<string, any>, Key extends keyof T = keyof T> = Key extends string
     ? T[Key] extends Record<string, unknown>
         ? `${Key}.${FlattenObjectKeys<T[Key]>}`
         : `${Key}`

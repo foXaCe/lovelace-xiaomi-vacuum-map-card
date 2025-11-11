@@ -110,7 +110,7 @@ export function localizeWithHass(
     ts: TranslatableString,
     hass?: HomeAssistantFixed,
     config?: XiaomiVacuumMapCardConfig,
-    fallback?: string,
+    fallback?: string
 ): string {
     return localize(ts, config?.language ?? hass?.locale?.language, fallback);
 }
@@ -118,37 +118,20 @@ export function localizeWithHass(
 export function localizeEntity(hass: HomeAssistantFixed, config: EntityConfig, entity: HassEntity): string {
     return "attribute" in config && config.attribute !== undefined
         ? entity.attributes[config.attribute] !== undefined
-            ? formatAttributeValue(
-                hass,
-                entity,
-                config.attribute,
-            )
+            ? formatAttributeValue(hass, entity, config.attribute)
             : hass.localize("state.default.unknown")
-        : computeStateDisplay(
-            hass.localize,
-            entity,
-            hass.locale,
-            hass.entities,
-        );
+        : computeStateDisplay(hass.localize, entity, hass.locale, hass.entities);
 }
 
 export function localizeStateForValue(hass: HomeAssistantFixed, entity: HassEntity, state: string): string {
-    return computeStateDisplay(
-        hass.localize,
-        entity,
-        hass.locale,
-        hass.entities,
-        state
-    )
+    return computeStateDisplay(hass.localize, entity, hass.locale, hass.entities, state);
 }
 
-export function localizeAttributeForValue(hass: HomeAssistantFixed, entity: HassEntity, attribute: string, value: string): string {
-    return computeAttributeValueDisplay(
-        hass.localize,
-        entity,
-        hass.locale,
-        hass.entities,
-        attribute,
-        value
-    )
+export function localizeAttributeForValue(
+    hass: HomeAssistantFixed,
+    entity: HassEntity,
+    attribute: string,
+    value: string
+): string {
+    return computeAttributeValueDisplay(hass.localize, entity, hass.locale, hass.entities, attribute, value);
 }

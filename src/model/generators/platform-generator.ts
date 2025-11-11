@@ -61,7 +61,7 @@ export class PlatformGenerator {
     }
 
     public static generateDefaultModes(platform: string): MapModeConfig[] {
-        return this.getPlatformTemplate(platform).map_modes.default_templates.map(dt => ({ template: dt }));
+        return this.getPlatformTemplate(platform).map_modes.default_templates.map((dt) => ({ template: dt }));
     }
 
     public static getTilesFromAttributesTemplates(platform: string): TileFromAttributeTemplate[] {
@@ -99,7 +99,7 @@ export class PlatformGenerator {
         return (
             this.TEMPLATES.get(platform) ??
             this.TEMPLATES.get(this.TASSHACK_DREAME_VACUUM_PLATFORM) ??
-            tasshackDreameVacuumTemplate as PlatformTemplate
+            (tasshackDreameVacuumTemplate as PlatformTemplate)
         );
     }
 }

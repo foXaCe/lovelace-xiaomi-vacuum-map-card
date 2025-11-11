@@ -135,7 +135,7 @@ export default class PinchZoom extends HTMLElement {
                 }
                 return true;
             },
-            move: previousPointers => {
+            move: (previousPointers) => {
                 if (this.enablePan) {
                     this._onPointerMove(previousPointers, pointerTracker.currentPointers);
                 }
@@ -150,7 +150,7 @@ export default class PinchZoom extends HTMLElement {
             },
         });
         // */
-        this.addEventListener("wheel", event => this._onWheel(event));
+        this.addEventListener("wheel", (event) => this._onWheel(event));
     }
 
     attributeChangedCallback(name: string, _oldValue: string, newValue: string) {

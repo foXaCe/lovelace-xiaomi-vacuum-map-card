@@ -34,7 +34,7 @@ export type VariablesStorage = Record<string, ReplacedKey>;
 export type KeyReplacer = (key: string) => ReplacedKey;
 export type LovelaceDomEvent = CustomEvent<Record<string, never>>;
 export type DropdownIconActionConfig = DropdownEntryIconActionConfig[];
-export type ActionHandlerFunction = ((_?: ActionHandlerEvent) => void);
+export type ActionHandlerFunction = (_?: ActionHandlerEvent) => void;
 export type ActionHandlerFunctionCreator = (_: ActionableObjectConfig) => ActionHandlerFunction;
 
 export type EntityRegistryEntry = {

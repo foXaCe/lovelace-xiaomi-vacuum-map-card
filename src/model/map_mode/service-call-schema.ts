@@ -31,7 +31,7 @@ export class ServiceCallSchema {
             service[0],
             service[1],
             serviceData as Record<string, unknown> | undefined,
-            target as Record<string, unknown> | undefined,
+            target as Record<string, unknown> | undefined
         );
     }
 

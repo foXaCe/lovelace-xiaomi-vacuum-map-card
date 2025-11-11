@@ -45,20 +45,20 @@ export function getWatchedEntitiesForMapMode(mapMode: MapMode): Set<string> {
     switch (mapMode.selectionType) {
         case SelectionType.PREDEFINED_RECTANGLE:
             mapMode.predefinedSelections
-                .map(m => m as PredefinedZoneConfig)
-                .filter(p => typeof p.zones === "string")
-                .forEach(p => watchedEntities.add((p.zones as string).split(".attributes.")[0]));
+                .map((m) => m as PredefinedZoneConfig)
+                .filter((p) => typeof p.zones === "string")
+                .forEach((p) => watchedEntities.add((p.zones as string).split(".attributes.")[0]));
             break;
         case SelectionType.PREDEFINED_POINT:
             mapMode.predefinedSelections
-                .map(m => m as PredefinedPointConfig)
-                .filter(p => typeof p.position === "string")
-                .forEach(p => watchedEntities.add((p.position as string).split(".attributes.")[0]));
+                .map((m) => m as PredefinedPointConfig)
+                .filter((p) => typeof p.position === "string")
+                .forEach((p) => watchedEntities.add((p.position as string).split(".attributes.")[0]));
             break;
     }
     mapMode.predefinedSelections
-        .filter(p => p.state_entity)
-        .forEach(p => watchedEntities.add(p.state_entity as string));
+        .filter((p) => p.state_entity)
+        .forEach((p) => watchedEntities.add(p.state_entity as string));
     return watchedEntities;
 }
 
@@ -74,51 +74,51 @@ export function getWatchedEntitiesForPreset(config: CardPresetConfig, language: 
         watchedEntities.add(config.calibration_source.entity);
     }
     (config.conditions ?? [])
-        .map(c => c?.entity)
-        .forEach(e => {
+        .map((c) => c?.entity)
+        .forEach((e) => {
             if (e) watchedEntities.add(e);
         });
-    (config.icons ?? []).forEach(i => {
+    (config.icons ?? []).forEach((i) => {
         if (i.hasOwnProperty("entity")) watchedEntities.add(i["entity"]);
     });
     (config.icons ?? [])
-        .filter(i => i.conditions)
-        .flatMap(i => i.conditions)
-        .map(c => c?.entity)
-        .forEach(e => {
+        .filter((i) => i.conditions)
+        .flatMap((i) => i.conditions)
+        .map((c) => c?.entity)
+        .forEach((e) => {
             if (e) watchedEntities.add(e);
         });
-    (config.tiles ?? []).forEach(s => {
+    (config.tiles ?? []).forEach((s) => {
         if (s.entity) watchedEntities.add(s.entity);
     });
-    (config.tiles ?? []).forEach(s => {
+    (config.tiles ?? []).forEach((s) => {
         if (s.icon_source) watchedEntities.add(s.icon_source.split(".attributes.")[0]);
     });
     (config.tiles ?? [])
-        .filter(s => s.conditions)
-        .flatMap(s => s.conditions)
-        .map(c => c?.entity)
-        .forEach(e => {
+        .filter((s) => s.conditions)
+        .flatMap((s) => s.conditions)
+        .map((c) => c?.entity)
+        .forEach((e) => {
             if (e) watchedEntities.add(e);
         });
     (config.map_modes ?? [])
-        .map(m => new MapMode(PlatformGenerator.getPlatformName(config.vacuum_platform), m, language))
-        .forEach(m => getWatchedEntitiesForMapMode(m).forEach(e => watchedEntities.add(e)));
+        .map((m) => new MapMode(PlatformGenerator.getPlatformName(config.vacuum_platform), m, language))
+        .forEach((m) => getWatchedEntitiesForMapMode(m).forEach((e) => watchedEntities.add(e)));
     return watchedEntities;
 }
 
 export function getWatchedEntities(config: XiaomiVacuumMapCardConfig): string[] {
     const watchedEntities = new Set<string>();
     [config, ...(config.additional_presets ?? [])]
-        .flatMap(p => [...getWatchedEntitiesForPreset(p, config.language)])
-        .forEach(e => watchedEntities.add(e));
+        .flatMap((p) => [...getWatchedEntitiesForPreset(p, config.language)])
+        .forEach((e) => watchedEntities.add(e));
     return [...watchedEntities];
 }
 
 export function isConditionMet(
     condition: ConditionConfig,
     internalVariables: VariablesStorage,
-    hass: HomeAssistantFixed,
+    hass: HomeAssistantFixed
 ): boolean {
     let currentValue: ReplacedKey = "";
     if (condition.internal_variable && condition.internal_variable in internalVariables) {
@@ -140,26 +140,26 @@ export function isConditionMet(
 export function areConditionsMet(
     config: ConditionalObjectConfig,
     internalVariables: VariablesStorage,
-    hass: HomeAssistantFixed,
+    hass: HomeAssistantFixed
 ): boolean {
-    return (config.conditions ?? []).every(condition => isConditionMet(condition, internalVariables, hass));
+    return (config.conditions ?? []).every((condition) => isConditionMet(condition, internalVariables, hass));
 }
 
 export function hasConfigOrAnyEntityChanged(
     watchedEntities: string[],
     changedProps: PropertyValues,
     forceUpdate: boolean,
-    hass?: HomeAssistantFixed,
+    hass?: HomeAssistantFixed
 ): boolean {
     if (changedProps.has("config") || forceUpdate) {
         return true;
     }
     const oldHass = changedProps.get("_hass") as HomeAssistantFixed | undefined;
-    const entitesChanged = !oldHass || watchedEntities.some(entity => oldHass.states[entity] !== hass?.states[entity]);
-    if (entitesChanged)
-        return true;
+    const entitesChanged =
+        !oldHass || watchedEntities.some((entity) => oldHass.states[entity] !== hass?.states[entity]);
+    if (entitesChanged) return true;
     const changedKeys = Array.from(changedProps.keys());
-    return changedKeys.length > 1 || changedKeys.length == 1 && changedKeys[0] != "_hass";
+    return changedKeys.length > 1 || (changedKeys.length == 1 && changedKeys[0] != "_hass");
 }
 
 export function checkIfEntitiesChanged(
@@ -167,7 +167,7 @@ export function checkIfEntitiesChanged(
     oldHass: HomeAssistantFixed,
     newHass: HomeAssistantFixed
 ): boolean {
-    const changedEntities = entities.filter(entity => oldHass.states[entity] !== newHass.states[entity]);
+    const changedEntities = entities.filter((entity) => oldHass.states[entity] !== newHass.states[entity]);
     return changedEntities.length > 0;
 }
 
@@ -178,7 +178,7 @@ export function conditional<T>(condition: boolean, content: () => T): T | null {
 export function createActionWithConfigHandler(
     node: XiaomiVacuumMapCard,
     config: ActionableObjectConfig | undefined,
-    action?: string,
+    action?: string
 ): ActionHandlerFunction {
     if (action) {
         return (): void => handleActionWithConfig(node, config, action);
@@ -189,7 +189,7 @@ export function createActionWithConfigHandler(
 export function handleActionWithConfig(
     node: XiaomiVacuumMapCard,
     config: ActionableObjectConfig | undefined,
-    action: string,
+    action: string
 ): void {
     if (node.hass && config && action) {
         const currentPreset = node._getCurrentPreset();
@@ -205,8 +205,14 @@ export function handleActionWithConfig(
         const entity_id = config.hasOwnProperty("entity") ? config["entity"] : currentPreset.entity;
         const { selection, variables } = node._getSelection(currentMode);
         const defaultVariables = ServiceCallSchema.getDefaultVariables(entity_id, selection, node.repeats);
-        const filled = getFilledTemplate(config as Record<string, unknown>, defaultVariables, itemVariables,
-            node.internalVariables, currentMode?.variables ?? {}, variables);
+        const filled = getFilledTemplate(
+            config as Record<string, unknown>,
+            defaultVariables,
+            itemVariables,
+            node.internalVariables,
+            currentMode?.variables ?? {},
+            variables
+        );
         handleAction(node, node.hass as unknown as HomeAssistant, filled as ActionableObjectConfig, action);
     }
 }
@@ -214,7 +220,7 @@ export function handleActionWithConfig(
 export function getMousePosition(
     event: MouseEvent | TouchEvent,
     element: SVGGraphicsElement,
-    scale: number,
+    scale: number
 ): MousePosition {
     let x, y;
     if (event instanceof MouseEvent) {
@@ -230,7 +236,7 @@ export function getMousePosition(
 
 export async function getAllEntitiesFromTheSameDevice(
     hass: HomeAssistantFixed,
-    entity: string,
+    entity: string
 ): Promise<EntityRegistryEntry[]> {
     let entityRegistryEntries;
     try {
@@ -243,7 +249,7 @@ export async function getAllEntitiesFromTheSameDevice(
 
 async function _getAllEntitiesFromTheSameDevice(
     hass: HomeAssistantFixed,
-    entity: string,
+    entity: string
 ): Promise<EntityRegistryEntry[]> {
     const vacuumDeviceId = (
         await hass.callWS<EntityRegistryEntry>({
@@ -255,20 +261,20 @@ async function _getAllEntitiesFromTheSameDevice(
         await hass.callWS<{ device_id: string; entity_id: string }[]>({
             type: "config/entity_registry/list",
         })
-    ).filter(e => e.device_id === vacuumDeviceId);
+    ).filter((e) => e.device_id === vacuumDeviceId);
     const allEntities = await Promise.all(
-        vacuumSensors.map(vs =>
+        vacuumSensors.map((vs) =>
             hass.callWS<EntityRegistryEntry>({
                 type: "config/entity_registry/get",
                 entity_id: vs.entity_id,
-            }),
-        ),
+            })
+        )
     );
-    return allEntities.filter(e => e.disabled_by == null);
+    return allEntities.filter((e) => e.disabled_by == null);
 }
 
 export async function delay(ms: number): Promise<void> {
-    await new Promise<void>(resolve => setTimeout(() => resolve(), ms));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
 }
 
 export function copyMessage(val: string): void {
@@ -287,9 +293,9 @@ export function copyMessage(val: string): void {
 
 export async function evaluateJinjaTemplate(
     hass: HomeAssistantFixed,
-    template: string,
+    template: string
 ): Promise<string | Record<string, unknown>> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         hass.connection.subscribeMessage((msg: { result: string | Record<string, unknown> }) => resolve(msg.result), {
             type: "render_template",
             template: template,
@@ -316,10 +322,10 @@ export function getReplacedValue(value: string, variables: VariablesStorage): Re
 export function replaceInStr(
     value: string,
     variables: VariablesStorage,
-    kr: (string) => ReplacedKey | null,
+    kr: (string) => ReplacedKey | null
 ): ReplacedKey {
     let output = value;
-    Object.keys(variables).forEach(tv => {
+    Object.keys(variables).forEach((tv) => {
         let replaced = kr(tv);
         if (typeof replaced == "object") {
             replaced = JSON.stringify(replaced);
@@ -341,7 +347,7 @@ export function getFilledTemplate(
     for (const variablesStorage of variablesStorages) {
         variables = { ...variablesStorage, ...variables };
     }
-    const keyReplacer = v => getReplacedValue(v, variables);
+    const keyReplacer = (v) => getReplacedValue(v, variables);
     replaceInTarget(target, keyReplacer);
     return target;
 }

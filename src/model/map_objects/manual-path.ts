@@ -6,7 +6,11 @@ import { Context } from "./context";
 import { MapObject } from "./map-object";
 
 export class PathPoint extends MapObject {
-    constructor(public x: number, public y: number, context: Context) {
+    constructor(
+        public x: number,
+        public y: number,
+        context: Context
+    ) {
         super(context);
     }
 
@@ -37,7 +41,10 @@ export class PathPoint extends MapObject {
 }
 
 export class ManualPath extends MapObject {
-    constructor(public points: PathPoint[], context: Context) {
+    constructor(
+        public points: PathPoint[],
+        context: Context
+    ) {
         super(context);
     }
 
@@ -45,8 +52,8 @@ export class ManualPath extends MapObject {
         if (this.points.length === 0) {
             return svg``;
         }
-        const pointsX = this.points.map(p => p.x);
-        const pointsY = this.points.map(p => p.y);
+        const pointsX = this.points.map((p) => p.x);
+        const pointsY = this.points.map((p) => p.y);
         const maxX = Math.max(...pointsX);
         const minX = Math.min(...pointsX);
         const maxY = Math.max(...pointsY);
@@ -57,12 +64,12 @@ export class ManualPath extends MapObject {
                     <mask id="manual-path-circles-filter">
                         <rect x="${minX}" y="${minY}" width="${maxX - minX}" height="${maxY - minY}"
                               fill="white"></rect>
-                        ${this.points.map(p => p.renderMask())}
+                        ${this.points.map((p) => p.renderMask())}
                     </mask>
                 </defs>
-                ${this.points.map(p => p.render())}
+                ${this.points.map((p) => p.render())}
                 <polyline class="manual-path-line"
-                          points="${this.points.map(p => `${p.x},${p.y}`).join(" ")}"
+                          points="${this.points.map((p) => `${p.x},${p.y}`).join(" ")}"
                           mask="url(#manual-path-circles-filter)">
                 </polyline>
             </g>
@@ -70,7 +77,7 @@ export class ManualPath extends MapObject {
     }
 
     public toVacuum(repeats: number | null = null): ([number, number] | [number, number, number])[] {
-        return this.points.map(p => {
+        return this.points.map((p) => {
             const [x, y] = this.realMapToVacuum(p.imageX(), p.imageY());
 
             if (repeats === null) {

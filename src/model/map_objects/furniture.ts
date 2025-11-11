@@ -24,26 +24,26 @@ export interface FurnitureConfig {
 
 // Types de meubles de l'app Dreame
 const FURNITURE_ICONS: Record<number, string> = {
-    1: "mdi:sofa",              // Canapé
-    2: "mdi:bed",               // Lit
-    3: "mdi:table-furniture",   // Table
-    4: "mdi:dresser",           // Commode
-    5: "mdi:toilet",            // Toilettes
-    6: "mdi:shower",            // Douche
-    7: "mdi:bathtub",           // Baignoire
-    8: "mdi:counter",           // Comptoir
-    9: "mdi:television",        // TV
-    10: "mdi:washing-machine",  // Machine à laver
-    11: "mdi:fridge",           // Réfrigérateur
-    12: "mdi:stove",            // Cuisinière
-    13: "mdi:dishwasher",       // Lave-vaisselle
-    14: "mdi:desk",             // Bureau
-    15: "mdi:bookshelf",        // Bibliothèque
-    16: "mdi:wardrobe",         // Armoire
-    17: "mdi:chair",            // Chaise
-    18: "mdi:door",             // Porte
-    19: "mdi:window-closed",    // Fenêtre
-    20: "mdi:radiator",         // Radiateur
+    1: "mdi:sofa", // Canapé
+    2: "mdi:bed", // Lit
+    3: "mdi:table-furniture", // Table
+    4: "mdi:dresser", // Commode
+    5: "mdi:toilet", // Toilettes
+    6: "mdi:shower", // Douche
+    7: "mdi:bathtub", // Baignoire
+    8: "mdi:counter", // Comptoir
+    9: "mdi:television", // TV
+    10: "mdi:washing-machine", // Machine à laver
+    11: "mdi:fridge", // Réfrigérateur
+    12: "mdi:stove", // Cuisinière
+    13: "mdi:dishwasher", // Lave-vaisselle
+    14: "mdi:desk", // Bureau
+    15: "mdi:bookshelf", // Bibliothèque
+    16: "mdi:wardrobe", // Armoire
+    17: "mdi:chair", // Chaise
+    18: "mdi:door", // Porte
+    19: "mdi:window-closed", // Fenêtre
+    20: "mdi:radiator", // Radiateur
 };
 
 export class Furniture extends MapObject {
@@ -100,9 +100,11 @@ export class Furniture extends MapObject {
                 stroke: var(--map-card-internal-furniture-stroke-color, #64b5f6);
                 stroke-width: calc(var(--map-card-internal-furniture-stroke-width, 2px) / var(--map-scale));
                 stroke-linejoin: round;
-                stroke-dasharray: calc(var(--map-card-internal-furniture-dash-length, 5px) / var(--map-scale)),
+                stroke-dasharray:
+                    calc(var(--map-card-internal-furniture-dash-length, 5px) / var(--map-scale)),
                     calc(var(--map-card-internal-furniture-dash-gap, 3px) / var(--map-scale));
-                transition: fill var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    fill var(--map-card-internal-transitions-duration) ease,
                     stroke var(--map-card-internal-transitions-duration) ease;
                 pointer-events: auto;
                 cursor: pointer;
@@ -141,7 +143,8 @@ export class Furniture extends MapObject {
                 height: 100%;
                 border-radius: 50%;
                 background: var(--map-card-internal-furniture-icon-background-color, rgba(100, 181, 246, 0.2));
-                border: calc(1.5px / var(--map-scale)) solid var(--map-card-internal-furniture-icon-border-color, #64b5f6);
+                border: calc(1.5px / var(--map-scale)) solid
+                    var(--map-card-internal-furniture-icon-border-color, #64b5f6);
                 box-shadow: 0 calc(2px / var(--map-scale)) calc(6px / var(--map-scale)) rgba(0, 0, 0, 0.15);
                 transition: all var(--map-card-internal-transitions-duration) ease;
             }

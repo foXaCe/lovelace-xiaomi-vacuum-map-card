@@ -6,36 +6,28 @@ import { HassEntity } from "home-assistant-js-websocket/dist/types";
 
 import { actionHandler } from "../action-handler-directive";
 import { conditional } from "../utils";
-import {
-    ActionHandlerFunctionCreator,
-    EntityConfig,
-    ReplacedKey,
-    TileConfig,
-    VariablesStorage,
-} from "../types/types";
+import { ActionHandlerFunctionCreator, EntityConfig, ReplacedKey, TileConfig, VariablesStorage } from "../types/types";
 import { HomeAssistantFixed } from "../types/fixes";
 import { localizeEntity } from "../localize/localize";
 import { computeAttributeNameDisplay } from "../localize/hass/compute_attribute_display";
 import { blankBeforePercent } from "../localize/hass/blank_before_percent";
 import { RootlessLitElement } from "./rootless-lit-element";
 
-
 @customElement("xvmc-tile")
 export class Tile extends RootlessLitElement {
-
-    @property({attribute: false})
+    @property({ attribute: false })
     private config!: TileConfig;
 
-    @property({attribute: false})
+    @property({ attribute: false })
     private hass!: HomeAssistantFixed;
 
-    @property({attribute: false})
+    @property({ attribute: false })
     private isInEditor!: boolean;
 
-    @property({attribute: false})
+    @property({ attribute: false })
     private onAction!: ActionHandlerFunctionCreator;
 
-    @property({attribute: false})
+    @property({ attribute: false })
     private internalVariables!: VariablesStorage;
 
     protected render(): TemplateResult | void {
@@ -51,25 +43,27 @@ export class Tile extends RootlessLitElement {
 
         return html`
             <div
-                .title="${this.isInEditor ? `tile_id: ${this.config.tile_id}` : this.config.tooltip ?? ""}"
+                .title="${this.isInEditor ? `tile_id: ${this.config.tile_id}` : (this.config.tooltip ?? "")}"
                 @action="${this.onAction(this.config)}"
                 .actionHandler="${actionHandler({
                     hasHold: hasAction(this.config?.hold_action),
                     hasDoubleClick: hasAction(this.config?.double_tap_action),
-                })}">
+                })}"
+            >
                 <div class="tile-title">${title}</div>
                 <div class="tile-value-wrapper">
                     ${conditional(
                         icon !== "",
-                        () => html`
-                            <div class="tile-icon">
+                        () =>
+                            html` <div class="tile-icon">
                                 <ha-state-icon
                                     .icon=${icon}
                                     .state=${stateObj}
                                     data-domain=${ifDefined(domain)}
-                                    data-state=${stateObj?.state}>
+                                    data-state=${stateObj?.state}
+                                >
                                 </ha-state-icon>
-                            </div>`,
+                            </div>`
                     )}
                     <div class="tile-value">${value}</div>
                 </div>
@@ -77,30 +71,28 @@ export class Tile extends RootlessLitElement {
         `;
     }
 
-    private getTileLabel(
-        stateObject?: HassEntity,
-    ) {
-        if (this.config.label !== undefined)
-            return this.config.label;
+    private getTileLabel(stateObject?: HassEntity) {
+        if (this.config.label !== undefined) return this.config.label;
         if (stateObject !== undefined) {
             if (this.config.attribute !== undefined)
-                return computeAttributeNameDisplay(this.hass.localize, stateObject, this.hass.entities, this.config.attribute);
+                return computeAttributeNameDisplay(
+                    this.hass.localize,
+                    stateObject,
+                    this.hass.entities,
+                    this.config.attribute
+                );
             return stateObject.attributes?.friendly_name ?? this.config.entity;
         }
         return this.config.tile_id ?? "tile";
     }
 
-    private getTileValue(
-        stateObject?: HassEntity,
-    ) {
+    private getTileValue(stateObject?: HassEntity) {
         let value: ReplacedKey = "";
         const unit = this.getUnit();
         const processNumber = this.config.multiplier !== undefined || this.config.precision !== undefined;
         if (this.config.entity && stateObject) {
             if (processNumber) {
-                value = this.config.attribute
-                    ? stateObject.attributes[this.config.attribute]
-                    : stateObject.state;
+                value = this.config.attribute ? stateObject.attributes[this.config.attribute] : stateObject.state;
             } else {
                 value = localizeEntity(this.hass, this.config as EntityConfig, stateObject);
                 const originalUnit = stateObject.attributes.unit_of_measurement;
@@ -142,41 +134,41 @@ export class Tile extends RootlessLitElement {
 
     private getUnit() {
         return !this.config.unit
-            ? "" :
-            this.config.unit === "%"
-                ? blankBeforePercent(this.hass.locale) + "%"
-                : ` ${this.config.unit}`;
+            ? ""
+            : this.config.unit === "%"
+              ? blankBeforePercent(this.hass.locale) + "%"
+              : ` ${this.config.unit}`;
     }
 
     public static get styles(): CSSResultGroup {
         return css`
-          .tile-wrapper {
-            min-width: fit-content;
-            width: 80px;
-            padding: 10px;
-            border-radius: var(--map-card-internal-small-radius);
-            background-color: var(--map-card-internal-tertiary-color);
-            flex-grow: 1;
-            overflow: hidden;
-            color: var(--map-card-internal-tertiary-text-color);
-          }
+            .tile-wrapper {
+                min-width: fit-content;
+                width: 80px;
+                padding: 10px;
+                border-radius: var(--map-card-internal-small-radius);
+                background-color: var(--map-card-internal-tertiary-color);
+                flex-grow: 1;
+                overflow: hidden;
+                color: var(--map-card-internal-tertiary-text-color);
+            }
 
-          .tile-title {
-            font-size: smaller;
-          }
+            .tile-title {
+                font-size: smaller;
+            }
 
-          .tile-value-wrapper {
-            display: inline-flex;
-            align-items: flex-end;
-            padding-top: 5px;
-          }
+            .tile-value-wrapper {
+                display: inline-flex;
+                align-items: flex-end;
+                padding-top: 5px;
+            }
 
-          .tile-icon {
-            padding-right: 5px;
-          }
+            .tile-icon {
+                padding-right: 5px;
+            }
 
-          .tile-value {
-          }
+            .tile-value {
+            }
         `;
     }
 }

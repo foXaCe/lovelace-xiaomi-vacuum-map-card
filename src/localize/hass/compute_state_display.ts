@@ -6,17 +6,12 @@ import { formatDuration, UNIT_TO_MILLISECOND_CONVERT } from "./duration";
 import { formatDate } from "./format_date";
 import { formatDateTime } from "./format_date_time";
 import { formatTime } from "./format_time";
-import {
-    formatNumber,
-    getNumberFormatOptions,
-    isNumericFromAttributes,
-} from "./format_number";
+import { formatNumber, getNumberFormatOptions, isNumericFromAttributes } from "./format_number";
 import { blankBeforePercent } from "./blank_before_percent";
 import { LocalizeFunc } from "./localize"; //type
 import { computeDomain } from "./compute_domain";
 import { EntityRegistryDisplayEntry, FrontendLocaleDataFixed, HomeAssistantFixed } from "../../types/fixes";
 import { FrontendLocaleData } from "./translation";
-
 
 export const computeStateDisplaySingleEntity = (
     localize: LocalizeFunc,
@@ -41,9 +36,7 @@ export const computeStateDisplay = (
     entities: HomeAssistantFixed["entities"],
     state?: string
 ): string => {
-    const entity = entities?.[stateObj.entity_id] as
-        | EntityRegistryDisplayEntry
-        | undefined;
+    const entity = entities?.[stateObj.entity_id] as EntityRegistryDisplayEntry | undefined;
 
     return computeStateDisplayFromEntityAttributes(
         localize,
@@ -88,10 +81,7 @@ export const computeStateDisplayFromEntityAttributes = (
                     currency: attributes.unit_of_measurement,
                     minimumFractionDigits: 2,
                     // Override monetary options with number format
-                    ...getNumberFormatOptions(
-                        { state, attributes } as HassEntity,
-                        entity
-                    ),
+                    ...getNumberFormatOptions({ state, attributes } as HassEntity, entity),
                 });
             } catch (_err) {
                 // fallback to default
@@ -100,8 +90,8 @@ export const computeStateDisplayFromEntityAttributes = (
         const unit = !attributes.unit_of_measurement
             ? ""
             : attributes.unit_of_measurement === "%"
-                ? blankBeforePercent(locale) + "%"
-                : ` ${attributes.unit_of_measurement}`;
+              ? blankBeforePercent(locale) + "%"
+              : ` ${attributes.unit_of_measurement}`;
         return `${formatNumber(
             state,
             locale,
@@ -129,10 +119,7 @@ export const computeStateDisplayFromEntityAttributes = (
                     if (state.includes(":")) {
                         // Time only.
                         const now = new Date();
-                        return formatTime(
-                            new Date(`${now.toISOString().split("T")[0]}T${state}`),
-                            locale
-                        );
+                        return formatTime(new Date(`${now.toISOString().split("T")[0]}T${state}`), locale);
                     }
                 }
                 return state;
@@ -174,17 +161,9 @@ export const computeStateDisplayFromEntityAttributes = (
     }
 
     // `counter` `number` and `input_number` domains do not have a unit of measurement but should still use `formatNumber`
-    if (
-        domain === "counter" ||
-        domain === "number" ||
-        domain === "input_number"
-    ) {
+    if (domain === "counter" || domain === "number" || domain === "input_number") {
         // Format as an integer if the value and step are integers
-        return formatNumber(
-            state,
-            locale,
-            getNumberFormatOptions({ state, attributes } as HassEntity, entity)
-        );
+        return formatNumber(state, locale, getNumberFormatOptions({ state, attributes } as HassEntity, entity));
     }
 
     // state is a timestamp
@@ -201,14 +180,10 @@ export const computeStateDisplayFromEntityAttributes = (
 
     return (
         (entity?.translation_key &&
-            localize(
-                `component.${entity.platform}.entity.${domain}.${entity.translation_key}.state.${state}`
-            )) ||
+            localize(`component.${entity.platform}.entity.${domain}.${entity.translation_key}.state.${state}`)) ||
         // Return device class translation
         (attributes.device_class &&
-            localize(
-                `component.${domain}.entity_component.${attributes.device_class}.state.${state}`
-            )) ||
+            localize(`component.${domain}.entity_component.${attributes.device_class}.state.${state}`)) ||
         // Return default translation
         localize(`component.${domain}.entity_component._.state.${state}`) ||
         // We don't know! Return the raw state.

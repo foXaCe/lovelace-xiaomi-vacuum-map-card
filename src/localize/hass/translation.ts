@@ -3,7 +3,6 @@
 import { fetchFrontendUserData } from "./frontend";
 import { HomeAssistantFixed } from "../../types/fixes";
 
-
 export enum NumberFormat {
     language = "language",
     system = "system",

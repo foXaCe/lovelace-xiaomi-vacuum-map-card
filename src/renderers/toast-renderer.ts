@@ -21,7 +21,7 @@ export class ToastRenderer {
         icon: string,
         successful: boolean,
         additionalText = "",
-        timeout = 2000,
+        timeout = 2000
     ): void {
         const toast = shadowRoot?.getElementById(`${idPrefix}-toast`);
         const toastText = shadowRoot?.getElementById(`${idPrefix}-toast-text`);
@@ -86,8 +86,14 @@ export class ToastRenderer {
 
             .toast.show {
                 visibility: visible;
-                -webkit-animation: fadein 0.5s, stay 1s 1s, fadeout 0.5s 1.5s;
-                animation: fadein 0.5s, stay 1s 1s, fadeout 0.5s 1.5s;
+                -webkit-animation:
+                    fadein 0.5s,
+                    stay 1s 1s,
+                    fadeout 0.5s 1.5s;
+                animation:
+                    fadein 0.5s,
+                    stay 1s 1s,
+                    fadeout 0.5s 1.5s;
             }
 
             @-webkit-keyframes fadein {

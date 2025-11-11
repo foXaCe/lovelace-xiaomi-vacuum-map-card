@@ -3,12 +3,7 @@ import { css, CSSResultGroup, svg, SVGTemplateResult } from "lit";
 import { forwardHaptic } from "custom-card-helpers";
 
 import { Context } from "./context";
-import {
-    IconConfig,
-    PointType,
-    PointWithRepeatsType,
-    PredefinedPointConfig,
-} from "../../types/types";
+import { IconConfig, PointType, PointWithRepeatsType, PredefinedPointConfig } from "../../types/types";
 import { deleteFromArray } from "../../utils";
 import { MapMode } from "../map_mode/map-mode";
 import { HomeAssistantFixed } from "../../types/fixes";
@@ -33,13 +28,13 @@ export class PredefinedPoint extends PredefinedMapObject {
     public static getFromEntities(
         newMode: MapMode,
         hass: HomeAssistantFixed,
-        contextCreator: () => Context,
+        contextCreator: () => Context
     ): PredefinedPoint[] {
         return newMode.predefinedSelections
-            .map(ps => ps as PredefinedPointConfig)
-            .filter(pzc => typeof pzc.position === "string")
-            .map(pzc => (pzc.position as string).split(".attributes."))
-            .flatMap(z => {
+            .map((ps) => ps as PredefinedPointConfig)
+            .filter((pzc) => typeof pzc.position === "string")
+            .map((pzc) => (pzc.position as string).split(".attributes."))
+            .flatMap((z) => {
                 const entity = hass.states[z[0]];
                 const value = z.length === 2 ? entity.attributes[z[1]] : entity.state;
                 let parsed;
@@ -51,7 +46,7 @@ export class PredefinedPoint extends PredefinedMapObject {
                 return parsed;
             })
             .map(
-                p =>
+                (p) =>
                     new PredefinedPoint(
                         {
                             position: p,
@@ -62,8 +57,8 @@ export class PredefinedPoint extends PredefinedMapObject {
                                 name: "mdi:map-marker",
                             },
                         },
-                        contextCreator(),
-                    ),
+                        contextCreator()
+                    )
             );
     }
 
@@ -127,7 +122,8 @@ export class PredefinedPoint extends PredefinedMapObject {
                 background: var(--map-card-internal-predefined-point-icon-background-color);
                 color: var(--map-card-internal-predefined-point-icon-color);
                 --mdc-icon-size: var(--map-card-internal-predefined-point-icon-size);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 
@@ -137,7 +133,8 @@ export class PredefinedPoint extends PredefinedMapObject {
                 pointer-events: none;
                 font-size: calc(var(--map-card-internal-predefined-point-label-font-size) / var(--map-scale));
                 fill: var(--map-card-internal-predefined-point-label-color);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 

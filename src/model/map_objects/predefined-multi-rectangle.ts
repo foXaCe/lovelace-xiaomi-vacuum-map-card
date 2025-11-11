@@ -21,13 +21,13 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
     public static getFromEntities(
         newMode: MapMode,
         hass: HomeAssistantFixed,
-        contextCreator: () => Context,
+        contextCreator: () => Context
     ): PredefinedMultiRectangle[] {
         return newMode.predefinedSelections
-            .map(ps => ps as PredefinedZoneConfig)
-            .filter(pzc => typeof pzc.zones === "string")
-            .map(pzc => (pzc.zones as string).split(".attributes."))
-            .flatMap(z => {
+            .map((ps) => ps as PredefinedZoneConfig)
+            .filter((pzc) => typeof pzc.zones === "string")
+            .map((pzc) => (pzc.zones as string).split(".attributes."))
+            .flatMap((z) => {
                 const entity = hass.states[z[0]];
                 const value = z.length === 2 ? entity.attributes[z[1]] : entity.state;
                 let parsed;
@@ -39,7 +39,7 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 return parsed;
             })
             .map(
-                z =>
+                (z) =>
                     new PredefinedMultiRectangle(
                         {
                             zones: [z],
@@ -50,8 +50,8 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                                 name: "mdi:broom",
                             },
                         },
-                        contextCreator(),
-                    ),
+                        contextCreator()
+                    )
             );
     }
 
@@ -60,16 +60,16 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
         if (typeof this._config.zones !== "string") {
             zones = this._config.zones;
         }
-        const mappedRectangles = zones.map(z => this.vacuumToMapRect(z)[0]);
+        const mappedRectangles = zones.map((z) => this.vacuumToMapRect(z)[0]);
         return svg`
             <g class="predefined-rectangle-wrapper ${this._selected ? "selected" : ""}">
                 ${mappedRectangles.map(
-                    r => svg`
+                    (r) => svg`
                     <polygon class="predefined-rectangle clickable"
-                             points="${r.map(p => p.join(", ")).join(" ")}"
+                             points="${r.map((p) => p.join(", ")).join(" ")}"
                              @click="${async (): Promise<void> => this._click()}">
                     </polygon>
-                `,
+                `
                 )}
                 ${this.renderIcon(this._config.icon, () => this._click(), "predefined-rectangle-icon-wrapper")}
                 ${this.renderLabel(this._config.label, "predefined-rectangle-label")}
@@ -86,7 +86,7 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
             return [];
         }
         if (repeats === null) return this._config.zones;
-        return this._config.zones.map(z => [...z, repeats]);
+        return this._config.zones.map((z) => [...z, repeats]);
     }
 
     private async _click(): Promise<void> {
@@ -94,7 +94,7 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
             !this._selected &&
             this._context
                 .selectedPredefinedRectangles()
-                .map(r => r.size())
+                .map((r) => r.size())
                 .reduce((s, c) => s + c, 0) +
                 this.size() >
                 this._context.maxSelections()
@@ -132,13 +132,13 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 y: var(--y);
                 stroke: var(--map-card-internal-predefined-rectangle-line-color);
                 stroke-linejoin: round;
-                stroke-dasharray: calc(
-                        var(--map-card-internal-predefined-rectangle-line-segment-line) / var(--map-scale)
-                    ),
+                stroke-dasharray:
+                    calc(var(--map-card-internal-predefined-rectangle-line-segment-line) / var(--map-scale)),
                     calc(var(--map-card-internal-predefined-rectangle-line-segment-gap) / var(--map-scale));
                 fill: var(--map-card-internal-predefined-rectangle-fill-color);
                 stroke-width: calc(var(--map-card-internal-predefined-rectangle-line-width) / var(--map-scale));
-                transition: stroke var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    stroke var(--map-card-internal-transitions-duration) ease,
                     fill var(--map-card-internal-transitions-duration) ease;
             }
 
@@ -157,7 +157,8 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 background: var(--map-card-internal-predefined-rectangle-icon-background-color);
                 color: var(--map-card-internal-predefined-rectangle-icon-color);
                 --mdc-icon-size: var(--map-card-internal-predefined-rectangle-icon-size);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 
@@ -167,7 +168,8 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 pointer-events: none;
                 font-size: calc(var(--map-card-internal-predefined-rectangle-label-font-size) / var(--map-scale));
                 fill: var(--map-card-internal-predefined-rectangle-label-color);
-                transition: color var(--map-card-internal-transitions-duration) ease,
+                transition:
+                    color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
             }
 

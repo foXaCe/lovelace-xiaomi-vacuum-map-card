@@ -17,8 +17,8 @@ export class CoordinatesConverter {
     private readonly vacuumToMapTransformer: ((x: number, y: number) => [number, number]) | undefined;
 
     constructor(calibrationPoints: CalibrationPoint[] | undefined) {
-        const mapPoints = calibrationPoints?.map(cp => cp.map);
-        const vacuumPoints = calibrationPoints?.map(cp => cp.vacuum);
+        const mapPoints = calibrationPoints?.map((cp) => cp.map);
+        const vacuumPoints = calibrationPoints?.map((cp) => cp.vacuum);
         if (mapPoints && vacuumPoints) {
             if (mapPoints.length === 3) {
                 this.transformMode = TransformMode.AFFINE;
@@ -27,8 +27,8 @@ export class CoordinatesConverter {
                 this.calibrated = !!(this.mapToVacuumMatrix && this.vacuumToMapMatrix);
             } else {
                 this.transformMode = TransformMode.PERSPECTIVE;
-                const mapMerged = mapPoints.flatMap(p => [p.x, p.y]);
-                const vacuumMerged = vacuumPoints.flatMap(p => [p.x, p.y]);
+                const mapMerged = mapPoints.flatMap((p) => [p.x, p.y]);
+                const vacuumMerged = vacuumPoints.flatMap((p) => [p.x, p.y]);
                 this.mapToVacuumTransformer = transformer(mapMerged as QuadPoints, vacuumMerged as QuadPoints);
                 this.vacuumToMapTransformer = transformer(vacuumMerged as QuadPoints, mapMerged as QuadPoints);
                 this.calibrated = true;

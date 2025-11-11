@@ -42,7 +42,8 @@ function validateCalibrationPoint(calibrationPoint: CalibrationPoint): Translata
         errors.push("validation.preset.calibration_source.calibration_points.missing_vacuum");
     }
     if (
-        [calibrationPoint?.map, calibrationPoint?.vacuum].filter(p => p.x === undefined || p.y === undefined).length > 0
+        [calibrationPoint?.map, calibrationPoint?.vacuum].filter((p) => p.x === undefined || p.y === undefined).length >
+        0
     ) {
         errors.push("validation.preset.calibration_source.calibration_points.missing_coordinate");
     }
@@ -50,14 +51,14 @@ function validateCalibrationPoint(calibrationPoint: CalibrationPoint): Translata
 }
 
 function validateCalibrationSource(calibrationSource: CalibrationSourceConfig): TranslatableString[] {
-    if (Object.keys(calibrationSource).filter(k => k != "attribute").length > 1) {
+    if (Object.keys(calibrationSource).filter((k) => k != "attribute").length > 1) {
         return ["validation.preset.calibration_source.ambiguous"];
     }
     if (calibrationSource.calibration_points) {
         if (![3, 4].includes(calibrationSource.calibration_points.length)) {
             return ["validation.preset.calibration_source.calibration_points.invalid_number"];
         }
-        return calibrationSource.calibration_points.flatMap(cp => validateCalibrationPoint(cp));
+        return calibrationSource.calibration_points.flatMap((cp) => validateCalibrationPoint(cp));
     }
     return [];
 }
@@ -122,14 +123,14 @@ function validatePredefinedRectangleConfig(ps: PredefinedSelectionConfig): Trans
     if (!config.zones) {
         errors.push("validation.preset.map_modes.predefined_selections.zones.missing");
     }
-    if (typeof config.zones !== "string" && config.zones.filter(z => z.length != 4).length > 0) {
+    if (typeof config.zones !== "string" && config.zones.filter((z) => z.length != 4).length > 0) {
         errors.push("validation.preset.map_modes.predefined_selections.zones.invalid_parameters_number");
     }
     if (config.icon) {
-        validateIcon(config.icon).forEach(e => errors.push(e));
+        validateIcon(config.icon).forEach((e) => errors.push(e));
     }
     if (config.label) {
-        validateLabel(config.label).forEach(e => errors.push(e));
+        validateLabel(config.label).forEach((e) => errors.push(e));
     }
     return errors;
 }
@@ -144,10 +145,10 @@ function validatePredefinedPointConfig(ps: PredefinedSelectionConfig): Translata
         errors.push("validation.preset.map_modes.predefined_selections.points.position.invalid_parameters_number");
     }
     if (config.icon) {
-        validateIcon(config.icon).forEach(e => errors.push(e));
+        validateIcon(config.icon).forEach((e) => errors.push(e));
     }
     if (config.label) {
-        validateLabel(config.label).forEach(e => errors.push(e));
+        validateLabel(config.label).forEach((e) => errors.push(e));
     }
     return errors;
 }
@@ -165,14 +166,14 @@ function validateRoomConfig(ps: PredefinedSelectionConfig): TranslatableString[]
             config.id.toString(),
         ]);
     }
-    if ((config.outline ?? []).filter(o => o.length != 2).length > 0) {
+    if ((config.outline ?? []).filter((o) => o.length != 2).length > 0) {
         errors.push("validation.preset.map_modes.predefined_selections.rooms.outline.invalid_parameters_number");
     }
     if (config.icon) {
-        validateIcon(config.icon).forEach(e => errors.push(e));
+        validateIcon(config.icon).forEach((e) => errors.push(e));
     }
     if (config.label) {
-        validateLabel(config.label).forEach(e => errors.push(e));
+        validateLabel(config.label).forEach((e) => errors.push(e));
     }
     return errors;
 }
@@ -190,7 +191,7 @@ function validateServiceCallSchemaConfig(config: ServiceCallSchemaConfig): Trans
 function validateMapModeConfig(
     vacuumPlatform: string,
     config: MapModeConfig,
-    language: Language,
+    language: Language
 ): TranslatableString[] {
     if (!config) {
         return ["validation.preset.map_modes.invalid"];
@@ -212,14 +213,16 @@ function validateMapModeConfig(
     switch (parsed.selectionType) {
         case SelectionType.PREDEFINED_RECTANGLE:
             parsed.predefinedSelections
-                .flatMap(ps => validatePredefinedRectangleConfig(ps))
-                .forEach(e => errors.push(e));
+                .flatMap((ps) => validatePredefinedRectangleConfig(ps))
+                .forEach((e) => errors.push(e));
             break;
         case SelectionType.ROOM:
-            parsed.predefinedSelections.flatMap(ps => validateRoomConfig(ps)).forEach(e => errors.push(e));
+            parsed.predefinedSelections.flatMap((ps) => validateRoomConfig(ps)).forEach((e) => errors.push(e));
             break;
         case SelectionType.PREDEFINED_POINT:
-            parsed.predefinedSelections.flatMap(ps => validatePredefinedPointConfig(ps)).forEach(e => errors.push(e));
+            parsed.predefinedSelections
+                .flatMap((ps) => validatePredefinedPointConfig(ps))
+                .forEach((e) => errors.push(e));
             break;
         case SelectionType.MANUAL_RECTANGLE:
         case SelectionType.MANUAL_PATH:
@@ -233,7 +236,7 @@ function validateMapModeConfig(
             }
     }
     if (config.service_call_schema)
-        validateServiceCallSchemaConfig(config.service_call_schema).forEach(e => errors.push(e));
+        validateServiceCallSchemaConfig(config.service_call_schema).forEach((e) => errors.push(e));
     return errors;
 }
 
@@ -254,17 +257,18 @@ function validatePreset(config: CardPresetConfig, nameRequired: boolean, languag
             errors.push(v);
         }
     });
-    if (config.map_source) validateMapSource(config.map_source).forEach(e => errors.push(e));
-    if (config.calibration_source) validateCalibrationSource(config.calibration_source).forEach(e => errors.push(e));
-    if (config.vacuum_platform
-        && !PlatformGenerator.getPlatforms().includes(PlatformGenerator.getPlatformName(config.vacuum_platform))
+    if (config.map_source) validateMapSource(config.map_source).forEach((e) => errors.push(e));
+    if (config.calibration_source) validateCalibrationSource(config.calibration_source).forEach((e) => errors.push(e));
+    if (
+        config.vacuum_platform &&
+        !PlatformGenerator.getPlatforms().includes(PlatformGenerator.getPlatformName(config.vacuum_platform))
     )
         errors.push(["validation.preset.platform.invalid", "{0}", config.vacuum_platform]);
-    (config.icons ?? []).flatMap(i => validateIconConfig(i)).forEach(e => errors.push(e));
-    (config.tiles ?? []).flatMap(i => validateTileConfig(i)).forEach(e => errors.push(e));
+    (config.icons ?? []).flatMap((i) => validateIconConfig(i)).forEach((e) => errors.push(e));
+    (config.tiles ?? []).flatMap((i) => validateTileConfig(i)).forEach((e) => errors.push(e));
     (config.map_modes ?? [])
-        .flatMap(i => validateMapModeConfig(vacuumPlatform, i, language))
-        .forEach(e => errors.push(e));
+        .flatMap((i) => validateMapModeConfig(vacuumPlatform, i, language))
+        .forEach((e) => errors.push(e));
     if (!config.preset_name && nameRequired) errors.push("validation.preset.preset_name.missing");
     return errors;
 }
@@ -272,11 +276,11 @@ function validatePreset(config: CardPresetConfig, nameRequired: boolean, languag
 export function validateConfig(config: XiaomiVacuumMapCardConfig): string[] {
     const errors: TranslatableString[] = [];
     const multiplePresets = (config.additional_presets?.length ?? 0) > 0;
-    validatePreset(config, multiplePresets, config.language).forEach(e => errors.push(e));
+    validatePreset(config, multiplePresets, config.language).forEach((e) => errors.push(e));
     config.additional_presets
-        ?.flatMap(preset => validatePreset(preset, multiplePresets, config.language))
-        .forEach(e => errors.push(e));
-    return errors.map(e => localize(e, config.language));
+        ?.flatMap((preset) => validatePreset(preset, multiplePresets, config.language))
+        .forEach((e) => errors.push(e));
+    return errors.map((e) => localize(e, config.language));
 }
 
 export function isOldConfig(config: XiaomiVacuumMapCardConfig): boolean {
@@ -285,5 +289,5 @@ export function isOldConfig(config: XiaomiVacuumMapCardConfig): boolean {
 
 export function areAllEntitiesDefined(usedEntities: string[], hass: HomeAssistantFixed): string[] {
     const availableEntities = Object.keys(hass.states);
-    return usedEntities.filter(e => !availableEntities.includes(e));
+    return usedEntities.filter((e) => !availableEntities.includes(e));
 }

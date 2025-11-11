@@ -53,7 +53,7 @@ export class XiaomiVacuumMapCardActionHandler extends HTMLElement implements Xia
         this.appendChild(this.ripple);
         this.ripple.primary = true;
 
-        ["touchcancel", "mouseout", "mouseup", "touchmove", "mousewheel", "wheel", "scroll"].forEach(ev => {
+        ["touchcancel", "mouseout", "mouseup", "touchmove", "mousewheel", "wheel", "scroll"].forEach((ev) => {
             document.addEventListener(
                 ev,
                 () => {
@@ -61,7 +61,7 @@ export class XiaomiVacuumMapCardActionHandler extends HTMLElement implements Xia
                     this.stopAnimation();
                     this.timer = undefined;
                 },
-                { passive: true },
+                { passive: true }
             );
         });
     }
@@ -181,7 +181,7 @@ const getActionHandler = (): XiaomiVacuumMapCardActionHandlerInterface => {
 
 export const actionHandlerBind = (
     element: XiaomiVacuumMapCardActionHandlerElement,
-    options?: ActionHandlerOptions,
+    options?: ActionHandlerOptions
 ): void => {
     const handler: XiaomiVacuumMapCardActionHandlerInterface = getActionHandler();
     if (!handler) {
@@ -197,7 +197,6 @@ export const actionHandler = directive(
             return noChange;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         render(_options?: ActionHandlerOptions): void {}
-    },
+    }
 );

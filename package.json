@@ -34,11 +34,12 @@
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^12.1.1",
-        "@typescript-eslint/eslint-plugin": "^8.15.0",
-        "@typescript-eslint/parser": "^8.15.0",
+        "@typescript-eslint/eslint-plugin": "^8.46.4",
+        "@typescript-eslint/parser": "^8.46.4",
         "eslint": "^9.15.0",
         "eslint-config-prettier": "^10.1.8",
-        "prettier": "^3.3.3",
+        "eslint-plugin-prettier": "^5.5.4",
+        "prettier": "^3.6.2",
         "replace-in-file": "^8.2.0",
         "rollup": "^4.27.4",
         "rollup-plugin-serve": "^3.0.0",
@@ -50,6 +51,9 @@
         "build": "npm run lint && npm run rollup && npm run add-version",
         "add-version": "node scripts/add-version.mjs",
         "lint": "eslint src/*.ts",
+        "lint:fix": "eslint src/*.ts --fix",
+        "format": "prettier --write \"src/**/*.{ts,js,json,css}\"",
+        "format:check": "prettier --check \"src/**/*.{ts,js,json,css}\"",
         "rollup": "rollup -c"
     }
 }

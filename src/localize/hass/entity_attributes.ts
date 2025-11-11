@@ -11,7 +11,6 @@ import { HomeAssistantFixed } from "../../types/fixes";
 import { computeAttributeValueDisplay } from "./compute_attribute_display";
 import { HassEntity } from "home-assistant-js-websocket/dist/types";
 
-
 export const STATE_ATTRIBUTES = [
     "entity_id",
     "assumed_state",
@@ -46,11 +45,7 @@ export function formatAttributeName(value: string): string {
     return capitalizeFirstLetter(value);
 }
 
-export function formatAttributeValue(
-    hass: HomeAssistantFixed,
-    stateObj: HassEntity,
-    attribute: string
-): string {
+export function formatAttributeValue(hass: HomeAssistantFixed, stateObj: HassEntity, attribute: string): string {
     const value = stateObj.attributes[attribute];
 
     if (value === null) {

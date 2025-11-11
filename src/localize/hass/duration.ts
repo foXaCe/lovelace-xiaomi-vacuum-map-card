@@ -14,9 +14,7 @@ export const UNIT_TO_MILLISECOND_CONVERT = {
 };
 
 export const formatDuration = (duration: string, units: string): string =>
-    millisecondsToDuration(
-        parseFloat(duration) * UNIT_TO_MILLISECOND_CONVERT[units]
-    ) || "0";
+    millisecondsToDuration(parseFloat(duration) * UNIT_TO_MILLISECOND_CONVERT[units]) || "0";
 
 const leftPad = (num: number, digits = 2) => {
     let paddedNum = "" + num;

@@ -14,7 +14,6 @@ import { formatDateTimeWithSeconds } from "./format_date_time";
 import { formatDate } from "./format_date";
 import { formatNumber } from "./format_number";
 
-
 export const computeAttributeValueDisplay = (
     localize: LocalizeFunc,
     stateObj: HassEntity,
@@ -23,8 +22,7 @@ export const computeAttributeValueDisplay = (
     attribute: string,
     value?: any
 ): string => {
-    const attributeValue =
-        value !== undefined ? value : stateObj.attributes[attribute];
+    const attributeValue = value !== undefined ? value : stateObj.attributes[attribute];
 
     // Null value, the state is unknown
     if (attributeValue === null) {
@@ -38,7 +36,6 @@ export const computeAttributeValueDisplay = (
 
     // Special handling in case this is a string with an known format
     if (typeof attributeValue === "string") {
-
         // Date handling
         if (isDate(attributeValue, true)) {
             // Timestamp handling
@@ -59,8 +56,7 @@ export const computeAttributeValueDisplay = (
 
     // Values are objects, render object
     if (
-        (Array.isArray(attributeValue) &&
-            attributeValue.some((val) => val instanceof Object)) ||
+        (Array.isArray(attributeValue) && attributeValue.some((val) => val instanceof Object)) ||
         (!Array.isArray(attributeValue) && attributeValue instanceof Object)
     ) {
         return JSON.stringify(attributeValue);
@@ -69,16 +65,7 @@ export const computeAttributeValueDisplay = (
     // If this is an array, try to determine the display value for each item
     if (Array.isArray(attributeValue)) {
         return attributeValue
-            .map((item) =>
-                computeAttributeValueDisplay(
-                    localize,
-                    stateObj,
-                    locale,
-                    entities,
-                    attribute,
-                    item
-                )
-            )
+            .map((item) => computeAttributeValueDisplay(localize, stateObj, locale, entities, attribute, item))
             .join(", ");
     }
 
@@ -87,9 +74,7 @@ export const computeAttributeValueDisplay = (
     const entityId = stateObj.entity_id;
     const domain = computeDomain(entityId);
     const deviceClass = stateObj.attributes.device_class;
-    const registryEntry = entities?.[entityId] as
-        | EntityRegistryDisplayEntry
-        | undefined;
+    const registryEntry = entities?.[entityId] as EntityRegistryDisplayEntry | undefined;
     const translationKey = registryEntry?.translation_key;
 
     return (
@@ -101,9 +86,7 @@ export const computeAttributeValueDisplay = (
             localize(
                 `component.${domain}.entity_component.${deviceClass}.state_attributes.${attribute}.state.${attributeValue}`
             )) ||
-        localize(
-            `component.${domain}.entity_component._.state_attributes.${attribute}.state.${attributeValue}`
-        ) ||
+        localize(`component.${domain}.entity_component._.state_attributes.${attribute}.state.${attributeValue}`) ||
         attributeValue
     );
 };
@@ -126,12 +109,8 @@ export const computeAttributeNameDisplay = (
                 `component.${entity.platform}.entity.${domain}.${translationKey}.state_attributes.${attribute}.name`
             )) ||
         (deviceClass &&
-            localize(
-                `component.${domain}.entity_component.${deviceClass}.state_attributes.${attribute}.name`
-            )) ||
-        localize(
-            `component.${domain}.entity_component._.state_attributes.${attribute}.name`
-        ) ||
+            localize(`component.${domain}.entity_component.${deviceClass}.state_attributes.${attribute}.name`)) ||
+        localize(`component.${domain}.entity_component._.state_attributes.${attribute}.name`) ||
         capitalizeFirstLetter(
             attribute
                 .replace(/_/g, " ")

@@ -35,8 +35,8 @@ export class ManualRectangle extends MapObject {
 
     private static _toPoints(rect: RectangleType): string {
         const points = rect
-            .filter(p => !isNaN(p[0]) && !isNaN(p[1]))
-            .map(p => p.join(", "))
+            .filter((p) => !isNaN(p[0]) && !isNaN(p[1]))
+            .map((p) => p.join(", "))
             .join(" ");
         return points;
     }
@@ -104,7 +104,7 @@ export class ManualRectangle extends MapObject {
     }
 
     public toVacuum(
-        repeats: number | null = null,
+        repeats: number | null = null
     ): [number, number, number, number] | [number, number, number, number, number] {
         const [x1, y1, x2, y2] = this._vacRect;
         const ordered = [Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)] as ZoneType;
@@ -119,11 +119,10 @@ export class ManualRectangle extends MapObject {
         const width = Math.abs(x2 - x1);
         const height = Math.abs(y2 - y1);
         const divider = this._context.coordinatesToMetersDivider();
-        if (divider === -1)
-            return "";
+        if (divider === -1) return "";
         const rounder = (v: number): string => (v / divider).toFixed(1);
         return `${rounder(width)}${this.localize("unit.meter_shortcut")} x ${rounder(height)}${this.localize(
-            "unit.meter_shortcut",
+            "unit.meter_shortcut"
         )}`;
     }
 
@@ -273,7 +272,8 @@ export class ManualRectangle extends MapObject {
             .manual-rectangle {
                 stroke: var(--map-card-internal-manual-rectangle-line-color);
                 stroke-linejoin: round;
-                stroke-dasharray: calc(var(--map-card-internal-manual-rectangle-line-segment-line) / var(--map-scale)),
+                stroke-dasharray:
+                    calc(var(--map-card-internal-manual-rectangle-line-segment-line) / var(--map-scale)),
                     calc(var(--map-card-internal-manual-rectangle-line-segment-gap) / var(--map-scale));
                 fill: var(--map-card-internal-manual-rectangle-fill-color);
                 stroke-width: calc(var(--map-card-internal-manual-rectangle-line-width) / var(--map-scale));

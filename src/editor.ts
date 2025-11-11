@@ -124,20 +124,19 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         this._helpers.importMoreInfoControl("climate");
 
         const entityIds = Object.keys(this.hass.states);
-        const cameras = entityIds.filter(e => ["camera", "image"].includes(e.substr(0, e.indexOf("."))));
-        const vacuums = entityIds.filter(e => e.substr(0, e.indexOf(".")) === "vacuum");
+        const cameras = entityIds.filter((e) => ["camera", "image"].includes(e.substr(0, e.indexOf("."))));
+        const vacuums = entityIds.filter((e) => e.substr(0, e.indexOf(".")) === "vacuum");
 
         return html`
             <div class="card-config">
-                <div class="description">
-                    ${this._localize("editor.description.text")}
-                </div>
+                <div class="description">${this._localize("editor.description.text")}</div>
                 <div class="values">
                     <ha-textfield
                         label="${this._localize("editor.label.name")}"
                         .value="${this._title}"
                         .configValue="${"title"}"
-                        @input="${this._valueChanged}"></ha-textfield>
+                        @input="${this._valueChanged}"
+                    ></ha-textfield>
                 </div>
                 <div class="values">
                     <ha-select
@@ -145,10 +144,11 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         fixedMenuPosition
                         label="${this._localize("editor.label.entity")}"
                         @selected="${this._valueChanged}"
-                        @closed="${ev => ev.stopPropagation()}"
+                        @closed="${(ev) => ev.stopPropagation()}"
                         .configValue="${"entity"}"
-                        .value="${this._entity}">
-                        ${vacuums.map(entity => {
+                        .value="${this._entity}"
+                    >
+                        ${vacuums.map((entity) => {
                             return html` <mwc-list-item .value="${entity}">${entity}</mwc-list-item> `;
                         })}
                     </ha-select>
@@ -159,10 +159,11 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         fixedMenuPosition
                         label="${this._localize("editor.label.camera")}"
                         @selected="${this._cameraChanged}"
-                        @closed="${ev => ev.stopPropagation()}"
+                        @closed="${(ev) => ev.stopPropagation()}"
                         .configValue="${"camera"}"
-                        .value="${this._camera}">
-                        ${cameras.map(entity => {
+                        .value="${this._camera}"
+                    >
+                        ${cameras.map((entity) => {
                             return html` <mwc-list-item .value="${entity}">${entity}</mwc-list-item> `;
                         })}
                     </ha-select>
@@ -172,7 +173,8 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._map_locked}"
                             .configValue="${"map_locked"}"
-                            @change="${this._valueChanged}"></ha-switch>
+                            @change="${this._valueChanged}"
+                        ></ha-switch>
                     </ha-formfield>
                 </div>
                 <div class="values">
@@ -180,7 +182,8 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._two_finger_pan}"
                             .configValue="${"two_finger_pan"}"
-                            @change="${this._valueChanged}"></ha-switch>
+                            @change="${this._valueChanged}"
+                        ></ha-switch>
                     </ha-formfield>
                 </div>
                 <div class="values">
@@ -188,7 +191,8 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._map_only}"
                             .configValue="${"map_only"}"
-                            @change="${this._mapOnlyChanged}"></ha-switch>
+                            @change="${this._mapOnlyChanged}"
+                        ></ha-switch>
                     </ha-formfield>
                 </div>
                 <div class="values">
@@ -196,7 +200,8 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._show_tiles}"
                             .configValue="${"show_tiles"}"
-                            @change="${this._valueChanged}"></ha-switch>
+                            @change="${this._valueChanged}"
+                        ></ha-switch>
                     </ha-formfield>
                 </div>
                 <div class="values">
@@ -204,11 +209,11 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                         <ha-switch
                             .checked="${this._tiles_only}"
                             .configValue="${"tiles_only"}"
-                            @change="${this._tilesOnlyChanged}"></ha-switch>
+                            @change="${this._tilesOnlyChanged}"
+                        ></ha-switch>
                     </ha-formfield>
                 </div>
-                ${this._tiles_only ? this._renderTilesConfig() : html``}
-                ${ToastRenderer.render("editor")}
+                ${this._tiles_only ? this._renderTilesConfig() : html``} ${ToastRenderer.render("editor")}
             </div>
         `;
     }
@@ -279,16 +284,16 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
     private _showToast(text: string, icon: string, successful: boolean, additionalText = ""): void {
         ToastRenderer.showToast(
             this.shadowRoot,
-            v => this._localize(v),
+            (v) => this._localize(v),
             "editor",
             text,
             icon,
             successful,
-            additionalText,
+            additionalText
         );
     }
 
-    private _platformChanged(ev): void{
+    private _platformChanged(ev): void {
         if (!this._config || !this.hass) {
             return;
         }
@@ -301,16 +306,12 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                 delete tmpConfig["calibration_source"];
             }
         } else {
-            if (!tmpConfig["calibration_source"]
-                && tmpConfig["map_source"]
-                && tmpConfig["map_source"]["camera"]
-            ) {
+            if (!tmpConfig["calibration_source"] && tmpConfig["map_source"] && tmpConfig["map_source"]["camera"]) {
                 tmpConfig["calibration_source"] = { camera: true };
             }
         }
         this._config = tmpConfig;
         fireEvent(this, "config-changed", { config: this._config });
-
     }
 
     private _cameraChanged(ev): void {
@@ -321,9 +322,10 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
         if (this._camera === value) return;
         const tmpConfig = { ...this._config };
         tmpConfig["map_source"] = { camera: value };
-        if (!PlatformGenerator.getCalibration(this._config.vacuum_platform)
-            && !tmpConfig["calibration_source"]
-            && "calibration_points" in this.hass.states[value].attributes
+        if (
+            !PlatformGenerator.getCalibration(this._config.vacuum_platform) &&
+            !tmpConfig["calibration_source"] &&
+            "calibration_points" in this.hass.states[value].attributes
         ) {
             tmpConfig["calibration_source"] = { camera: true };
         }
@@ -386,13 +388,13 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
     private _tileVisibilityChanged(tileId: string, visible: boolean): void {
         if (!this._config) return;
 
-        const tiles = this._config.tiles || this._generatedTiles.map(t => ({ ...t }));
-        const tileIndex = tiles.findIndex(t => t.tile_id === tileId);
+        const tiles = this._config.tiles || this._generatedTiles.map((t) => ({ ...t }));
+        const tileIndex = tiles.findIndex((t) => t.tile_id === tileId);
 
         if (tileIndex >= 0) {
             tiles[tileIndex] = { ...tiles[tileIndex], visible };
         } else {
-            const generatedTile = this._generatedTiles.find(t => t.tile_id === tileId);
+            const generatedTile = this._generatedTiles.find((t) => t.tile_id === tileId);
             if (generatedTile) {
                 tiles.push({ ...generatedTile, visible });
             }
@@ -420,29 +422,33 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
 
         return html`
             <div class="tiles-config-wrapper">
-                <div class="tiles-header" @click="${() => this._tilesExpanded = !this._tilesExpanded}">
-                    <ha-icon icon="${this._tilesExpanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}"></ha-icon>
+                <div class="tiles-header" @click="${() => (this._tilesExpanded = !this._tilesExpanded)}">
+                    <ha-icon icon="${this._tilesExpanded ? "mdi:chevron-down" : "mdi:chevron-right"}"></ha-icon>
                     <span>${this._localize("editor.label.configure_tiles") || "Configure tiles"}</span>
                 </div>
-                ${this._tilesExpanded ? html`
-                    <div class="tiles-list">
-                        ${this._generatedTiles.map(tile => {
-                            const configTile = configTiles.find(t => t.tile_id === tile.tile_id);
-                            const isVisible = configTile?.visible !== undefined ? configTile.visible : true;
+                ${this._tilesExpanded
+                    ? html`
+                          <div class="tiles-list">
+                              ${this._generatedTiles.map((tile) => {
+                                  const configTile = configTiles.find((t) => t.tile_id === tile.tile_id);
+                                  const isVisible = configTile?.visible !== undefined ? configTile.visible : true;
 
-                            return html`
-                                <div class="tile-item">
-                                    <ha-formfield .label="${tile.label || tile.tile_id}">
-                                        <ha-switch
-                                            .checked="${isVisible}"
-                                            @change="${(ev) => this._tileVisibilityChanged(tile.tile_id, ev.target.checked)}">
-                                        </ha-switch>
-                                    </ha-formfield>
-                                </div>
-                            `;
-                        })}
-                    </div>
-                ` : html``}
+                                  return html`
+                                      <div class="tile-item">
+                                          <ha-formfield .label="${tile.label || tile.tile_id}">
+                                              <ha-switch
+                                                  .checked="${isVisible}"
+                                                  @change="${(ev) =>
+                                                      this._tileVisibilityChanged(tile.tile_id, ev.target.checked)}"
+                                              >
+                                              </ha-switch>
+                                          </ha-formfield>
+                                      </div>
+                                  `;
+                              })}
+                          </div>
+                      `
+                    : html``}
             </div>
         `;
     }
@@ -540,7 +546,7 @@ export class XiaomiVacuumMapCardEditor extends LitElement implements Omit<Lovela
                 border-top: solid 1px;
                 border-top-color: var(--primary-text-color);
             }
-          
+
             .version {
                 position: absolute;
                 bottom: 0;

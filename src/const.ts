@@ -22,5 +22,5 @@ export const EVENT_LOVELACE_DOM_DETAIL = "dreame_vacuum_card";
 export const EMPTY_MAP_MODE: MapModeConfig = {
     run_immediately: true,
     selection_type: SelectionType[SelectionType.ROOM],
-    repeats_type: RepeatsType[RepeatsType.NONE]
-}
+    repeats_type: RepeatsType[RepeatsType.NONE],
+};

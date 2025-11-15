@@ -687,6 +687,11 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 transition:
                     stroke var(--map-card-internal-transitions-duration) ease,
                     fill var(--map-card-internal-transitions-duration) ease;
+                pointer-events: none;
+            }
+
+            .predefined-rectangle-wrapper.selected > .predefined-rectangle {
+                pointer-events: all;
             }
 
             .predefined-rectangle-icon-wrapper {
@@ -707,6 +712,11 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 transition:
                     color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
+                pointer-events: none;
+            }
+
+            .predefined-rectangle-wrapper.selected > * > .predefined-rectangle-icon-wrapper {
+                pointer-events: all;
             }
 
             .predefined-rectangle-label {
@@ -733,7 +743,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
             .predefined-rectangle-wrapper.selected > .predefined-rectangle-label {
                 fill: var(--map-card-internal-predefined-rectangle-label-color-selected);
             }
-        `}}class Fs extends Ls{constructor(e,t){super(e,t),this._config=e}render(){var e,t;const i=(null!==(t=null===(e=this._config)||void 0===e?void 0:e.outline)&&void 0!==t?t:[]).map(e=>this.vacuumToScaledMap(e[0],e[1])),a=i.map(e=>e.join(", ")).join(" "),n=i.map(e=>e[0]),o=i.map(e=>e[1]),r=Math.min(...n),s=Math.max(...n),l=Math.min(...o),c=Math.max(...o);return K`
+        `}}class Fs extends Ls{constructor(e,t){super(e,t),this._config=e}render(){var e,t;const i=(null!==(t=null===(e=this._config)||void 0===e?void 0:e.outline)&&void 0!==t?t:[]).map(e=>this.vacuumToScaledMap(e[0],e[1])),a=i.map(e=>e.join(", ")).join(" "),n=i.map(e=>e[0]),o=i.map(e=>e[1]);return Math.min(...n),Math.max(...n),Math.min(...o),Math.max(...o),K`
             <g class="room-wrapper ${this._selected?"selected":""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm,"_")}-wrapper">
                 <polygon class="room-outline clickable room-polygon"
@@ -742,17 +752,6 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                          @click="${async e=>{e.stopPropagation(),e.preventDefault(),await this._click()}}"
                          @mousedown="${e=>{e.stopPropagation()}}">
                 </polygon>
-                <rect class="room-click-area"
-                      x="${r}"
-                      y="${l}"
-                      width="${s-r}"
-                      height="${c-l}"
-                      fill="transparent"
-                      stroke="none"
-                      pointer-events="all"
-                      @click="${async e=>{e.stopPropagation(),e.preventDefault(),await this._click()}}"
-                      style="cursor: pointer;">
-                </rect>
                 ${this.renderIcon(this._config.icon,()=>this._click(),"room-icon-wrapper")}
                 ${this.renderLabel(this._config.label,"room-label")}
             </g>
@@ -1553,7 +1552,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
             ></ha-icon>
         `}_runZoneCleaning(){this._run(!1)}_runRoomCleaning(){this._run(!1)}_cancelZoneMode(){this.selectedManualRectangles=[],this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_cancelRoomMode(){this.selectedRooms=[],this.selectableRooms.forEach(e=>{e.selected&&(e._selected=!1)}),this._setCurrentMode(0,!0),xe("selection"),this.requestUpdate()}_startCleaning(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","start",{entity_id:i}),xe("success"))}_pauseVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","pause",{entity_id:i}),xe("success"))}_stopVacuum(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","stop",{entity_id:i}),xe("success"))}_returnToBase(){var e,t;const i=null===(e=this.currentPreset)||void 0===e?void 0:e.entity;i&&(null===(t=this.hass)||void 0===t||t.callService("vacuum","return_to_base",{entity_id:i}),xe("success"))}_getCssProperty(e){return getComputedStyle(this._getMapImage()).getPropertyValue(e)}_zoomIn(){xe("selection"),this._updateScale(1.5)}_zoomOut(){xe("selection"),this._updateScale(1/1.5)}_updateScale(e){const t=this._getMapZoomerContent(),i=this._getPinchZoom(),a=this._getPinchZoom().getBoundingClientRect();this.mapScale=Math.max(this.mapScale*e,.5),t.style.transitionDuration="200ms",i.scaleTo(this.mapScale,{originX:a.left+a.width/2,originY:a.top+a.height/2,relativeTo:"container",allowChangeEvent:!0}),Jr(300).then(()=>t.style.transitionDuration="0s")}_calculateBasicScale(){const e=this._getMapImage();e&&e.naturalWidth>0&&(this.realImageWidth=e.naturalWidth,this.realImageHeight=e.naturalHeight,this.realScale=e.width/e.naturalWidth)}_calculateScale(){const e=this._getPinchZoom();this.mapScale=e.scale,this.mapX=e.x,this.mapY=e.y}_getPinchZoom(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer")}_getMapImage(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-image")}_getMapZoomerContent(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.getElementById("map-zoomer-content")}_getSvgWrapper(){var e;return null===(e=this.shadowRoot)||void 0===e?void 0:e.querySelector("#svg-wrapper")}_showConfigErrors(e){e.forEach(e=>console.error(e));const t=document.createElement("hui-error-card");try{return t.setConfig({type:"error",error:e[0],origConfig:this.config}),q` ${t} `}catch(t){return q` <pre style="padding: 10px; background-color: red;">${e[0]}</pre> `}}_showOldConfig(){return q`
             <hui-warning>
-                <h1>Xiaomi Vacuum Map Card ${"vv3.5.24"}</h1>
+                <h1>Xiaomi Vacuum Map Card ${"vv3.5.25"}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
                     <a

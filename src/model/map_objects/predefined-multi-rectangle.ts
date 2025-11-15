@@ -140,6 +140,11 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 transition:
                     stroke var(--map-card-internal-transitions-duration) ease,
                     fill var(--map-card-internal-transitions-duration) ease;
+                pointer-events: none;
+            }
+
+            .predefined-rectangle-wrapper.selected > .predefined-rectangle {
+                pointer-events: all;
             }
 
             .predefined-rectangle-icon-wrapper {
@@ -160,6 +165,11 @@ export class PredefinedMultiRectangle extends PredefinedMapObject {
                 transition:
                     color var(--map-card-internal-transitions-duration) ease,
                     background var(--map-card-internal-transitions-duration) ease;
+                pointer-events: none;
+            }
+
+            .predefined-rectangle-wrapper.selected > * > .predefined-rectangle-icon-wrapper {
+                pointer-events: all;
             }
 
             .predefined-rectangle-label {

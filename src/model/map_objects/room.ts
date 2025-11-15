@@ -18,6 +18,15 @@ export class Room extends PredefinedMapObject {
     public render(): SVGTemplateResult {
         const poly = (this._config?.outline ?? []).map((p) => this.vacuumToScaledMap(p[0], p[1]));
         const pointsStr = poly.map((p) => p.join(", ")).join(" ");
+
+        // Calculate bounding box for invisible click area
+        const xs = poly.map(p => p[0]);
+        const ys = poly.map(p => p[1]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+
         return svg`
             <g class="room-wrapper ${this._selected ? "selected" : ""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
@@ -33,6 +42,21 @@ export class Room extends PredefinedMapObject {
                              e.stopPropagation();
                          }}">
                 </polygon>
+                <rect class="room-click-area"
+                      x="${minX}"
+                      y="${minY}"
+                      width="${maxX - minX}"
+                      height="${maxY - minY}"
+                      fill="transparent"
+                      stroke="none"
+                      pointer-events="all"
+                      @click="${async (e: MouseEvent): Promise<void> => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          await this._click();
+                      }}"
+                      style="cursor: pointer;">
+                </rect>
                 ${this.renderIcon(this._config.icon, () => this._click(), "room-icon-wrapper")}
                 ${this.renderLabel(this._config.label, "room-label")}
             </g>

@@ -95,8 +95,8 @@ export class Room extends PredefinedMapObject {
             .room-outline {
                 stroke: var(--map-card-internal-room-outline-line-color);
                 stroke-width: calc(var(--map-card-internal-room-outline-line-width) / var(--map-scale));
-                fill: rgba(255, 0, 0, 0.3);
-                fill-opacity: 1;
+                fill: transparent;
+                fill-opacity: 0;
                 stroke-opacity: 0;
                 stroke-linejoin: round;
                 stroke-dasharray:

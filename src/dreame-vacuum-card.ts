@@ -1048,24 +1048,14 @@ export class XiaomiVacuumMapCard extends LitElement {
         if (rooms) {
             const mode = this.modes.filter((m) => m.selectionType === SelectionType.ROOM).reverse()[0];
             const modeIndex = mode ? this.modes.indexOf(mode) : -1;
-            console.log("🏠 [ROOMS DEBUG] Total rooms in data:", Object.keys(rooms).length);
             for (const room_id in rooms) {
                 if (!rooms.hasOwnProperty(room_id)) continue;
                 const room = rooms[room_id];
-                console.log(`🏠 [ROOM ${room_id}]`, {
-                    hasOutline: !!room.outline,
-                    outlineLength: room.outline?.length,
-                    hasCoords: !!(room.x0 && room.y0 && room.x1 && room.y1),
-                    visibility: room.visibility,
-                    fullRoom: room
-                });
                 if (!room.outline && !room.x0 && !room.y0 && !room.x1 && !room.y1) {
-                    console.log(`❌ [ROOM ${room_id}] SKIPPED: No outline or coordinates`);
                     continue;
                 }
                 // Skip hidden rooms (visibility = "Hidden")
                 if (room.visibility === "Hidden") {
-                    console.log(`❌ [ROOM ${room_id}] SKIPPED: visibility = "${room.visibility}"`);
                     continue;
                 }
                 const outline = room.outline ?? [
@@ -1083,10 +1073,8 @@ export class XiaomiVacuumMapCard extends LitElement {
                     label: undefined,
                     outline: outline,
                 } as RoomConfig;
-                console.log(`✅ [ROOM ${room_id}] ADDED to selectableRooms`);
                 roomsConfig.push(roomConfig);
             }
-            console.log("🏠 [ROOMS DEBUG] Final selectable rooms:", roomsConfig.length);
             return { modeIndex: modeIndex, rooms: roomsConfig };
         }
         return undefined;

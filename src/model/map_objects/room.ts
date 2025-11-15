@@ -18,14 +18,6 @@ export class Room extends PredefinedMapObject {
     public render(): SVGTemplateResult {
         const poly = (this._config?.outline ?? []).map((p) => this.vacuumToScaledMap(p[0], p[1]));
         const pointsStr = poly.map((p) => p.join(", ")).join(" ");
-        console.log(`🔍 [ROOM RENDER] Room ${this._config.id}:`, {
-            outlinePoints: this._config?.outline?.length || 0,
-            scaledPoints: poly.length,
-            pointsString: pointsStr,
-            selected: this._selected,
-            hasIcon: !!this._config.icon,
-            hasLabel: !!this._config.label,
-        });
         return svg`
             <g class="room-wrapper ${this._selected ? "selected" : ""}
             room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
@@ -33,17 +25,13 @@ export class Room extends PredefinedMapObject {
                          data-room-id="${this._config.id}"
                          points="${pointsStr}"
                          @click="${async (e: MouseEvent): Promise<void> => {
-                             console.log(`🖱️ [ROOM POLYGON CLICK] Room ${this._config.id} polygon clicked`, e);
                              e.stopPropagation();
                              e.preventDefault();
                              await this._click();
                          }}"
                          @mousedown="${(e: MouseEvent): void => {
-                             console.log(`🖱️ [ROOM POLYGON MOUSEDOWN] Room ${this._config.id}`);
                              e.stopPropagation();
-                         }}"
-                         @mouseenter="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse enter`)}"
-                         @mouseleave="${(): void => console.log(`🖱️ [ROOM HOVER] Room ${this._config.id} mouse leave`)}">
+                         }}">
                 </polygon>
                 ${this.renderIcon(this._config.icon, () => this._click(), "room-icon-wrapper")}
                 ${this.renderLabel(this._config.label, "room-label")}
@@ -56,44 +44,31 @@ export class Room extends PredefinedMapObject {
     }
 
     private async _click(): Promise<void> {
-        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} clicked`);
         const currentMode = this._context.getCurrentMode();
         const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
-        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - currentModeIsRoom:`, currentModeIsRoom);
 
         if (!currentModeIsRoom) {
-            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - Activating room mode`);
             this._context.activateRoomMode();
             await new Promise((resolve) => setTimeout(resolve, 150));
 
             const newMode = this._context.getCurrentMode();
-            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - newMode selectionType:`, newMode?.selectionType);
             if (newMode?.selectionType !== 2) {
-                console.log(`❌ [ROOM CLICK] Room ${this._config.id} - Failed to activate room mode, aborting`);
                 return;
             }
         }
 
-        console.log(
-            `🔍 [ROOM CLICK] Room ${this._config.id} - selected: ${this._selected}, selectedRooms: ${this._context.selectedRooms().length}, maxSelections: ${this._context.maxSelections()}`
-        );
         if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
-            console.log(`❌ [ROOM CLICK] Room ${this._config.id} - Max selections reached`);
             forwardHaptic("failure");
             return;
         }
         this._toggleSelected();
-        console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - toggled to: ${this._selected}`);
         if (this._selected) {
             this._context.selectedRooms().push(this);
-            console.log(`✅ [ROOM CLICK] Room ${this._config.id} - Added to selection`);
         } else {
             deleteFromArray(this._context.selectedRooms(), this);
-            console.log(`➖ [ROOM CLICK] Room ${this._config.id} - Removed from selection`);
         }
         this._context.selectionChanged();
         if (await this._context.runImmediately()) {
-            console.log(`🔍 [ROOM CLICK] Room ${this._config.id} - Running immediately, clearing selection`);
             this._selected = false;
             deleteFromArray(this._context.selectedRooms(), this);
             this._context.selectionChanged();
@@ -101,7 +76,6 @@ export class Room extends PredefinedMapObject {
         }
         forwardHaptic("selection");
         this.update();
-        console.log(`✅ [ROOM CLICK] Room ${this._config.id} - Click completed successfully`);
     }
 
     public static get styles(): CSSResultGroup {
@@ -112,8 +86,8 @@ export class Room extends PredefinedMapObject {
             .room-outline {
                 stroke: var(--map-card-internal-room-outline-line-color);
                 stroke-width: calc(var(--map-card-internal-room-outline-line-width) / var(--map-scale));
-                fill: rgba(255, 0, 0, 0.01);
-                fill-opacity: 1;
+                fill: var(--map-card-internal-room-outline-fill-color);
+                fill-opacity: 0.01;
                 stroke-opacity: 0;
                 stroke-linejoin: round;
                 stroke-dasharray:
@@ -124,7 +98,7 @@ export class Room extends PredefinedMapObject {
                     fill var(--map-card-internal-transitions-duration) ease,
                     stroke-opacity var(--map-card-internal-transitions-duration) ease,
                     fill-opacity var(--map-card-internal-transitions-duration) ease;
-                pointer-events: all !important;
+                pointer-events: all;
                 cursor: pointer;
             }
 

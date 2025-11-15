@@ -1048,26 +1048,16 @@ export class XiaomiVacuumMapCard extends LitElement {
         if (rooms) {
             const mode = this.modes.filter((m) => m.selectionType === SelectionType.ROOM).reverse()[0];
             const modeIndex = mode ? this.modes.indexOf(mode) : -1;
-            console.log("🔍 [ROOM DEBUG] Processing rooms:", Object.keys(rooms));
             for (const room_id in rooms) {
                 if (!rooms.hasOwnProperty(room_id)) continue;
                 const room = rooms[room_id];
-                console.log(`🔍 [ROOM DEBUG] Room ${room_id}:`, {
-                    hasOutline: !!room.outline,
-                    hasCoordinates: !!(room.x0 && room.y0 && room.x1 && room.y1),
-                    visibility: room.visibility,
-                    fullRoom: room,
-                });
                 if (!room.outline && !room.x0 && !room.y0 && !room.x1 && !room.y1) {
-                    console.log(`❌ [ROOM DEBUG] Room ${room_id} skipped: no outline or coordinates`);
                     continue;
                 }
                 // Skip hidden rooms (visibility = "Hidden")
                 if (room.visibility === "Hidden") {
-                    console.log(`❌ [ROOM DEBUG] Room ${room_id} skipped: visibility is Hidden`);
                     continue;
                 }
-                console.log(`✅ [ROOM DEBUG] Room ${room_id} will be added to selectable rooms`);
                 const outline = room.outline ?? [
                     [room.x0, room.y0],
                     [room.x1, room.y0],
@@ -1329,29 +1319,15 @@ export class XiaomiVacuumMapCard extends LitElement {
             "";
         const isRoomPolygon = classNames.includes("room-polygon");
 
-        console.log("🖱️ [MOUSEUP] _mouseUp called", {
-            eventType: event.type,
-            target: target?.tagName,
-            targetId: target?.id,
-            classNameType: typeof classNameObj,
-            classNameBaseVal: classNameObj?.baseVal,
-            classNames: classNames,
-            isRoomPolygon: isRoomPolygon,
-            shouldHandleMouseUp: this.shouldHandleMouseUp,
-        });
-
         // Si le click provient d'un polygone de pièce, ne rien faire ici
         // Le handler du polygone va gérer le click
         if (isRoomPolygon) {
-            console.log("🖱️ [MOUSEUP] Click on room polygon, letting polygon handler take over");
             this.shouldHandleMouseUp = false;
             return;
         }
 
         const currentMode = this._getCurrentMode();
-        console.log("🖱️ [MOUSEUP] currentMode:", currentMode?.selectionType);
         if (!(event instanceof MouseEvent && event.button != 0) && this.shouldHandleMouseUp && currentMode) {
-            console.log("🖱️ [MOUSEUP] Entering handler, selectionType:", currentMode.selectionType);
             const { x, y } = getMousePosition(event, this._getSvgWrapper(), 1);
             switch (currentMode.selectionType) {
                 case SelectionType.MANUAL_PATH:
@@ -1369,17 +1345,10 @@ export class XiaomiVacuumMapCard extends LitElement {
                     this.requestUpdate();
                     break;
                 default:
-                    console.log("🖱️ [MOUSEUP] In default case, NOT stopping event propagation");
                     // Ne pas bloquer l'événement pour les autres modes (ROOM, etc.)
                     // L'événement doit se propager aux polygones des pièces
                     break;
             }
-        } else {
-            console.log("🖱️ [MOUSEUP] Handler skipped because:", {
-                isRightClick: event instanceof MouseEvent && event.button != 0,
-                shouldHandleMouseUp: this.shouldHandleMouseUp,
-                hasCurrentMode: !!currentMode,
-            });
         }
         this.shouldHandleMouseUp = false;
     }

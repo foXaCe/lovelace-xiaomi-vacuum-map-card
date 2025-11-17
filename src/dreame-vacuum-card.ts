@@ -1198,7 +1198,7 @@ export class XiaomiVacuumMapCard extends LitElement {
         if (s) {
             s.style.borderRadius = this._getCssProperty("--map-card-internal-big-radius");
         }
-        delay(100).then(() => this._calculateBasicScale());
+        delay(10).then(() => this._calculateBasicScale());
 
         if (!somethingChanged) {
             return;

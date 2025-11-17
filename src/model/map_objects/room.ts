@@ -20,8 +20,8 @@ export class Room extends PredefinedMapObject {
         const pointsStr = poly.map((p) => p.join(", ")).join(" ");
 
         // Calculate bounding box for invisible click area
-        const xs = poly.map(p => p[0]);
-        const ys = poly.map(p => p[1]);
+        const xs = poly.map((p) => p[0]);
+        const ys = poly.map((p) => p[1]);
         const minX = Math.min(...xs);
         const maxX = Math.max(...xs);
         const minY = Math.min(...ys);

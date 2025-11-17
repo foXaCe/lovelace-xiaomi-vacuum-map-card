@@ -144,6 +144,7 @@ export class XiaomiVacuumMapCard extends LitElement {
     private shouldHandleMouseUp!: boolean;
     private lastHassUpdate!: Date;
     public isInEditor = false;
+    private lastValidMapUrl?: string;
 
     constructor() {
         super();
@@ -357,6 +358,15 @@ export class XiaomiVacuumMapCard extends LitElement {
                                 ${mapZoomerContent}
                             </pinch-zoom>
                             <div id="map-zoomer-overlay">
+                                ${conditional(
+                                    this._isUpdatingFromCache(),
+                                    () => html`
+                                        <div class="updating-badge">
+                                            <ha-icon icon="mdi:cloud-refresh" class="updating-icon"></ha-icon>
+                                            <span>Updating...</span>
+                                        </div>
+                                    `
+                                )}
                                 <div class="map-zoom-icons">
                                     ${this._renderMapControls()}
                                     <ha-icon
@@ -654,6 +664,16 @@ export class XiaomiVacuumMapCard extends LitElement {
         this.coordinatesConverter = new CoordinatesConverter(calibrationPoints);
     }
 
+    private _isUpdatingFromCache(): boolean {
+        // Check if we're showing cached map while reconnecting
+        return (
+            (!this.connected ||
+                !this.lastHassUpdate ||
+                this.lastHassUpdate.getTime() + DISCONNECTION_TIME < new Date().getTime()) &&
+            !!this.lastValidMapUrl
+        );
+    }
+
     private _getMapSrc(config: CardPresetConfig): string {
         if (config.map_source.camera) {
             if (
@@ -662,7 +682,14 @@ export class XiaomiVacuumMapCard extends LitElement {
                 this.lastHassUpdate.getTime() + DISCONNECTION_TIME >= new Date().getTime()
             ) {
                 const url = this.hass.hassUrl(this.hass.states[config.map_source.camera].attributes.entity_picture);
-                return `${url}&v=${+new Date()}`;
+                const fullUrl = `${url}&v=${+new Date()}`;
+                // Store last valid map URL for cache
+                this.lastValidMapUrl = fullUrl;
+                return fullUrl;
+            }
+            // Return cached map instead of disconnected image
+            if (this.lastValidMapUrl) {
+                return this.lastValidMapUrl;
             }
             return DISCONNECTED_IMAGE;
         }
@@ -2123,6 +2150,49 @@ export class XiaomiVacuumMapCard extends LitElement {
                 border-radius: var(--map-card-internal-small-radius);
                 margin: 5px;
                 direction: ltr;
+            }
+
+            .updating-badge {
+                top: 0;
+                right: 0;
+                position: absolute;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background-color: rgba(var(--rgb-warning-color, 255, 152, 0), 0.9);
+                color: var(--text-primary-color, #ffffff);
+                border-radius: var(--map-card-internal-small-radius);
+                padding: 6px 12px;
+                margin: 5px;
+                font-size: 12px;
+                font-weight: 500;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                animation: pulse-opacity 2s ease-in-out infinite;
+            }
+
+            .updating-icon {
+                height: 18px;
+                width: 18px;
+                animation: spin 2s linear infinite;
+            }
+
+            @keyframes pulse-opacity {
+                0%,
+                100% {
+                    opacity: 0.9;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
             }
 
             .map-zoom-icons-main {

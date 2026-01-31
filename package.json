@@ -18,7 +18,7 @@
     "dependencies": {
         "change-perspective": "^1.0.1",
         "custom-card-helpers": "^1.9.0",
-        "home-assistant-js-websocket": "^9.5.0",
+        "home-assistant-js-websocket": "^9.6.0",
         "lit": "^3.3.1",
         "pointer-tracker": "^2.4.0",
         "transformation-matrix": "^3.1.0"

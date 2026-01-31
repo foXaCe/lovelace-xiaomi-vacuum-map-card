@@ -100,7 +100,7 @@ This platform can be used to control vacuums connected to Home Assistant using D
   map_modes:
     - template: vacuum_clean_zone_predefined
       predefined_selections:
-        - zones: 
+        - zones:
             - - -350
               - -8200
               - 2050
@@ -219,12 +219,12 @@ This platform can be used to control vacuums connected to Home Assistant using D
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_goto
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -236,14 +236,14 @@ This platform can be used to control vacuums connected to Home Assistant using D
 * ### Going to a predefined point (`vacuum_goto_predefined`)
 
   Uses a pair of coordinates for vacuum to go to a point that has been defined in the configuration. Requires `predefined_selections` to be provided.
-  
+
   [Getting coordinates](/docs/templates/setup.md#getting-coordinates)
 
   Used service: `dreame_vacuum.vacuum_goto`
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_goto_predefined
@@ -269,7 +269,7 @@ This platform can be used to control vacuums connected to Home Assistant using D
             x: 3214
             y: 2628
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -280,18 +280,18 @@ This platform can be used to control vacuums connected to Home Assistant using D
 
 * ### Following a specified path (`vacuum_follow_path`)
 
-  Uses a list of points to make a vacuum follow a user-defined path. 
+  Uses a list of points to make a vacuum follow a user-defined path.
 
   Used service: `dreame_vacuum.vacuum_follow_path`
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_follow_path
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>

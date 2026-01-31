@@ -60,7 +60,7 @@ body:
       required: true
     attributes:
       label: Which integration do you use to control your vacuum (link)?
-      description: Provide a link to (custom) integration that you use to control your vacuum. 
+      description: Provide a link to (custom) integration that you use to control your vacuum.
       placeholder: https://www.home-assistant.io/integrations/xiaomi_miio/
       value: https://www.home-assistant.io/integrations/xiaomi_miio/
   - type: input

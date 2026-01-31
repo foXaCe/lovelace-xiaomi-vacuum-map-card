@@ -48,7 +48,7 @@ To reset a value for a given consumable press and hold a matching tile.
             x: 22282
             y: 26496
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -65,12 +65,12 @@ To reset a value for a given consumable press and hold a matching tile.
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_clean_zone
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -82,14 +82,14 @@ To reset a value for a given consumable press and hold a matching tile.
 * ### Predefined zone cleaning (`vacuum_clean_zone_predefined`)
 
   Uses 4 coordinates to clean rectangular zones that have been defined in the configuration. Requires `predefined_selections` to be provided.
-  
+
   [Getting coordinates](/docs/templates/setup.md#getting-coordinates)
 
   Used service: `xiaomi_miio.vacuum_clean_zone`
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_clean_zone_predefined
@@ -115,7 +115,7 @@ To reset a value for a given consumable press and hold a matching tile.
             x: 28760
             y: 28403
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -132,12 +132,12 @@ To reset a value for a given consumable press and hold a matching tile.
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_goto
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -149,14 +149,14 @@ To reset a value for a given consumable press and hold a matching tile.
 * ### Going to a predefined point (`vacuum_goto_predefined`)
 
   Uses a pair of coordinates for vacuum to go to a point that has been defined in the configuration. Requires `predefined_selections` to be provided.
-  
+
   [Getting coordinates](/docs/templates/setup.md#getting-coordinates)
 
   Used service: `xiaomi_miio.vacuum_goto`
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_goto_predefined
@@ -182,7 +182,7 @@ To reset a value for a given consumable press and hold a matching tile.
             x: 32143
             y: 26284
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>
@@ -199,12 +199,12 @@ To reset a value for a given consumable press and hold a matching tile.
 
   <details>
   <summary>Example configuration</summary>
-  
+
   ```yaml
   map_modes:
     - template: vacuum_follow_path
   ```
-  
+
   </details>
   <details>
   <summary>Example video</summary>

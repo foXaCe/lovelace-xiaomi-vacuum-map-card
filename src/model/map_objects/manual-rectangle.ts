@@ -50,7 +50,7 @@ export class ManualRectangle extends MapObject {
         const angle = ManualRectangle.calcAngle(mapRect[0], mapRect[3]);
         return svg`
             <g class="manual-rectangle-wrapper ${this.isSelected() ? "selected" : ""}"
-               style="--x-resize:${movePoint[0]}px; 
+               style="--x-resize:${movePoint[0]}px;
                       --y-resize:${movePoint[1]}px;
                       --x-delete:${deletePoint[0]}px;
                       --y-delete:${deletePoint[1]}px;

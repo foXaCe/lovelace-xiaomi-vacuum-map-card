@@ -21,11 +21,7 @@ export class CleaningProgressBar extends LitElement {
         if (!deviceId) return null;
 
         for (const [eid, entry] of Object.entries(this.hass.entities)) {
-            if (
-                entry.device_id === deviceId &&
-                eid.startsWith("sensor.") &&
-                eid.endsWith("_cleaning_progress")
-            ) {
+            if (entry.device_id === deviceId && eid.startsWith("sensor.") && eid.endsWith("_cleaning_progress")) {
                 return eid;
             }
         }

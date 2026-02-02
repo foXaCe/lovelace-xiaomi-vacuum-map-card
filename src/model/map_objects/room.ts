@@ -127,7 +127,9 @@ export class Room extends PredefinedMapObject {
                 stroke-width: 3px;
                 stroke-linecap: round;
                 stroke-linejoin: round;
-                transition: opacity 0.3s ease, fill 0.3s ease;
+                transition:
+                    opacity 0.3s ease,
+                    fill 0.3s ease;
             }
 
             /* Mode pièce : tous les labels dimmés par défaut */

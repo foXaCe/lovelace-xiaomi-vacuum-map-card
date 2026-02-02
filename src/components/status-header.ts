@@ -78,12 +78,7 @@ export class StatusHeader extends LitElement {
         let statusDisplay: string;
         if (stateSensorId && this.hass.states[stateSensorId]) {
             const stateSensor = this.hass.states[stateSensorId];
-            statusDisplay = computeStateDisplay(
-                this.hass.localize,
-                stateSensor,
-                this.hass.locale,
-                this.hass.entities,
-            );
+            statusDisplay = computeStateDisplay(this.hass.localize, stateSensor, this.hass.locale, this.hass.entities);
         } else {
             statusDisplay = stateObj.state;
         }
@@ -180,11 +175,7 @@ export class StatusHeader extends LitElement {
                 justify-content: center;
                 gap: 24px;
                 padding: 8px 16px;
-                background: color-mix(
-                    in srgb,
-                    var(--card-background-color, #fff) 70%,
-                    transparent
-                );
+                background: color-mix(in srgb, var(--card-background-color, #fff) 70%, transparent);
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
             }

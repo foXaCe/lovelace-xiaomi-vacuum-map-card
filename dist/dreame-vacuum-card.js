@@ -499,7 +499,9 @@ const de=e=>(a,t)=>{void 0!==t?t.addInitializer(()=>{customElements.define(e,a)}
                 stroke-width: 3px;
                 stroke-linecap: round;
                 stroke-linejoin: round;
-                transition: opacity 0.3s ease, fill 0.3s ease;
+                transition:
+                    opacity 0.3s ease,
+                    fill 0.3s ease;
             }
 
             /* Mode pièce : tous les labels dimmés par défaut */
@@ -777,11 +779,7 @@ const de=e=>(a,t)=>{void 0!==t?t.addInitializer(()=>{customElements.define(e,a)}
                 justify-content: center;
                 gap: 24px;
                 padding: 8px 16px;
-                background: color-mix(
-                    in srgb,
-                    var(--card-background-color, #fff) 70%,
-                    transparent
-                );
+                background: color-mix(in srgb, var(--card-background-color, #fff) 70%, transparent);
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
             }
@@ -1089,18 +1087,20 @@ const de=e=>(a,t)=>{void 0!==t?t.addInitializer(()=>{customElements.define(e,a)}
                     <div id="map-zoomer-overlay">
                         <div class="map-zoom-icons">
                             ${"zone"===this.activeTab?K`
-                                <ha-icon
-                                    icon="mdi:plus"
-                                    class="icon-on-map clickable ripple"
-                                    @click="${()=>this._addRectangle()}"
-                                ></ha-icon>
-                            `:null}
+                                      <ha-icon
+                                          icon="mdi:plus"
+                                          class="icon-on-map clickable ripple"
+                                          @click="${()=>this._addRectangle()}"
+                                      ></ha-icon>
+                                  `:null}
                             ${"zone"===this.activeTab||"room"===this.activeTab?K`
-                                <div
-                                    class="icon-on-map clickable ripple cycle-counter"
-                                    @click="${()=>{var e,a;const t=null!==(a=null===(e=this._getCurrentMode())||void 0===e?void 0:e.maxRepeats)&&void 0!==a?a:3;this.repeats=this.repeats%t+1,fe("selection"),this.requestUpdate()}}"
-                                >x${this.repeats}</div>
-                            `:null}
+                                      <div
+                                          class="icon-on-map clickable ripple cycle-counter"
+                                          @click="${()=>{var e,a;const t=null!==(a=null===(e=this._getCurrentMode())||void 0===e?void 0:e.maxRepeats)&&void 0!==a?a:3;this.repeats=this.repeats%t+1,fe("selection"),this.requestUpdate()}}"
+                                      >
+                                          x${this.repeats}
+                                      </div>
+                                  `:null}
                             <ha-icon
                                 icon="mdi:image-filter-center-focus"
                                 class="icon-on-map clickable ripple"
@@ -1387,10 +1387,7 @@ const de=e=>(a,t)=>{void 0!==t?t.addInitializer(()=>{customElements.define(e,a)}
                     --map-card-manual-rectangle-resize-icon-color-selected,
                     var(--map-card-internal-primary-text-color)
                 );
-                --map-card-internal-room-label-color: var(
-                    --map-card-room-label-color,
-                    #333
-                );
+                --map-card-internal-room-label-color: var(--map-card-room-label-color, #333);
                 --map-card-internal-room-label-font-size: var(--map-card-room-label-font-size, 12px);
                 --map-card-internal-transitions-duration: var(--map-card-transitions-duration, 200ms);
             }

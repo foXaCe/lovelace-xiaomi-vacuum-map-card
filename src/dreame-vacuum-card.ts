@@ -1,14 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-    css,
-    CSSResultGroup,
-    html,
-    LitElement,
-    PropertyValues,
-    svg,
-    SVGTemplateResult,
-    TemplateResult,
-} from "lit";
+import { css, CSSResultGroup, html, LitElement, PropertyValues, svg, SVGTemplateResult, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators";
 import { forwardHaptic, LovelaceCard, LovelaceCardEditor } from "custom-card-helpers";
 
@@ -291,7 +282,10 @@ export class XiaomiVacuumMapCard extends LitElement {
                     class="${this.mapScale * this.realScale > 1 ? "zoomed" : ""}"
                     src="${mapSrc}"
                     style="pointer-events: none;"
-                    @load="${() => { this._calculateBasicScale(); this._buildPickCanvas(); }}"
+                    @load="${() => {
+                        this._calculateBasicScale();
+                        this._buildPickCanvas();
+                    }}"
                 />
 
                 <canvas id="room-selection-overlay"></canvas>
@@ -337,24 +331,30 @@ export class XiaomiVacuumMapCard extends LitElement {
                     </pinch-zoom>
                     <div id="map-zoomer-overlay">
                         <div class="map-zoom-icons">
-                            ${this.activeTab === "zone" ? html`
-                                <ha-icon
-                                    icon="mdi:plus"
-                                    class="icon-on-map clickable ripple"
-                                    @click="${() => this._addRectangle()}"
-                                ></ha-icon>
-                            ` : null}
-                            ${this.activeTab === "zone" || this.activeTab === "room" ? html`
-                                <div
-                                    class="icon-on-map clickable ripple cycle-counter"
-                                    @click="${() => {
-                                        const maxRepeats = this._getCurrentMode()?.maxRepeats ?? 3;
-                                        this.repeats = (this.repeats % maxRepeats) + 1;
-                                        forwardHaptic("selection");
-                                        this.requestUpdate();
-                                    }}"
-                                >x${this.repeats}</div>
-                            ` : null}
+                            ${this.activeTab === "zone"
+                                ? html`
+                                      <ha-icon
+                                          icon="mdi:plus"
+                                          class="icon-on-map clickable ripple"
+                                          @click="${() => this._addRectangle()}"
+                                      ></ha-icon>
+                                  `
+                                : null}
+                            ${this.activeTab === "zone" || this.activeTab === "room"
+                                ? html`
+                                      <div
+                                          class="icon-on-map clickable ripple cycle-counter"
+                                          @click="${() => {
+                                              const maxRepeats = this._getCurrentMode()?.maxRepeats ?? 3;
+                                              this.repeats = (this.repeats % maxRepeats) + 1;
+                                              forwardHaptic("selection");
+                                              this.requestUpdate();
+                                          }}"
+                                      >
+                                          x${this.repeats}
+                                      </div>
+                                  `
+                                : null}
                             <ha-icon
                                 icon="mdi:image-filter-center-focus"
                                 class="icon-on-map clickable ripple"
@@ -936,7 +936,6 @@ export class XiaomiVacuumMapCard extends LitElement {
         return roomId;
     }
 
-
     private async _run(debug: boolean): Promise<void> {
         const currentPreset = this._getCurrentPreset();
         const currentMode = this._getCurrentMode();
@@ -1013,7 +1012,6 @@ export class XiaomiVacuumMapCard extends LitElement {
         // Les polygones SVG de l'API sont décalés et inutilisables
         return svg`${this.selectableRooms.map((r) => r.renderLabelOnly())}`;
     }
-
 
     private _drawSelection(): SVGTemplateResult | null {
         // En mode "all", aucune sélection sur la carte (comme l'app Dreame)
@@ -1316,9 +1314,14 @@ export class XiaomiVacuumMapCard extends LitElement {
                 const pd = pickImgData.data;
                 for (let i = 0; i < w * h; i++) {
                     const off = i * 4;
-                    const mr = mapPixels[off], mg = mapPixels[off + 1], mb = mapPixels[off + 2];
+                    const mr = mapPixels[off],
+                        mg = mapPixels[off + 1],
+                        mb = mapPixels[off + 2];
                     if (mr + mg + mb < 80 || Math.max(mr, mg, mb) - Math.min(mr, mg, mb) < 25) {
-                        pd[off] = 0; pd[off + 1] = 0; pd[off + 2] = 0; pd[off + 3] = 0;
+                        pd[off] = 0;
+                        pd[off + 1] = 0;
+                        pd[off + 2] = 0;
+                        pd[off + 3] = 0;
                     }
                 }
                 ctx.putImageData(pickImgData, 0, 0);
@@ -1331,7 +1334,6 @@ export class XiaomiVacuumMapCard extends LitElement {
         this._pickCtx = ctx;
         this._lastPickCacheKey = cacheKey;
     }
-
 
     /**
      * Récupère les polygones des pièces depuis l'API (pour l'overlay visuel).
@@ -1807,10 +1809,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                     --map-card-manual-rectangle-resize-icon-color-selected,
                     var(--map-card-internal-primary-text-color)
                 );
-                --map-card-internal-room-label-color: var(
-                    --map-card-room-label-color,
-                    #333
-                );
+                --map-card-internal-room-label-color: var(--map-card-room-label-color, #333);
                 --map-card-internal-room-label-font-size: var(--map-card-room-label-font-size, 12px);
                 --map-card-internal-transitions-duration: var(--map-card-transitions-duration, 200ms);
             }

@@ -132,15 +132,13 @@ export abstract class MapObject {
 
     protected renderLabel(config: LabelConfig | undefined, htmlClass: string): SVGTemplateResult {
         const mapped = config ? this.vacuumToScaledMap(config.x, config.y) : [];
-        return svg`${conditional(
-            config != null && mapped.length > 0,
-            () => {
-                const cx = mapped[0] + this.scaled(config?.offset_x ?? 0);
-                const cy = mapped[1] + this.scaled(config?.offset_y ?? 0);
-                const text = config?.text ?? "";
-                const foW = 200;
-                const foH = 40;
-                return svg`
+        return svg`${conditional(config != null && mapped.length > 0, () => {
+            const cx = mapped[0] + this.scaled(config?.offset_x ?? 0);
+            const cy = mapped[1] + this.scaled(config?.offset_y ?? 0);
+            const text = config?.text ?? "";
+            const foW = 200;
+            const foH = 40;
+            return svg`
                     <foreignObject
                         x="${cx}"
                         y="${cy}"
@@ -158,8 +156,7 @@ export abstract class MapObject {
                         </body>
                     </foreignObject>
                 `;
-            }
-        )}`;
+        })}`;
     }
 
     protected vacuumToMapRect([vacX1, vacY1, vacX2, vacY2]: ZoneType): [RectangleType, RectangleType] {

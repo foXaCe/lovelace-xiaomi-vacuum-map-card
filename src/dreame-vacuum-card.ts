@@ -1538,9 +1538,7 @@ export class XiaomiVacuumMapCard extends LitElement {
                 <h1>Xiaomi Vacuum Map Card ${CARD_VERSION}</h1>
                 <p>${this._localize("common.old_configuration")}</p>
                 <p>
-                    <a
-                        href="https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card#migrating-from-v1xx"
-                        target="_blank"
+                    <a href="https://github.com/foXaCe/dreame-vacuum-card#migrating-from-v1xx" target="_blank"
                         >${this._localize("common.old_configuration_migration_link")}</a
                     >
                 </p>

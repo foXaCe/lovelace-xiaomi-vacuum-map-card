@@ -1,5 +1,5 @@
-type: custom:xiaomi-vacuum-map-card
-title: Xiaomi Vacuum Map Card
+type: custom:dreame-vacuum-card
+title: Dreame Vacuum Card
 preset_name: Live map
 entity: vacuum.xiaomi_vacuum
 map_source:

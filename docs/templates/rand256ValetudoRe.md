@@ -27,7 +27,7 @@ calibration_source:
 To use this card with a Valetudo RE vacuum you have to define `topic` internal variable in your preset:
 
 ```yaml
-type: custom:xiaomi-vacuum-map-card
+type: custom:dreame-vacuum-card
 map_source:
   camera: camera.valetudo_re
 calibration_source:

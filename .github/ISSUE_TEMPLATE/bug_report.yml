@@ -1,7 +1,7 @@
-name: Report an issue with Xiaomi Vacuum Map card
-description: Report an issue with Xiaomi Vacuum Map card.
+name: Report an issue with Dreame Vacuum Card
+description: Report an issue with Dreame Vacuum Card.
 labels: bug
-assignees: 'PiotrMachowski'
+assignees: 'foXaCe'
 body:
   - type: markdown
     attributes:

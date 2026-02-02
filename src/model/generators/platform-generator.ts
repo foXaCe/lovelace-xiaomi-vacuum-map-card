@@ -15,7 +15,7 @@ export class PlatformGenerator {
     public static TASSHACK_DREAME_VACUUM_PLATFORM = "Dreame";
 
     private static DOCUMENTATION_URL_FORMAT =
-        "https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card/tree/master/docs/templates/{0}.md";
+        "https://github.com/foXaCe/dreame-vacuum-card/tree/master/docs/templates/{0}.md";
 
     private static TEMPLATES = new Map<string, PlatformTemplate>([
         [PlatformGenerator.TASSHACK_DREAME_VACUUM_PLATFORM, tasshackDreameVacuumTemplate as PlatformTemplate],

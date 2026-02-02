@@ -20,7 +20,7 @@ If you need to setup this card using the custom component, you should use The "h
 4. This integration works by piggybacking off of the Core integration, so the Core integration will do all the data updating to help prevent rate-limits. But that means that the core integration must be setup and loaded first. If you run into any issues, make sure the Roborock integration is loaded first, and then reload this one.
 5. Setup this card like normal! You should select a image with the suffix _custom. An example configuration would look like
 ```yaml
-type: custom:xiaomi-vacuum-map-card
+type: custom:dreame-vacuum-card
 vacuum_platform: Roborock
 entity: vacuum.s7
 map_source:

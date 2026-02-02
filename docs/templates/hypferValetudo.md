@@ -19,7 +19,7 @@ In other cases you have to manually calibrate the map and provide calibration po
 To use this card with a Valetudo vacuum you have to define `topic` internal variable in your preset:
 
 ```yaml
-type: custom:xiaomi-vacuum-map-card
+type: custom:dreame-vacuum-card
 map_source:
   camera: camera.valetudo
 calibration_source:

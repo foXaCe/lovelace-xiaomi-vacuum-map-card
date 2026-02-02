@@ -1,7 +1,7 @@
-name: Request a feature in Xiaomi Vacuum Map card
-description: Request a feature in Xiaomi Vacuum Map card
+name: Request a feature in Dreame Vacuum Card
+description: Request a feature in Dreame Vacuum Card
 labels: enhancement
-assignees: 'PiotrMachowski'
+assignees: 'foXaCe'
 body:
   - type: markdown
     attributes:

@@ -1,4 +1,4 @@
-type: custom:xiaomi-vacuum-map-card
+type: custom:dreame-vacuum-card
 entity: vacuum.roborock_vacuum_s5
 map_source:
   camera: camera.xiaomi_cloud_map_extractor

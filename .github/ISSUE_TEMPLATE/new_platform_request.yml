@@ -3,7 +3,7 @@ description: Request support for a new vacuum platform
 labels:
   - new platform
   - enhancement
-assignees: 'PiotrMachowski'
+assignees: 'foXaCe'
 body:
   - type: markdown
     attributes:
@@ -34,7 +34,7 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: I have sent info about entities to `piotr.machowski.dev [at] gmail.com` ([Retrieving entities info](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card/discussions/594); please provide your GitHub username in the email)
+        - label: I have provided info about entities in this issue
           required: false
   - type: textarea
     validations:

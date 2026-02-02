@@ -3,12 +3,12 @@
 [![GitHub Latest Release][releases_shield]][latest_release]
 [![GitHub All Releases][downloads_total_shield]][releases]
 
-[releases_shield]: https://img.shields.io/github/release/foXaCe/lovelace-xiaomi-vacuum-map-card.svg?style=popout
-[latest_release]: https://github.com/foXaCe/lovelace-xiaomi-vacuum-map-card/releases/latest
-[releases]: https://github.com/foXaCe/lovelace-xiaomi-vacuum-map-card/releases
-[downloads_total_shield]: https://img.shields.io/github/downloads/foXaCe/lovelace-xiaomi-vacuum-map-card/total
+[releases_shield]: https://img.shields.io/github/release/foXaCe/dreame-vacuum-card.svg?style=popout
+[latest_release]: https://github.com/foXaCe/dreame-vacuum-card/releases/latest
+[releases]: https://github.com/foXaCe/dreame-vacuum-card/releases
+[downloads_total_shield]: https://img.shields.io/github/downloads/foXaCe/dreame-vacuum-card/total
 
-A custom Lovelace card for Home Assistant that provides a Dreame-app-style interface for controlling Dreame vacuum robots. Built as a fork of [Xiaomi Vacuum Map Card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card) by Piotr Machowski, completely redesigned with a native Dreame look and feel.
+A custom Lovelace card for Home Assistant that provides a Dreame-app-style interface for controlling Dreame vacuum robots. Built as a fork of [Xiaomi Vacuum Map Card](https://github.com/PiotrMachowski/dreame-vacuum-card) by Piotr Machowski, completely redesigned with a native Dreame look and feel.
 
 ## Features
 
@@ -53,18 +53,18 @@ A custom Lovelace card for Home Assistant that provides a Dreame-app-style inter
 5. Install
 6. Add to [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/):
    ```yaml
-   url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/dreame-vacuum-card.js
+   url: /hacsfiles/dreame-vacuum-card/dreame-vacuum-card.js
    type: module
    ```
 7. Refresh your browser
 
 ### Manual Installation
 
-1. Download `dreame-vacuum-card.js` from the [latest release](https://github.com/foXaCe/lovelace-xiaomi-vacuum-map-card/releases/latest)
-2. Save the file to `<ha config>/www/community/lovelace-xiaomi-vacuum-map-card/`
+1. Download `dreame-vacuum-card.js` from the [latest release](https://github.com/foXaCe/dreame-vacuum-card/releases/latest)
+2. Save the file to `<ha config>/www/community/dreame-vacuum-card/`
 3. Add to [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/):
    ```yaml
-   url: /local/community/lovelace-xiaomi-vacuum-map-card/dreame-vacuum-card.js
+   url: /local/community/dreame-vacuum-card/dreame-vacuum-card.js
    type: module
    ```
 4. Refresh your browser
@@ -74,7 +74,7 @@ A custom Lovelace card for Home Assistant that provides a Dreame-app-style inter
 ### Minimal configuration
 
 ```yaml
-type: custom:xiaomi-vacuum-map-card
+type: custom:dreame-vacuum-card
 entity: vacuum.your_dreame_vacuum
 map_source:
   camera: camera.your_dreame_vacuum_map
@@ -147,7 +147,7 @@ npm run dev
 
 ## Acknowledgments
 
-This project is a fork of the [Xiaomi Vacuum Map Card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card) by **[Piotr Machowski](https://github.com/PiotrMachowski)**. His work provided the foundation for map rendering, calibration, and coordinate conversion that this card builds upon.
+This project is a fork of the [Xiaomi Vacuum Map Card](https://github.com/PiotrMachowski/dreame-vacuum-card) by **[Piotr Machowski](https://github.com/PiotrMachowski)**. His work provided the foundation for map rendering, calibration, and coordinate conversion that this card builds upon.
 
 ## License
 

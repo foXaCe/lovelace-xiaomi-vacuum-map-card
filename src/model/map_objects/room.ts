@@ -4,8 +4,9 @@ import { forwardHaptic } from "custom-card-helpers";
 
 import { Context } from "./context";
 import { deleteFromArray } from "../../utils";
-import { RoomConfig } from "../../types/types";
+import { OutlineType, RoomConfig } from "../../types/types";
 import { PredefinedMapObject } from "./predefined-map-object";
+import { SelectionType } from "../map_mode/selection-type";
 
 export class Room extends PredefinedMapObject {
     private readonly _config: RoomConfig;
@@ -15,35 +16,66 @@ export class Room extends PredefinedMapObject {
         this._config = config;
     }
 
+    private _renderRoomLabel(): SVGTemplateResult | null {
+        const label = this._config.label;
+        if (!label) return null;
+        const mapped = this.vacuumToScaledMap(label.x, label.y);
+        const text = label.text ?? "";
+        const fontSize = 12 / this._context.scale();
+        return svg`
+            <text class="room-label-text"
+                  x="${mapped[0]}"
+                  y="${mapped[1]}"
+                  font-size="${fontSize}"
+                  text-anchor="middle"
+                  dominant-baseline="central"
+                  pointer-events="none">
+                ${text}
+            </text>
+        `;
+    }
+
     public render(): SVGTemplateResult {
-        const poly = (this._config?.outline ?? []).map((p) => this.vacuumToScaledMap(p[0], p[1]));
+        const outline = this._config?.outline ?? [];
+
+        if (!outline.length) {
+            return svg`
+                <g class="room-wrapper ${this._selected ? "selected" : ""} room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
+                    ${this._renderRoomLabel()}
+                </g>
+            `;
+        }
+
+        const poly = outline.map((p) => this.vacuumToScaledMap(p[0], p[1]));
         const pointsStr = poly.map((p) => p.join(", ")).join(" ");
 
-        // Calculate bounding box for invisible click area
-        const xs = poly.map((p) => p[0]);
-        const ys = poly.map((p) => p[1]);
-        const minX = Math.min(...xs);
-        const maxX = Math.max(...xs);
-        const minY = Math.min(...ys);
-        const maxY = Math.max(...ys);
+        const hasAnySelection = this._context.selectedRooms().length > 0;
+        const isDimmed = hasAnySelection && !this._selected;
+        const classes = [
+            "room-wrapper",
+            this._selected ? "selected" : "",
+            isDimmed ? "dimmed" : "",
+            `room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper`,
+        ]
+            .filter(Boolean)
+            .join(" ");
 
         return svg`
-            <g class="room-wrapper ${this._selected ? "selected" : ""}
-            room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
-                <polygon class="room-outline clickable room-polygon"
+            <g class="${classes}">
+                <polygon class="room-outline room-polygon"
                          data-room-id="${this._config.id}"
-                         points="${pointsStr}"
-                         @click="${async (e: MouseEvent): Promise<void> => {
-                             e.stopPropagation();
-                             e.preventDefault();
-                             await this._click();
-                         }}"
-                         @mousedown="${(e: MouseEvent): void => {
-                             e.stopPropagation();
-                         }}">
+                         points="${pointsStr}">
                 </polygon>
-                ${this.renderIcon(this._config.icon, () => this._click(), "room-icon-wrapper")}
-                ${this.renderLabel(this._config.label, "room-label")}
+                ${this.renderIcon(this._config.icon, () => void 0, "room-icon-wrapper")}
+                ${this._renderRoomLabel()}
+            </g>
+        `;
+    }
+
+    public renderLabelOnly(): SVGTemplateResult {
+        return svg`
+            <g class="room-wrapper room-${`${this._config.id}`.replace(/[^a-zA-Z0-9_\-]/gm, "_")}-wrapper">
+                ${this._renderRoomLabel()}
             </g>
         `;
     }
@@ -52,37 +84,56 @@ export class Room extends PredefinedMapObject {
         return this._config.id;
     }
 
-    private async _click(): Promise<void> {
+    public getOutline(): OutlineType | undefined {
+        return this._config.outline;
+    }
+
+    public async toggleFromHitTest(): Promise<void> {
         const currentMode = this._context.getCurrentMode();
-        const currentModeIsRoom = currentMode?.selectionType === 2; // SelectionType.ROOM = 2
+        const currentModeIsRoom = currentMode?.selectionType === SelectionType.ROOM;
 
         if (!currentModeIsRoom) {
             this._context.activateRoomMode();
             await new Promise((resolve) => setTimeout(resolve, 150));
 
             const newMode = this._context.getCurrentMode();
-            if (newMode?.selectionType !== 2) {
+            if (newMode?.selectionType !== SelectionType.ROOM) {
                 return;
             }
         }
 
-        if (!this._selected && this._context.selectedRooms().length >= this._context.maxSelections()) {
+        const isAlreadyInSelected = this._context.selectedRooms().includes(this);
+
+        if (
+            !this._selected &&
+            !isAlreadyInSelected &&
+            this._context.selectedRooms().length >= this._context.maxSelections()
+        ) {
             forwardHaptic("failure");
             return;
         }
+
         this._toggleSelected();
+
         if (this._selected) {
-            this._context.selectedRooms().push(this);
+            if (!isAlreadyInSelected) {
+                this._context.selectedRooms().push(this);
+            }
         } else {
-            deleteFromArray(this._context.selectedRooms(), this);
+            if (isAlreadyInSelected) {
+                deleteFromArray(this._context.selectedRooms(), this);
+            }
         }
+
         this._context.selectionChanged();
+
         if (await this._context.runImmediately()) {
             this._selected = false;
             deleteFromArray(this._context.selectedRooms(), this);
             this._context.selectionChanged();
             return;
         }
+
         forwardHaptic("selection");
         this.update();
     }
@@ -93,22 +144,10 @@ export class Room extends PredefinedMapObject {
             }
 
             .room-outline {
-                stroke: var(--map-card-internal-room-outline-line-color);
-                stroke-width: calc(var(--map-card-internal-room-outline-line-width) / var(--map-scale));
+                stroke: none;
                 fill: transparent;
-                fill-opacity: 0;
-                stroke-opacity: 0;
                 stroke-linejoin: round;
-                stroke-dasharray:
-                    calc(var(--map-card-internal-room-outline-line-segment-line) / var(--map-scale)),
-                    calc(var(--map-card-internal-room-outline-line-segment-gap) / var(--map-scale));
-                transition:
-                    stroke var(--map-card-internal-transitions-duration) ease,
-                    fill var(--map-card-internal-transitions-duration) ease,
-                    stroke-opacity var(--map-card-internal-transitions-duration) ease,
-                    fill-opacity var(--map-card-internal-transitions-duration) ease;
-                pointer-events: all !important;
-                cursor: pointer;
+                pointer-events: none;
             }
 
             .room-icon-wrapper {
@@ -132,22 +171,34 @@ export class Room extends PredefinedMapObject {
                     background var(--map-card-internal-transitions-duration) ease;
             }
 
-            .room-label {
-                text-anchor: middle;
-                dominant-baseline: middle;
+            .room-label-text {
+                fill: rgba(255, 255, 255, 0.9);
+                font-weight: 600;
+                font-family: inherit;
                 pointer-events: none;
-                font-size: calc(var(--map-card-internal-room-label-font-size) / var(--map-scale));
-                fill: var(--map-card-internal-room-label-color);
-                transition:
-                    color var(--map-card-internal-transitions-duration) ease,
-                    background var(--map-card-internal-transitions-duration) ease;
+                paint-order: stroke;
+                stroke: rgba(0, 0, 0, 0.6);
+                stroke-width: 3px;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                transition: opacity 0.3s ease, fill 0.3s ease;
             }
 
-            .room-wrapper.selected > .room-outline {
-                stroke: var(--map-card-internal-room-outline-line-color-selected);
-                fill: var(--map-card-internal-room-outline-fill-color-selected);
-                stroke-opacity: 1;
-                fill-opacity: 1;
+            /* Mode pièce : tous les labels dimmés par défaut */
+            .room-mode .room-label-text {
+                opacity: 0.5;
+            }
+
+            /* Mode pièce, pièce sélectionnée : label bien visible */
+            .room-mode .room-wrapper.selected .room-label-text {
+                opacity: 1;
+                fill: #fff;
+                font-weight: 700;
+            }
+
+            /* Mode pièce, pièces non sélectionnées quand il y a une sélection */
+            .room-mode .room-wrapper.dimmed .room-label-text {
+                opacity: 0.3;
             }
 
             .room-wrapper.selected > * > .room-icon-wrapper {
@@ -155,8 +206,13 @@ export class Room extends PredefinedMapObject {
                 color: var(--map-card-internal-room-icon-color-selected);
             }
 
-            .room-wrapper.selected > .room-label {
-                fill: var(--map-card-internal-room-label-color-selected);
+            .room-wrapper.selected .room-label-text {
+                fill: #fff;
+                font-weight: 700;
+            }
+
+            .room-wrapper.dimmed .room-label-text {
+                opacity: 0.4;
             }
         `;
     }

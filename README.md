@@ -98,7 +98,7 @@ vacuum_platform: tasshackDreameVacuum
 
 ### Required integration
 
-This card is designed to work with the [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) integration, which provides:
+This card is designed to work with the [foXaCe/dreame-vacuum](https://github.com/foXaCe/dreame-vacuum) integration (fork with segment_map support), which provides:
 
 - Camera entity with the map image and room data (outlines, segment_map, calibration points)
 - Vacuum entity with state and attributes
@@ -130,7 +130,7 @@ When in room mode, a semi-transparent dark overlay dims the entire map. Selected
 
 - Home Assistant 2024.1.0 or newer
 - A Dreame vacuum robot
-- [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) integration installed and configured
+- [foXaCe/dreame-vacuum](https://github.com/foXaCe/dreame-vacuum) integration installed and configured (fork with segment_map support)
 
 ## Development
 

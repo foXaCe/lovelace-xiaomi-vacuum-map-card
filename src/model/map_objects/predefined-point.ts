@@ -36,6 +36,7 @@ export class PredefinedPoint extends PredefinedMapObject {
             .map((pzc) => (pzc.position as string).split(".attributes."))
             .flatMap((z) => {
                 const entity = hass.states[z[0]];
+                if (!entity) return undefined;
                 const value = z.length === 2 ? entity.attributes[z[1]] : entity.state;
                 let parsed;
                 try {

@@ -28,7 +28,8 @@ export class Context {
         public readonly getState: (_: string) => string,
         public readonly toggleEntity: (_: string) => void,
         public readonly getCurrentMode: () => MapMode | undefined,
-        public readonly activateRoomMode: () => void
+        public readonly activateRoomMode: () => void,
+        public readonly activeTab: () => "room" | "all" | "zone"
     ) {}
 
     public roundMap([x, y]: PointArrayNotation): PointArrayNotation {

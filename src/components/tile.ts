@@ -120,6 +120,7 @@ export class Tile extends RootlessLitElement {
         if (this.config.icon_source) {
             const split = this.config.icon_source.split(".attributes.");
             const entity = this.hass.states[split[0]];
+            if (!entity) return "";
             let icon = entity.state;
             if (split.length === 2) {
                 icon = entity.attributes[split[1]];
@@ -165,9 +166,6 @@ export class Tile extends RootlessLitElement {
 
             .tile-icon {
                 padding-right: 5px;
-            }
-
-            .tile-value {
             }
         `;
     }

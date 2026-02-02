@@ -63,14 +63,19 @@ const languages: Record<string, unknown> = {
     "zh-Hant": zhHant,
 };
 
+let cachedLanguage: string | null = null;
+
 function localizeString(string: string, search = "", replace = "", lang: Language = "", fallback = string): string {
     const defaultLang = "en";
     if (!lang) {
-        try {
-            lang = JSON.parse(localStorage.getItem("selectedLanguage") || `"${defaultLang}"`);
-        } catch {
-            lang = (localStorage.getItem("selectedLanguage") || defaultLang).replace(/['"]+/g, "");
+        if (!cachedLanguage) {
+            try {
+                cachedLanguage = JSON.parse(localStorage.getItem("selectedLanguage") || `"${defaultLang}"`);
+            } catch {
+                cachedLanguage = (localStorage.getItem("selectedLanguage") || defaultLang).replace(/['"]+/g, "");
+            }
         }
+        lang = cachedLanguage ?? defaultLang;
     }
 
     let translated: string | undefined;
@@ -85,7 +90,7 @@ function localizeString(string: string, search = "", replace = "", lang: Languag
 
     translated = translated ?? fallback;
     if (search !== "" && replace !== "") {
-        translated = translated.replace(search, replace);
+        translated = translated.replaceAll(search, replace);
     }
     return translated;
 }

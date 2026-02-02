@@ -78,29 +78,6 @@ export function getWatchedEntitiesForPreset(config: CardPresetConfig, language: 
         .forEach((e) => {
             if (e) watchedEntities.add(e);
         });
-    (config.icons ?? []).forEach((i) => {
-        if (i.hasOwnProperty("entity")) watchedEntities.add(i["entity"]);
-    });
-    (config.icons ?? [])
-        .filter((i) => i.conditions)
-        .flatMap((i) => i.conditions)
-        .map((c) => c?.entity)
-        .forEach((e) => {
-            if (e) watchedEntities.add(e);
-        });
-    (config.tiles ?? []).forEach((s) => {
-        if (s.entity) watchedEntities.add(s.entity);
-    });
-    (config.tiles ?? []).forEach((s) => {
-        if (s.icon_source) watchedEntities.add(s.icon_source.split(".attributes.")[0]);
-    });
-    (config.tiles ?? [])
-        .filter((s) => s.conditions)
-        .flatMap((s) => s.conditions)
-        .map((c) => c?.entity)
-        .forEach((e) => {
-            if (e) watchedEntities.add(e);
-        });
     (config.map_modes ?? [])
         .map((m) => new MapMode(PlatformGenerator.getPlatformName(config.vacuum_platform), m, language))
         .forEach((m) => getWatchedEntitiesForMapMode(m).forEach((e) => watchedEntities.add(e)));
@@ -109,9 +86,7 @@ export function getWatchedEntitiesForPreset(config: CardPresetConfig, language: 
 
 export function getWatchedEntities(config: XiaomiVacuumMapCardConfig): string[] {
     const watchedEntities = new Set<string>();
-    [config, ...(config.additional_presets ?? [])]
-        .flatMap((p) => [...getWatchedEntitiesForPreset(p, config.language)])
-        .forEach((e) => watchedEntities.add(e));
+    getWatchedEntitiesForPreset(config, config.language).forEach((e) => watchedEntities.add(e));
     return [...watchedEntities];
 }
 
@@ -124,15 +99,15 @@ export function isConditionMet(
     if (condition.internal_variable && condition.internal_variable in internalVariables) {
         currentValue = internalVariables[condition.internal_variable];
     } else if (condition.entity) {
-        currentValue = condition.attribute
-            ? hass.states[condition.entity].attributes[condition.attribute]
-            : hass.states[condition.entity].state;
+        const entity = hass.states[condition.entity];
+        if (!entity) return false;
+        currentValue = condition.attribute ? entity.attributes[condition.attribute] : entity.state;
     }
     if (condition.value) {
-        return currentValue == condition.value;
+        return String(currentValue) === String(condition.value);
     }
     if (condition.value_not) {
-        return currentValue != condition.value_not;
+        return String(currentValue) !== String(condition.value_not);
     }
     return false;
 }
@@ -159,7 +134,7 @@ export function hasConfigOrAnyEntityChanged(
         !oldHass || watchedEntities.some((entity) => oldHass.states[entity] !== hass?.states[entity]);
     if (entitesChanged) return true;
     const changedKeys = Array.from(changedProps.keys());
-    return changedKeys.length > 1 || (changedKeys.length == 1 && changedKeys[0] != "_hass");
+    return changedKeys.length > 1 || (changedKeys.length === 1 && changedKeys[0] !== "_hass");
 }
 
 export function checkIfEntitiesChanged(
@@ -305,9 +280,9 @@ export async function evaluateJinjaTemplate(
 
 export function replaceInTarget(target: Record<string, unknown>, keyReplacer: KeyReplacer): void {
     for (const [key, value] of Object.entries(target)) {
-        if (typeof value == "object") {
+        if (typeof value === "object") {
             replaceInTarget(value as Record<string, unknown>, keyReplacer);
-        } else if (typeof value == "string") {
+        } else if (typeof value === "string") {
             target[key] = keyReplacer(value as string);
         }
     }
@@ -327,7 +302,7 @@ export function replaceInStr(
     let output = value;
     Object.keys(variables).forEach((tv) => {
         let replaced = kr(tv);
-        if (typeof replaced == "object") {
+        if (typeof replaced === "object") {
             replaced = JSON.stringify(replaced);
         }
         output = output.replaceAll(tv, `${replaced}`);

@@ -295,11 +295,30 @@
         "failed": "Failed to call service",
         "no_zone_mode": "No zone mode available. Check your configuration."
     },
+    "dreame_ui": {
+        "tab": {
+            "room": "Room",
+            "all": "All",
+            "zone": "Zone"
+        },
+        "action": {
+            "clean": "Clean",
+            "stop": "Stop",
+            "pause": "Pause",
+            "resume": "Resume",
+            "dock": "Dock",
+            "cancel": "Cancel"
+        },
+        "mode": {
+            "cycle_tooltip": "Click to cycle mode ({0} options)"
+        }
+    },
     "editor": {
         "description": {
             "text": "This visual editor supports only a basic configuration. For more advanced setup use YAML mode."
         },
         "label": {
+            "show_title": "Show title",
             "name": "Title (optional)",
             "entity": "Vacuum entity (required)",
             "camera": "Camera entity (required)",

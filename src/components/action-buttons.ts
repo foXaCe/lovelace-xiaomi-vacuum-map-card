@@ -1,4 +1,4 @@
-import { LitElement, html, css, TemplateResult, CSSResultGroup } from "lit";
+import { LitElement, html, css, TemplateResult, CSSResultGroup, nothing } from "lit";
 import { customElement, property } from "lit/decorators";
 import { HomeAssistantFixed } from "../types/fixes";
 import { localize } from "../localize/localize";
@@ -130,14 +130,14 @@ export class ActionButtons extends LitElement {
         }
     }
 
-    protected render(): TemplateResult | void {
+    protected render(): TemplateResult | typeof nothing {
         if (!this.hass || !this.entityId) {
-            return html``;
+            return nothing;
         }
 
         const stateObj = this.hass.states[this.entityId];
         if (!stateObj) {
-            return html``;
+            return nothing;
         }
 
         const vacuumState = stateObj.state as VacuumState;

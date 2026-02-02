@@ -105,9 +105,7 @@ export class MapMode {
             max_repeats: this.maxRepeats,
             service_call_schema: JSON.parse(JSON.stringify(this.serviceCallSchema.config)),
             predefined_selections: this.predefinedSelections,
-            variables: Object.fromEntries(
-                Object.entries(this.variables ?? {}).map(([k, v]) => [k.substr(2, k.length - 4), v])
-            ),
+            variables: Object.fromEntries(Object.entries(this.variables ?? {}).map(([k, v]) => [k.slice(2, -2), v])),
         };
     }
 

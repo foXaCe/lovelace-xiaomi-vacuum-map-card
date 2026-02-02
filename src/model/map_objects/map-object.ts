@@ -134,13 +134,31 @@ export abstract class MapObject {
         const mapped = config ? this.vacuumToScaledMap(config.x, config.y) : [];
         return svg`${conditional(
             config != null && mapped.length > 0,
-            () => svg`
-                <text class="label-text ${htmlClass}"
-                      x="${mapped[0] + this.scaled(config?.offset_x ?? 0)}px"
-                      y="${mapped[1] + this.scaled(config?.offset_y ?? 0)}px">
-                    ${config?.text}
-                </text>
-            `
+            () => {
+                const cx = mapped[0] + this.scaled(config?.offset_x ?? 0);
+                const cy = mapped[1] + this.scaled(config?.offset_y ?? 0);
+                const text = config?.text ?? "";
+                const foW = 200;
+                const foH = 40;
+                return svg`
+                    <foreignObject
+                        x="${cx}"
+                        y="${cy}"
+                        width="${foW}"
+                        height="${foH}"
+                        class="${htmlClass}-fo"
+                        style="overflow: visible; pointer-events: none;
+                               transform: translate(-${foW / 2}px, -${foH / 2}px)
+                                          scale(${1 / this._context.scale()});">
+                        <body xmlns="http://www.w3.org/1999/xhtml"
+                              style="margin:0; padding:0; background:none; display:flex;
+                                     justify-content:center; align-items:center;
+                                     width:${foW}px; height:${foH}px;">
+                            <div class="label-badge ${htmlClass}">${text}</div>
+                        </body>
+                    </foreignObject>
+                `;
+            }
         )}`;
     }
 

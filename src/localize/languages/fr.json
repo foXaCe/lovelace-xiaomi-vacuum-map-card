@@ -295,11 +295,30 @@
         "failed": "L'appel au service a échoué",
         "no_zone_mode": "Aucun mode de zone disponible. Vérifiez votre configuration."
     },
+    "dreame_ui": {
+        "tab": {
+            "room": "Pièce",
+            "all": "Toutes",
+            "zone": "Zone"
+        },
+        "action": {
+            "clean": "Nettoyer",
+            "stop": "Stop",
+            "pause": "Pause",
+            "resume": "Reprendre",
+            "dock": "Station d'accueil",
+            "cancel": "Annuler"
+        },
+        "mode": {
+            "cycle_tooltip": "Cliquer pour changer de mode ({0} options)"
+        }
+    },
     "editor": {
         "description": {
             "text": "Cet éditeur visuel ne permet qu'une configuration de base. Pour un paramétrage plus avancé, utilisez le mode YAML."
         },
         "label": {
+            "show_title": "Afficher le titre",
             "name": "Titre (optionnel)",
             "entity": "Entité de l'aspirateur (obligatoire)",
             "camera": "Entité de la caméra (obligatoire)",

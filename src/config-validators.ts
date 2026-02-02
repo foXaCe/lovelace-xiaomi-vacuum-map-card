@@ -264,8 +264,6 @@ function validatePreset(config: CardPresetConfig, nameRequired: boolean, languag
         !PlatformGenerator.getPlatforms().includes(PlatformGenerator.getPlatformName(config.vacuum_platform))
     )
         errors.push(["validation.preset.platform.invalid", "{0}", config.vacuum_platform]);
-    (config.icons ?? []).flatMap((i) => validateIconConfig(i)).forEach((e) => errors.push(e));
-    (config.tiles ?? []).flatMap((i) => validateTileConfig(i)).forEach((e) => errors.push(e));
     (config.map_modes ?? [])
         .flatMap((i) => validateMapModeConfig(vacuumPlatform, i, language))
         .forEach((e) => errors.push(e));
@@ -275,11 +273,7 @@ function validatePreset(config: CardPresetConfig, nameRequired: boolean, languag
 
 export function validateConfig(config: XiaomiVacuumMapCardConfig): string[] {
     const errors: TranslatableString[] = [];
-    const multiplePresets = (config.additional_presets?.length ?? 0) > 0;
-    validatePreset(config, multiplePresets, config.language).forEach((e) => errors.push(e));
-    config.additional_presets
-        ?.flatMap((preset) => validatePreset(preset, multiplePresets, config.language))
-        .forEach((e) => errors.push(e));
+    validatePreset(config, false, config.language).forEach((e) => errors.push(e));
     return errors.map((e) => localize(e, config.language));
 }
 

@@ -5,28 +5,44 @@ import babel from "@rollup/plugin-babel";
 import serve from "rollup-plugin-serve";
 import terser from "@rollup/plugin-terser";
 import json from "@rollup/plugin-json";
+import alias from "@rollup/plugin-alias";
 
 const port = process.env.PORT || 5000;
 
 export default {
-    input: ["src/xiaomi-vacuum-map-card.ts"],
+    input: ["src/dreame-vacuum-card.ts"],
     output: {
         dir: "./dist",
         format: "es",
     },
     plugins: [
-        nodeResolve(),
-        commonjs(),
+        alias({
+            entries: [
+                { find: /^lit\/(.+)$/, replacement: 'lit/$1.js' }
+            ]
+        }),
+        nodeResolve({
+            extensions: [".js", ".ts"],
+            browser: true,
+            preferBuiltins: false,
+            exportConditions: ["production", "default", "module", "import"],
+            mainFields: ["module", "main"],
+            dedupe: ["lit", "lit-element", "lit-html", "@lit/reactive-element"],
+        }),
+        commonjs({
+            include: /node_modules/,
+        }),
         typescript(),
         json(),
         babel({
             exclude: "node_modules/**",
             babelHelpers: "bundled",
+            extensions: [".js", ".ts"],
         }),
         terser(),
         serve({
             contentBase: "./dist",
-            host: "0.0.0.0",
+            host: "127.0.0.1",
             port: port,
             allowCrossOrigin: true,
             headers: {

@@ -19,13 +19,16 @@ export class DropdownIcon extends RootlessLitElement {
         const items = this.config.map((i) => {
             return { icon: i.icon, name: i.label ?? "" };
         });
-        const currentIndex = this.config.findIndex((i) => i.isSelected);
+        const currentIndex = Math.max(
+            0,
+            this.config.findIndex((i) => i.isSelected)
+        );
         const itemClass = `icon-menu-${this.config[0].menu_id}`;
         return html`
             <xvmc-dropdown-menu
                 .title="${this.isInEditor
                     ? `menu_id: ${this.config[0].menu_id}`
-                    : (this.config[currentIndex].tooltip ?? "")}"
+                    : (this.config[currentIndex]?.tooltip ?? "")}"
                 .values=${items}
                 .currentIndex=${currentIndex}
                 .setValue=${(selected) => {

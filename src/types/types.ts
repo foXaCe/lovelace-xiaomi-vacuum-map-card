@@ -8,15 +8,12 @@ import {
 import { ACTION_HANDLER_CUSTOM_ELEMENT_NAME, CARD_CUSTOM_ELEMENT_NAME, EDITOR_CUSTOM_ELEMENT_NAME } from "../const";
 import { XiaomiVacuumMapCardActionHandler } from "../action-handler-directive";
 import { XiaomiVacuumMapCard } from "../dreame-vacuum-card";
-import { Tile } from "../components/tile";
-
 declare global {
     interface HTMLElementTagNameMap {
         [CARD_CUSTOM_ELEMENT_NAME]: XiaomiVacuumMapCard;
         [EDITOR_CUSTOM_ELEMENT_NAME]: LovelaceCardEditor;
         [ACTION_HANDLER_CUSTOM_ELEMENT_NAME]: XiaomiVacuumMapCardActionHandler;
         "hui-error-card": LovelaceCard;
-        "xvmc-tile": Tile;
     }
 }
 
@@ -46,8 +43,7 @@ export type EntityRegistryEntry = {
 };
 
 export interface XiaomiVacuumMapCardConfig extends LovelaceCardConfig, CardPresetConfig {
-    readonly title?: string;
-    readonly additional_presets?: CardPresetConfig[];
+    readonly show_title?: boolean;
     readonly language?: Language;
     readonly debug?: boolean;
     readonly action_handler_id?: string;
@@ -60,17 +56,8 @@ export interface CardPresetConfig extends ConditionalObjectConfig {
     readonly map_source: MapSourceConfig;
     readonly map_locked?: boolean;
     readonly two_finger_pan?: boolean;
-    readonly map_only?: boolean;
-    readonly show_tiles?: boolean;
-    readonly tiles_only?: boolean;
     readonly calibration_source?: CalibrationSourceConfig;
-    readonly icons?: IconActionConfig[];
-    readonly append_icons?: boolean;
-    readonly tiles?: TileConfig[];
-    readonly append_tiles?: boolean;
     readonly map_modes?: MapModeConfig[];
-    readonly activate?: ServiceCallSchemaConfig;
-    readonly activate_on_switch?: boolean;
     readonly clean_selection_on_start?: boolean;
     readonly internal_variables?: VariablesStorage;
 }
@@ -246,6 +233,8 @@ export interface PredefinedPointConfig extends PredefinedSelectionCommonConfig {
 export interface RoomConfig extends PredefinedSelectionCommonConfig {
     readonly id: number | string;
     readonly outline?: OutlineType;
+    readonly color?: number[];
+    readonly color_index?: number;
 }
 
 export interface LabelConfig {
@@ -287,6 +276,8 @@ export interface MapExtractorRoom {
     readonly x: number | undefined;
     readonly y: number | undefined;
     readonly visibility: string | undefined;
+    readonly color_index: number | undefined;
+    readonly color: number[] | undefined;
 }
 
 export interface RoomConfigEventData {

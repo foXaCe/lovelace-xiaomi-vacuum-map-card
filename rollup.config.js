@@ -37,7 +37,7 @@ export default [
         output: {
             dir: "dist",
             format: "es",
-            entryFileNames: "dreame-vacuum-card-[hash].js",
+            entryFileNames: "dreame-vacuum-card.js",
         },
         plugins,
         external: [],

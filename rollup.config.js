@@ -8,9 +8,7 @@ import alias from "@rollup/plugin-alias";
 
 const plugins = [
     alias({
-        entries: [
-            { find: /^lit\/(.+)$/, replacement: 'lit/$1.js' }
-        ]
+        entries: [{ find: /^lit\/(.+)$/, replacement: "lit/$1.js" }],
     }),
     nodeResolve({
         extensions: [".js", ".ts"],
@@ -39,6 +37,7 @@ export default [
         output: {
             dir: "dist",
             format: "es",
+            entryFileNames: "dreame-vacuum-card-[hash].js",
         },
         plugins,
         external: [],

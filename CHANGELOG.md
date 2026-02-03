@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-02-03
+
+### Added
+- Cache-busting with content hash in filename for Android app compatibility
+
+### Changed
+
+**BREAKING CHANGE**: The output filename pattern has changed from `dreame-vacuum-card.js` to `dreame-vacuum-card-[hash].js` (e.g., `dreame-vacuum-card-a1b2c3d.js`).
+
+This change is necessary for proper cache-busting in the Home Assistant Android app. If you reference the card file directly by its old name, you will need to update your configuration to use the new filename pattern or let HACS handle the automatic updates.
+
 ## [4.2.0] - 2026-02-03
 
 ### Added

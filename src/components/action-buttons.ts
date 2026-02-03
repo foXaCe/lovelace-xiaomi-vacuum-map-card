@@ -166,25 +166,25 @@ export class ActionButtons extends LitElement {
         return css`
             :host {
                 display: block;
-                padding: 8px 16px 16px;
+                padding: var(--dvc-action-host-padding, 8px 16px 16px);
             }
 
             .actions {
                 display: flex;
-                gap: 12px;
+                gap: var(--dvc-action-gap, 12px);
             }
 
             .action-btn {
                 flex: 1;
-                padding: 14px;
+                padding: var(--dvc-action-btn-padding, 14px);
                 border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 8px;
+                gap: var(--dvc-action-icon-gap, 8px);
                 border: none;
                 cursor: pointer;
-                font-size: 15px;
+                font-size: var(--dvc-action-font-size, 15px);
                 font-weight: 600;
                 font-family: inherit;
                 transition: opacity 0.2s;
@@ -215,7 +215,7 @@ export class ActionButtons extends LitElement {
             }
 
             .action-btn ha-icon {
-                --mdc-icon-size: 20px;
+                --mdc-icon-size: var(--dvc-action-icon-size, 20px);
             }
         `;
     }

@@ -22,19 +22,19 @@ export class DreameTabSelector extends LitElement {
             }
             .tab {
                 flex: 1;
-                padding: 10px 0;
+                padding: var(--dvc-tab-padding, 10px 0);
                 text-align: center;
                 cursor: pointer;
                 background: none;
                 border: none;
                 border-bottom: 2px solid transparent;
                 color: var(--secondary-text-color);
-                font-size: 14px;
+                font-size: var(--dvc-tab-font-size, 14px);
                 font-family: inherit;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 4px;
+                gap: var(--dvc-tab-gap, 4px);
                 transition: all 0.2s ease;
             }
             .tab:hover {
@@ -46,7 +46,7 @@ export class DreameTabSelector extends LitElement {
                 font-weight: 500;
             }
             .tab ha-icon {
-                --mdc-icon-size: 20px;
+                --mdc-icon-size: var(--dvc-tab-icon-size, 20px);
             }
         `;
     }

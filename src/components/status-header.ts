@@ -149,7 +149,7 @@ export class StatusHeader extends LitElement {
             }
 
             .header-section {
-                padding: 12px 16px 8px;
+                padding: var(--dvc-header-section-padding, 12px 16px 8px);
                 background: linear-gradient(
                     to bottom,
                     var(--card-background-color, rgba(255, 255, 255, 0.85)) 0%,
@@ -159,13 +159,13 @@ export class StatusHeader extends LitElement {
             }
 
             .device-name {
-                font-size: 18px;
+                font-size: var(--dvc-header-name-size, 18px);
                 font-weight: 600;
                 color: var(--primary-text-color);
             }
 
             .status {
-                font-size: 14px;
+                font-size: var(--dvc-header-status-size, 14px);
                 color: var(--secondary-text-color);
                 margin-top: 2px;
             }
@@ -173,8 +173,8 @@ export class StatusHeader extends LitElement {
             .stats-bar {
                 display: flex;
                 justify-content: center;
-                gap: 24px;
-                padding: 8px 16px;
+                gap: var(--dvc-stats-gap, 24px);
+                padding: var(--dvc-stats-padding, 8px 16px);
                 background: color-mix(in srgb, var(--card-background-color, #fff) 70%, transparent);
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
@@ -183,13 +183,13 @@ export class StatusHeader extends LitElement {
             .stat {
                 display: flex;
                 align-items: center;
-                gap: 6px;
-                font-size: 13px;
+                gap: var(--dvc-stat-gap, 6px);
+                font-size: var(--dvc-stat-font-size, 13px);
                 color: var(--secondary-text-color);
             }
 
             .stat ha-icon {
-                --mdc-icon-size: 18px;
+                --mdc-icon-size: var(--dvc-stat-icon-size, 18px);
                 opacity: 0.8;
             }
 

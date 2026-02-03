@@ -211,6 +211,15 @@ export class XiaomiVacuumMapCard extends LitElement {
         return 12;
     }
 
+    public getLayoutOptions() {
+        return {
+            grid_columns: 4,
+            grid_min_columns: 2,
+            grid_rows: 4,
+            grid_min_rows: 3,
+        };
+    }
+
     connectedCallback(): void {
         super.connectedCallback();
         if (this._isInEditor()) {
@@ -1631,6 +1640,8 @@ export class XiaomiVacuumMapCard extends LitElement {
             ha-card {
                 overflow: hidden;
                 display: flow-root;
+                container-type: inline-size;
+                container-name: vacuum-card;
                 --map-card-internal-primary-color: var(--map-card-primary-color, var(--slider-color));
                 --map-card-internal-primary-text-color: var(--map-card-primary-text-color, var(--primary-text-color));
                 --map-card-internal-secondary-color: var(--map-card-secondary-color, var(--slider-secondary-color));
@@ -1866,6 +1877,93 @@ export class XiaomiVacuumMapCard extends LitElement {
                 --map-card-internal-room-label-color: var(--map-card-room-label-color, #333);
                 --map-card-internal-room-label-font-size: var(--map-card-room-label-font-size, 12px);
                 --map-card-internal-transitions-duration: var(--map-card-transitions-duration, 200ms);
+            }
+
+            /* Responsive: small cards (< 350px) */
+            @container vacuum-card (max-width: 349px) {
+                ha-card {
+                    --dvc-header-section-padding: 8px 10px 4px;
+                    --dvc-header-name-size: 15px;
+                    --dvc-header-status-size: 12px;
+                    --dvc-stats-gap: 14px;
+                    --dvc-stats-padding: 6px 10px;
+                    --dvc-stat-gap: 4px;
+                    --dvc-stat-font-size: 11px;
+                    --dvc-stat-icon-size: 15px;
+                    --dvc-action-host-padding: 6px 10px 12px;
+                    --dvc-action-gap: 8px;
+                    --dvc-action-btn-padding: 10px;
+                    --dvc-action-font-size: 13px;
+                    --dvc-action-icon-gap: 6px;
+                    --dvc-action-icon-size: 18px;
+                    --dvc-tab-padding: 8px 0;
+                    --dvc-tab-font-size: 12px;
+                    --dvc-tab-gap: 2px;
+                    --dvc-tab-icon-size: 18px;
+                    --dvc-chip-host-padding: 2px 10px;
+                    --dvc-chip-gap: 6px;
+                    --dvc-chip-padding: 8px 12px;
+                    --dvc-chip-font-size: 12px;
+                    --dvc-progress-host-padding: 0 10px 2px;
+                    --dvc-progress-font-size: 11px;
+                }
+                .map-wrapper {
+                    padding-top: 56px;
+                }
+                .controls-wrapper {
+                    margin: 10px;
+                    gap: 8px;
+                }
+                .map-actions-item {
+                    width: 42px;
+                    height: 42px;
+                }
+                .icon-on-map {
+                    width: 30px;
+                    height: 30px;
+                }
+                .standalone-icon-on-map {
+                    width: 30px;
+                    height: 30px;
+                }
+                .cycle-counter {
+                    font-size: 12px;
+                }
+                .updating-badge {
+                    font-size: 11px;
+                    padding: 4px 8px;
+                }
+            }
+
+            /* Responsive: large cards (> 500px) */
+            @container vacuum-card (min-width: 501px) {
+                ha-card {
+                    --dvc-header-section-padding: 16px 20px 10px;
+                    --dvc-header-name-size: 20px;
+                    --dvc-stats-gap: 28px;
+                    --dvc-action-host-padding: 10px 20px 20px;
+                    --dvc-action-gap: 14px;
+                    --dvc-action-btn-padding: 16px;
+                }
+                .map-wrapper {
+                    padding-top: 80px;
+                }
+                .controls-wrapper {
+                    margin: 20px;
+                    gap: 14px;
+                }
+                .map-actions-item {
+                    width: 56px;
+                    height: 56px;
+                }
+                .icon-on-map {
+                    width: 40px;
+                    height: 40px;
+                }
+                .standalone-icon-on-map {
+                    width: 40px;
+                    height: 40px;
+                }
             }
 
             .clickable {

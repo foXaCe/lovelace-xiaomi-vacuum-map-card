@@ -317,6 +317,10 @@
         "description": {
             "text": "This visual editor supports only a basic configuration. For more advanced setup use YAML mode."
         },
+        "section": {
+            "display": "Display Options",
+            "map_behavior": "Map Behavior"
+        },
         "label": {
             "show_title": "Show title",
             "name": "Title (optional)",
@@ -338,7 +342,9 @@
             "config_set": "Config set!\nOpen config editor to adjust it.",
             "config_set_failed": "Failed to update config.",
             "generate_rooms_config": "Generate rooms config",
-            "copy_service_call": "Copy service call"
+            "copy_service_call": "Copy service call",
+            "language": "Language override",
+            "clean_selection_on_start": "Clear selection on clean start"
         },
         "alerts": {
             "set_static_config": "You should use this functionality only if you want to manually adjust automatically generated configuration.\nContinue?"

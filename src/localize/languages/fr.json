@@ -317,6 +317,10 @@
         "description": {
             "text": "Cet éditeur visuel ne permet qu'une configuration de base. Pour un paramétrage plus avancé, utilisez le mode YAML."
         },
+        "section": {
+            "display": "Options d'affichage",
+            "map_behavior": "Comportement de la carte"
+        },
         "label": {
             "show_title": "Afficher le titre",
             "name": "Titre (optionnel)",
@@ -338,7 +342,9 @@
             "config_set": "Configuration définie !\nOuvrez l'éditeur de configuration pour l'ajuster.",
             "config_set_failed": "Échec de la mise à jour de la configuration.",
             "generate_rooms_config": "Générer la configuration des pièces",
-            "copy_service_call": "Copier l'appel de service"
+            "copy_service_call": "Copier l'appel de service",
+            "language": "Langue (surcharge)",
+            "clean_selection_on_start": "Effacer la sélection au démarrage"
         },
         "alerts": {
             "set_static_config": "Vous devez utiliser cette fonctionnalité uniquement si vous souhaitez ajuster manuellement la configuration générée automatiquement.\nContinuer ?"

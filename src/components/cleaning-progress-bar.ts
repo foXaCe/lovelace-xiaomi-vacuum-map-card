@@ -59,7 +59,7 @@ export class CleaningProgressBar extends LitElement {
         return css`
             :host {
                 display: block;
-                padding: 0 16px 4px;
+                padding: var(--dvc-progress-host-padding, 0 16px 4px);
             }
 
             .progress-container {
@@ -84,7 +84,7 @@ export class CleaningProgressBar extends LitElement {
             }
 
             .progress-text {
-                font-size: 12px;
+                font-size: var(--dvc-progress-font-size, 12px);
                 font-weight: 600;
                 color: var(--secondary-text-color, rgba(255, 255, 255, 0.6));
                 min-width: 32px;

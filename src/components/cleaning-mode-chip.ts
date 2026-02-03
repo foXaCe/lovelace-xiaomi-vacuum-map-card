@@ -116,16 +116,16 @@ export class CleaningModeChip extends LitElement {
         return css`
             :host {
                 display: block;
-                padding: 4px 16px;
+                padding: var(--dvc-chip-host-padding, 4px 16px);
             }
 
             .mode-chip {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: var(--dvc-chip-gap, 8px);
                 background: var(--secondary-background-color, rgba(0, 0, 0, 0.1));
                 border-radius: 20px;
-                padding: 10px 16px;
+                padding: var(--dvc-chip-padding, 10px 16px);
                 cursor: pointer;
                 transition: background 0.2s;
             }
@@ -147,7 +147,7 @@ export class CleaningModeChip extends LitElement {
 
             .mode-label {
                 flex: 1;
-                font-size: 14px;
+                font-size: var(--dvc-chip-font-size, 14px);
                 color: var(--primary-text-color);
             }
 

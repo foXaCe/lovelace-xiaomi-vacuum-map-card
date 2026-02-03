@@ -26,13 +26,13 @@ jobs:
         run: npm run lint
 
       - name: Build
-        run: npm run rollup && npm run update-hacs-filename && npm run add-version
+        run: npm run rollup && npm run add-version
 
       - name: Verify output
-        run: test -n "$(ls dist/dreame-vacuum-card-*.js 2>/dev/null)"
+        run: test -f dist/dreame-vacuum-card.js
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/dreame-vacuum-card-*.js
+          files: dist/dreame-vacuum-card.js
           generate_release_notes: true

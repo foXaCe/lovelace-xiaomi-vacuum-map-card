@@ -51,12 +51,12 @@ jobs:
         run: npm run rollup
 
       - name: Verify output
-        run: test -n "$(ls dist/dreame-vacuum-card-*.js 2>/dev/null)"
+        run: test -f dist/dreame-vacuum-card.js
 
       - name: Upload artifact
         if: matrix.node-version == 20
         uses: actions/upload-artifact@v6
         with:
           name: dreame-vacuum-card
-          path: dist/dreame-vacuum-card-*.js
+          path: dist/dreame-vacuum-card.js
           retention-days: 7

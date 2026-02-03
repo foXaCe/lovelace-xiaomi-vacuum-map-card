@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult, CSSResultGroup, nothing } from "lit";
 import { customElement, property } from "lit/decorators";
+import { forwardHaptic } from "custom-card-helpers";
 import { HomeAssistantFixed } from "../types/fixes";
 import { localize } from "../localize/localize";
 
@@ -39,10 +40,12 @@ export class ActionButtons extends LitElement {
 
     private _callService(action: string): void {
         if (!this.hass || !this.entityId) return;
+        forwardHaptic("light");
         this.hass.callService("vacuum", action, { entity_id: this.entityId });
     }
 
     private _fireEvent(eventName: string): void {
+        forwardHaptic("light");
         this.dispatchEvent(
             new CustomEvent(eventName, {
                 bubbles: true,
@@ -176,6 +179,7 @@ export class ActionButtons extends LitElement {
 
             .action-btn {
                 flex: 1;
+                min-height: 48px;
                 padding: var(--dvc-action-btn-padding, 14px);
                 border-radius: 12px;
                 display: flex;
@@ -187,11 +191,12 @@ export class ActionButtons extends LitElement {
                 font-size: var(--dvc-action-font-size, 15px);
                 font-weight: 600;
                 font-family: inherit;
-                transition: opacity 0.2s;
+                -webkit-tap-highlight-color: transparent;
+                transition: transform 0.1s ease;
             }
 
             .action-btn:active {
-                opacity: 0.7;
+                transform: scale(0.95);
             }
 
             .action-btn.primary {

@@ -991,7 +991,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                     ${Us("dreame_ui.tab.zone",this.language)}
                 </button>
             </div>
-        `}_selectTab(e){this.activeTab!==e&&(this.activeTab=e,this.dispatchEvent(new CustomEvent("tab-changed",{detail:{tab:e},bubbles:!0,composed:!0})))}};e([ue({type:String})],zo.prototype,"activeTab",void 0),e([ue({type:String})],zo.prototype,"language",void 0),zo=e([de("dreame-tab-selector")],zo);let Co=class extends le{constructor(){super(...arguments),this.activeTab="all",this.hasSelection=!1,this.selectionCount=0}_callService(e){this.hass&&this.entityId&&this.hass.callService("vacuum",e,{entity_id:this.entityId})}_fireEvent(e){this.dispatchEvent(new CustomEvent(e,{bubbles:!0,composed:!0}))}get _lang(){var e,t,i;return null!==(i=null===(t=null===(e=this.hass)||void 0===e?void 0:e.locale)||void 0===t?void 0:t.language)&&void 0!==i?i:""}_getSelectionButtons(){return[{label:`${Us("dreame_ui.action.clean",this._lang)}${this.selectionCount>0?` (${this.selectionCount})`:""}`,icon:"mdi:play",cssClass:"primary",action:()=>this._fireEvent("action-run")},{label:Us("dreame_ui.action.cancel",this._lang),icon:"mdi:close",cssClass:"secondary",action:()=>this._fireEvent("action-cancel")}]}_getStateButtons(e){const t=this._lang;switch(e){case"cleaning":case"segment_cleaning":case"zoned_cleaning":return[{label:Us("dreame_ui.action.pause",t),icon:"mdi:pause",cssClass:"primary warning",action:()=>this._callService("pause")},{label:Us("dreame_ui.action.stop",t),icon:"mdi:stop",cssClass:"secondary",action:()=>this._callService("stop")}];case"paused":return[{label:Us("dreame_ui.action.resume",t),icon:"mdi:play",cssClass:"primary",action:()=>this._callService("start")},{label:Us("dreame_ui.action.stop",t),icon:"mdi:stop",cssClass:"secondary",action:()=>this._callService("stop")}];default:return[{label:Us("dreame_ui.action.clean",t),icon:"mdi:play",cssClass:"primary",action:()=>this._callService("start")},{label:Us("dreame_ui.action.dock",t),icon:"mdi:eject",cssClass:"secondary",action:()=>this._callService("return_to_base")}]}}render(){if(!this.hass||!this.entityId)return K;const e=this.hass.states[this.entityId];if(!e)return K;const t=e.state,i=("room"===this.activeTab||"zone"===this.activeTab)&&this.hasSelection,[a,n]=i?this._getSelectionButtons():this._getStateButtons(t);return G`
+        `}_selectTab(e){this.activeTab!==e&&(this.activeTab=e,this.dispatchEvent(new CustomEvent("tab-changed",{detail:{tab:e},bubbles:!0,composed:!0})))}};e([ue({type:String})],zo.prototype,"activeTab",void 0),e([ue({type:String})],zo.prototype,"language",void 0),zo=e([de("dreame-tab-selector")],zo);let Co=class extends le{constructor(){super(...arguments),this.activeTab="all",this.hasSelection=!1,this.selectionCount=0}_callService(e){this.hass&&this.entityId&&(_e("light"),this.hass.callService("vacuum",e,{entity_id:this.entityId}))}_fireEvent(e){_e("light"),this.dispatchEvent(new CustomEvent(e,{bubbles:!0,composed:!0}))}get _lang(){var e,t,i;return null!==(i=null===(t=null===(e=this.hass)||void 0===e?void 0:e.locale)||void 0===t?void 0:t.language)&&void 0!==i?i:""}_getSelectionButtons(){return[{label:`${Us("dreame_ui.action.clean",this._lang)}${this.selectionCount>0?` (${this.selectionCount})`:""}`,icon:"mdi:play",cssClass:"primary",action:()=>this._fireEvent("action-run")},{label:Us("dreame_ui.action.cancel",this._lang),icon:"mdi:close",cssClass:"secondary",action:()=>this._fireEvent("action-cancel")}]}_getStateButtons(e){const t=this._lang;switch(e){case"cleaning":case"segment_cleaning":case"zoned_cleaning":return[{label:Us("dreame_ui.action.pause",t),icon:"mdi:pause",cssClass:"primary warning",action:()=>this._callService("pause")},{label:Us("dreame_ui.action.stop",t),icon:"mdi:stop",cssClass:"secondary",action:()=>this._callService("stop")}];case"paused":return[{label:Us("dreame_ui.action.resume",t),icon:"mdi:play",cssClass:"primary",action:()=>this._callService("start")},{label:Us("dreame_ui.action.stop",t),icon:"mdi:stop",cssClass:"secondary",action:()=>this._callService("stop")}];default:return[{label:Us("dreame_ui.action.clean",t),icon:"mdi:play",cssClass:"primary",action:()=>this._callService("start")},{label:Us("dreame_ui.action.dock",t),icon:"mdi:eject",cssClass:"secondary",action:()=>this._callService("return_to_base")}]}}render(){if(!this.hass||!this.entityId)return K;const e=this.hass.states[this.entityId];if(!e)return K;const t=e.state,i=("room"===this.activeTab||"zone"===this.activeTab)&&this.hasSelection,[a,n]=i?this._getSelectionButtons():this._getStateButtons(t);return G`
             <div class="actions">
                 <button class="action-btn ${a.cssClass}" @click=${a.action}>
                     <ha-icon .icon=${a.icon}></ha-icon>
@@ -1015,6 +1015,7 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
 
             .action-btn {
                 flex: 1;
+                min-height: 48px;
                 padding: var(--dvc-action-btn-padding, 14px);
                 border-radius: 12px;
                 display: flex;
@@ -1026,11 +1027,12 @@ const de=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}
                 font-size: var(--dvc-action-font-size, 15px);
                 font-weight: 600;
                 font-family: inherit;
-                transition: opacity 0.2s;
+                -webkit-tap-highlight-color: transparent;
+                transition: transform 0.1s ease;
             }
 
             .action-btn:active {
-                opacity: 0.7;
+                transform: scale(0.95);
             }
 
             .action-btn.primary {

@@ -12,6 +12,7 @@
         "noImplicitAny": false,
         "skipLibCheck": true,
         "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true
     }
 }

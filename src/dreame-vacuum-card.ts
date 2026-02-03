@@ -77,6 +77,7 @@ import "./components/cleaning-mode-chip";
 import "./components/tab-selector";
 import "./components/action-buttons";
 import "./components/cleaning-progress-bar";
+import "./components/robot-animation";
 
 /** Palette Dreame par défaut, indexée par color_index 0-3 */
 const DEFAULT_ROOM_PALETTE: Record<number, number[]> = {
@@ -136,6 +137,8 @@ export class XiaomiVacuumMapCard extends LitElement {
     private _pickCtx: CanvasRenderingContext2D | null = null;
     private _lastPickCacheKey?: string;
     private _pickLoadingKey?: string;
+    private _stateSensorId: string | null | undefined = undefined;
+    private _stateSensorEntityKey: string | undefined = undefined;
 
     constructor() {
         super();
@@ -241,6 +244,27 @@ export class XiaomiVacuumMapCard extends LitElement {
         return hasConfigOrAnyEntityChanged(this.watchedEntities, changedProps, false, this.hass);
     }
 
+    private _resolveStateSensor(entityId: string): string | null {
+        if (this._stateSensorId !== undefined && this._stateSensorEntityKey === entityId) {
+            return this._stateSensorId;
+        }
+        this._stateSensorEntityKey = entityId;
+        const deviceId = this.hass?.entities?.[entityId]?.device_id;
+        if (!deviceId) {
+            this._stateSensorId = null;
+            return null;
+        }
+        for (const [eid, entry] of Object.entries(this.hass.entities)) {
+            if (entry.device_id !== deviceId || !eid.startsWith("sensor.")) continue;
+            if ((entry as any).translation_key === "state" || eid.endsWith("_state")) {
+                this._stateSensorId = eid;
+                return eid;
+            }
+        }
+        this._stateSensorId = null;
+        return null;
+    }
+
     protected render(): TemplateResult | void {
         if (this.oldConfig) {
             return this._showOldConfig();
@@ -254,7 +278,32 @@ export class XiaomiVacuumMapCard extends LitElement {
         }
 
         const preset = this._getCurrentPreset();
+
+        const stateSensorId = this._resolveStateSensor(preset.entity);
+        const robotState = stateSensorId ? (this.hass.states[stateSensorId]?.state ?? "") : "";
+        if (stateSensorId && !this.watchedEntities.includes(stateSensorId)) {
+            this.watchedEntities.push(stateSensorId);
+        }
+
         this._updateCalibration(preset);
+
+        // Compute charger position as percentage of map image
+        let chargerXPct = -1;
+        let chargerYPct = -1;
+        if (this.coordinatesConverter?.calibrated && preset.map_source?.camera) {
+            const camState = this.hass.states[preset.map_source.camera];
+            const chargerPos = camState?.attributes?.charger_position;
+            if (chargerPos && chargerPos.x != null && chargerPos.y != null) {
+                const mapCoords = this.coordinatesConverter.vacuumToMap(chargerPos.x, chargerPos.y);
+                const img = this.shadowRoot?.querySelector("#map-image") as HTMLImageElement | null;
+                const natW = img?.naturalWidth;
+                const natH = img?.naturalHeight;
+                if (natW && natH) {
+                    chargerXPct = (mapCoords[0] / natW) * 100;
+                    chargerYPct = (mapCoords[1] / natH) * 100;
+                }
+            }
+        }
 
         const mapSrc = this._getMapSrc(preset);
         const platformsWithDefaultCalibration = PlatformGenerator.getPlatformsWithDefaultCalibration();
@@ -307,6 +356,11 @@ export class XiaomiVacuumMapCard extends LitElement {
                         ${validCalibration ? this._drawRooms() : null}
                     </svg>
                 </div>
+                <dreame-robot-animation
+                    .robotState=${robotState}
+                    .chargerX=${chargerXPct}
+                    .chargerY=${chargerYPct}
+                ></dreame-robot-animation>
             </div>
         `;
 
@@ -318,17 +372,19 @@ export class XiaomiVacuumMapCard extends LitElement {
                         .entityId=${preset.entity}
                         .showTitle=${this.config.show_title ?? false}
                     ></dreame-status-header>
-                    <pinch-zoom
-                        min-scale="0.5"
-                        id="map-zoomer"
-                        @change="${this._calculateScale}"
-                        two-finger-pan="${preset.two_finger_pan}"
-                        locked="${this.mapLocked}"
-                        no-default-pan="${this.mapLocked || preset.two_finger_pan}"
-                        style="touch-action: none;"
-                    >
-                        ${mapZoomerContent}
-                    </pinch-zoom>
+                    <div class="map-container">
+                        <pinch-zoom
+                            min-scale="0.5"
+                            id="map-zoomer"
+                            @change="${this._calculateScale}"
+                            two-finger-pan="${preset.two_finger_pan}"
+                            locked="${this.mapLocked}"
+                            no-default-pan="${this.mapLocked || preset.two_finger_pan}"
+                            style="touch-action: none;"
+                        >
+                            ${mapZoomerContent}
+                        </pinch-zoom>
+                    </div>
                     <div id="map-zoomer-overlay">
                         <div class="map-zoom-icons">
                             ${this.activeTab === "zone"
@@ -1820,6 +1876,10 @@ export class XiaomiVacuumMapCard extends LitElement {
                 position: relative;
                 height: max-content;
                 padding-top: 70px;
+            }
+
+            .map-container {
+                position: relative;
             }
 
             #map-zoomer {

@@ -20,6 +20,7 @@
         "custom-card-helpers": "^1.9.0",
         "home-assistant-js-websocket": "^9.6.0",
         "lit": "^3.3.1",
+        "lottie-web": "^5.13.0",
         "pointer-tracker": "^2.4.0",
         "transformation-matrix": "^3.1.0"
     },

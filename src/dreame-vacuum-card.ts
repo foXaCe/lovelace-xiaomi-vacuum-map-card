@@ -215,7 +215,7 @@ export class XiaomiVacuumMapCard extends LitElement {
         return {
             grid_columns: 4,
             grid_min_columns: 2,
-            grid_rows: 4,
+            grid_rows: "auto" as unknown as number,
             grid_min_rows: 3,
         };
     }

@@ -25,11 +25,7 @@ const STATE_LOTTIE_MAP: Record<string, unknown> = {
     emptying: animDustCollect,
 };
 
-const ZZZ_STATES = new Set([
-    "charging",
-    "charging_completed",
-    "idle",
-]);
+const ZZZ_STATES = new Set(["charging", "charging_completed", "idle"]);
 
 @customElement("dreame-robot-animation")
 export class RobotAnimation extends LitElement {
@@ -118,9 +114,7 @@ export class RobotAnimation extends LitElement {
 
     protected render(): unknown {
         const hasPosition = this.chargerX >= 0 && this.chargerY >= 0;
-        const posStyle = hasPosition
-            ? `left: ${this.chargerX}%; top: ${this.chargerY}%;`
-            : "";
+        const posStyle = hasPosition ? `left: ${this.chargerX}%; top: ${this.chargerY}%;` : "";
         const targetState = this._currentState;
         const isZzz = ZZZ_STATES.has(targetState);
         const isLottie = !!STATE_LOTTIE_MAP[targetState];

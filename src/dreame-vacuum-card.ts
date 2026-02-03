@@ -109,7 +109,7 @@ export class XiaomiVacuumMapCard extends LitElement {
     @state() public repeats = 1;
     @state() private selectedMode = 0;
     @state() private activeTab: "room" | "all" | "zone" = "all";
-    @state() private mapLocked = false;
+    @state() private mapLocked = true;
     @state() private configErrors: string[] = [];
     @state() private connected = false;
     @state() public internalVariables = {};
@@ -396,6 +396,11 @@ export class XiaomiVacuumMapCard extends LitElement {
                     </div>
                     <div id="map-zoomer-overlay">
                         <div class="map-zoom-icons">
+                            <ha-icon
+                                icon="${this.mapLocked ? "mdi:lock" : "mdi:lock-open-variant"}"
+                                class="icon-on-map clickable ripple ${this.mapLocked ? "lock-active" : ""}"
+                                @click="${this._toggleMapLock}"
+                            ></ha-icon>
                             ${this.activeTab === "zone"
                                 ? html`
                                       <ha-icon
@@ -576,7 +581,7 @@ export class XiaomiVacuumMapCard extends LitElement {
         if (user) {
             forwardHaptic("selection");
         }
-        this.mapLocked = config?.map_locked ?? false;
+        this.mapLocked = true;
         this.selectedMode = 0;
         this.realScale = 1;
         this.mapScale = 1;
@@ -1190,6 +1195,11 @@ export class XiaomiVacuumMapCard extends LitElement {
             }
         }
         this.shouldHandleMouseUp = false;
+    }
+
+    private _toggleMapLock(): void {
+        this.mapLocked = !this.mapLocked;
+        forwardHaptic("selection");
     }
 
     private _restoreMap(): void {
@@ -2127,6 +2137,10 @@ export class XiaomiVacuumMapCard extends LitElement {
                 font-weight: 700;
                 font-family: inherit;
                 user-select: none;
+            }
+
+            .icon-on-map.lock-active {
+                color: var(--primary-color, #03a9f4);
             }
 
             .icon-on-map.zone-action {
